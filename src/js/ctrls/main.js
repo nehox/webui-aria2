@@ -1,4 +1,5 @@
 import angular from "angular";
+import alldebridService from "services/alldebrid";
 
 export default angular
   .module("webui.ctrls.download", [
@@ -10,7 +11,8 @@ export default angular
     "webui.services.settings",
     "webui.services.modals",
     "webui.services.configuration",
-    "webui.services.errors"
+  "webui.services.errors",
+  "webui.services.alldebrid"
   ])
   .controller("MainCtrl", [
     "$scope",
@@ -44,8 +46,85 @@ export default angular
       pageSize,
       getErrorStatus,
       rootScope,
-      filter
+      filter,
+      $alldebrid
     ) {
+      // UI: gestion de l'upload AllDebrid
+      scope.downloadPath = "";
+      scope.uploadAllDebridTorrent = function() {
+        scope.alldebridLinks = null;
+        scope.alldebridError = null;
+        var input = document.getElementById('alldebrid-torrent');
+        if (!input.files || !input.files.length) {
+          scope.alldebridError = "Veuillez sélectionner un fichier .torrent.";
+          scope.$apply && scope.$apply();
+          return;
+        }
+        var file = input.files[0];
+        var path = scope.downloadPath || "";
+        scope.alldebridError = "Envoi en cours...";
+        $alldebrid.uploadTorrentToAllDebrid(file, function(err, links) {
+          if (err) {
+            scope.alldebridError = typeof err === 'string' ? err : (err && err.message) || "Erreur inconnue.";
+            scope.alldebridLinks = null;
+          } else {
+            scope.alldebridLinks = links;
+            scope.alldebridError = null;
+            // Envoi des liens débridés au serveur via la mécanique existante
+            if (links && links.length) {
+              var uris = links.map(function(file) { return [file.l]; });
+              var settings = { dir: path };
+              rhelpers.addUris(uris, settings, function() {
+                scope.alldebridSuccess = "Liens envoyés au serveur et ajoutés à la file de téléchargement.";
+                scope.$apply && scope.$apply();
+                setTimeout(function() {
+                  scope.alldebridSuccess = null;
+                  scope.$apply && scope.$apply();
+                }, 4000);
+              });
+            }
+          }
+          scope.$apply && scope.$apply();
+        });
+      };
+
+      // Télécharge un fichier à l'URL donnée dans le chemin local spécifié
+      scope.downloadFileToPath = function(url, filename, path) {
+        // Création d'un lien invisible pour déclencher le téléchargement côté navigateur
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = path ? (path + '/' + filename) : filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      // Ajout AllDebrid : upload et download torrent
+      scope.uploadTorrentToAllDebrid = function(file, callback) {
+        $alldebrid.uploadTorrentFile(file)
+          .then(function(magnetId) {
+            // Pooling status jusqu'à ce que le magnet soit prêt
+            function pollStatus() {
+              $alldebrid.getMagnetStatus(magnetId).then(function(status) {
+                if (status.statusCode === 4) { // Ready
+                  $alldebrid.getFilesLinks(magnetId).then(function(files) {
+                    if (callback) callback(null, files);
+                  }, function(err) {
+                    if (callback) callback(err);
+                  });
+                } else if (status.statusCode >= 5) {
+                  if (callback) callback("Erreur AllDebrid: " + status.status);
+                } else {
+                  setTimeout(pollStatus, 5000);
+                }
+              }, function(err) {
+                if (callback) callback(err);
+              });
+            }
+            pollStatus();
+          }, function(err) {
+            if (callback) callback(err);
+          });
+      };
       scope.name = name; // default UI name
       scope.enable = enable; // UI enable options
 

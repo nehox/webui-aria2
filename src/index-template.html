@@ -19,6 +19,24 @@
 
 <body ng-controller="MainCtrl" ng-cloak>
 
+<!-- AllDebrid Torrent Upload UI -->
+<div style="margin:20px 0;">
+  <h3>Ajouter un torrent sur AllDebrid</h3>
+  <input type="file" id="alldebrid-torrent" accept=".torrent" />
+  <input type="text" ng-model="downloadPath" placeholder="Chemin de téléchargement (ex: Films/2025)" style="margin-left:10px;" />
+  <button class="btn btn-success" ng-click="uploadAllDebridTorrent()">Envoyer sur AllDebrid</button>
+  <div ng-if="alldebridSuccess" style="color:green;font-weight:bold;">{{alldebridSuccess}}</div>
+  <div ng-if="alldebridLinks && alldebridLinks.length">
+    <h4>Liens de téléchargement AllDebrid :</h4>
+    <ul>
+      <li ng-repeat="file in alldebridLinks">
+        <span>{{file.n}}</span> - <a ng-href="{{file.l}}" target="_blank">Télécharger</a>
+      </li>
+    </ul>
+  </div>
+  <div ng-if="alldebridError" style="color:red;">{{alldebridError}}</div>
+</div>
+
 <!-- {{{ Icons -->
 <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
