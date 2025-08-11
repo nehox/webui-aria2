@@ -70,6 +70,10 @@ export default angular
         modals.invoke("getTorrents", _.bind(rhelpers.addTorrents, rhelpers));
       };
 
+      scope.openAllDebridModal = function() {
+        scope.$parent.openAllDebridModal();
+      };
+
       scope.changeCSettings = function() {
         modals.invoke("connection", rpc.getConfiguration(), _.bind(rpc.configure, rpc));
       };

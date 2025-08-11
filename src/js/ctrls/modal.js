@@ -270,6 +270,76 @@ export default angular
         };
       });
 
+      // AllDebrid modal
+      scope.getAllDebrid = {
+        open: function(alldebridData, cb) {
+          var self = this;
+          console.log("🏗️ Ouverture modal getAllDebrid avec données:", alldebridData);
+
+          // Créer un nouveau scope pour la modal
+          var modalScope = scope.$new();
+
+          // Assigner les données au scope de la modal
+          if (alldebridData) {
+            modalScope.alldebrid = alldebridData;
+            console.log("🔑 Objet AllDebrid assigné au modalScope:", modalScope.alldebrid);
+
+            // Pour compatibilité, assigner aussi directement les propriétés
+            modalScope.alldebridApiKey = alldebridData.apiKey;
+            modalScope.alldebridApiKeySaved = alldebridData.apiKeySaved;
+            modalScope.alldebridError = alldebridData.error;
+            modalScope.alldebridSuccess = alldebridData.success;
+            modalScope.alldebridLinks = alldebridData.links;
+          } else {
+            // Fallback : créer un objet vide
+            modalScope.alldebrid = {
+              apiKey: localStorage.getItem("alldebridApiKey") || "",
+              apiKeySaved: false,
+              error: null,
+              success: null,
+              links: null
+            };
+            modalScope.alldebridApiKey = modalScope.alldebrid.apiKey;
+            modalScope.alldebridApiKeySaved = false;
+            console.log(
+              "🔑 Objet AllDebrid créé par défaut dans modalScope:",
+              modalScope.alldebrid
+            );
+          }
+
+          // Copier les fonctions du scope parent
+          modalScope.saveAllDebridApiKey = scope.saveAllDebridApiKey;
+
+          // Créer une fonction wrapper pour uploadAllDebridTorrent qui passe le bon downloadPath
+          modalScope.uploadAllDebridTorrent = function() {
+            console.log("🎯 Upload torrent appelé depuis modalScope");
+            console.log("🎯 modalScope.downloadPath:", modalScope.downloadPath);
+            // Temporairement synchroniser le downloadPath
+            scope.downloadPath = modalScope.downloadPath;
+            return scope.uploadAllDebridTorrent.call(modalScope);
+          };
+
+          modalScope.downloadPath = scope.downloadPath;
+
+          this.inst = $modal.open({
+            templateUrl: "getAllDebrid.html",
+            scope: modalScope,
+            windowClass: "modal-large"
+          });
+          this.inst.result.then(
+            function() {
+              delete self.inst;
+              if (cb) {
+                cb();
+              }
+            },
+            function() {
+              delete self.inst;
+            }
+          );
+        }
+      };
+
       _.each(["about", "server_info"], function(name) {
         scope[name] = {
           open: function() {
@@ -302,6 +372,7 @@ export default angular
           "selectFiles",
           "settings",
           "connection",
+          "getAllDebrid",
           "server_info",
           "about"
         ],

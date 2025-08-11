@@ -19,23 +19,8 @@
 
 <body ng-controller="MainCtrl" ng-cloak>
 
-<!-- AllDebrid Torrent Upload UI -->
-<div style="margin:20px 0;">
-  <h3>Ajouter un torrent sur AllDebrid</h3>
-  <input type="file" id="alldebrid-torrent" accept=".torrent" />
-  <input type="text" ng-model="downloadPath" placeholder="Chemin de téléchargement (ex: Films/2025)" style="margin-left:10px;" />
-  <button class="btn btn-success" ng-click="uploadAllDebridTorrent()">Envoyer sur AllDebrid</button>
-  <div ng-if="alldebridSuccess" style="color:green;font-weight:bold;">{{alldebridSuccess}}</div>
-  <div ng-if="alldebridLinks && alldebridLinks.length">
-    <h4>Liens de téléchargement AllDebrid :</h4>
-    <ul>
-      <li ng-repeat="file in alldebridLinks">
-        <span>{{file.n}}</span> - <a ng-href="{{file.l}}" target="_blank">Télécharger</a>
-      </li>
-    </ul>
-  </div>
-  <div ng-if="alldebridError" style="color:red;">{{alldebridError}}</div>
-</div>
+
+
 
 <!-- {{{ Icons -->
 <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -188,6 +173,11 @@
                         <li>
                             <a href="#" ng-click="addUris()">
                               <svg class="icon icon-fw"><use xlink:href="#icon-link"></use></svg> {{ 'By URIs' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="openAllDebridModal()">
+                              <svg class="icon icon-fw"><use xlink:href="#icon-magnet"></use></svg> AllDebrid
                             </a>
                         </li>
                         <li ng-show="isFeatureEnabled('BitTorrent') && enable.torrent">
@@ -1315,6 +1305,81 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-default" ng-click="$dismiss()">{{ 'Close' | translate }}</button>
+  </div>
+</script>
+<!-- }}} -->
+
+<!-- {{{ AllDebrid modal -->
+<script type="text/ng-template" id="getAllDebrid.html">
+  <div class="modal-header">
+    <button class="close" ng-click="$dismiss()">&times;</button>
+    <h4>AllDebrid - Upload et Téléchargement</h4>
+  </div>
+  <form class="modal-body">
+    <fieldset>
+      <legend>Configuration AllDebrid</legend>
+      <div class="form-group">
+        <label for="alldebrid-apikey-modal">Token API AllDebrid :</label>
+        <div class="input-group">
+          <input type="text" id="alldebrid-apikey-modal" class="form-control" ng-model="alldebridApiKey" placeholder="Votre token API AllDebrid" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-click="saveAllDebridApiKey()">Sauvegarder</button>
+          </span>
+        </div>
+        <span ng-if="alldebridApiKeySaved" class="help-block text-success">Token sauvegardé avec succès !</span>
+        <p class="help-block">
+          Obtenez votre token API sur <a href="https://alldebrid.com/apikeys" target="_blank">alldebrid.com/apikeys</a>
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="download-path-modal">Chemin de téléchargement (optionnel) :</label>
+        <input type="text" id="download-path-modal" class="form-control" ng-model="downloadPath" placeholder="ex: Films/2025, Séries/Action" />
+        <p class="help-block">
+          Spécifiez un sous-dossier pour organiser vos téléchargements
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="alldebrid-torrent-modal">Sélectionner un fichier .torrent :</label>
+        <input type="file" id="alldebrid-torrent-modal" class="form-control" accept=".torrent" />
+        <p class="help-block">
+          Sélectionnez un fichier .torrent depuis votre ordinateur pour l'uploader sur AllDebrid
+        </p>
+      </div>
+
+      <div ng-if="alldebridError" class="alert alert-danger">
+        <strong>Erreur :</strong> {{alldebridError}}
+      </div>
+
+      <div ng-if="alldebridSuccess" class="alert alert-success">
+        <strong>Succès :</strong> {{alldebridSuccess}}
+      </div>
+
+      <div ng-if="alldebridLinks && alldebridLinks.length" class="panel panel-success">
+        <div class="panel-heading">
+          <h5 class="panel-title">Liens de téléchargement AllDebrid</h5>
+        </div>
+        <div class="panel-body">
+          <div class="list-group">
+            <div ng-repeat="file in alldebridLinks" class="list-group-item">
+              <h6 class="list-group-item-heading">{{file.n}}</h6>
+              <p class="list-group-item-text">
+                <a ng-href="{{file.l}}" target="_blank" class="btn btn-sm btn-primary">
+                  <svg class="icon icon-fw"><use xlink:href="#icon-download"></use></svg> Télécharger
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Fermer</button>
+    <button type="button" class="btn btn-primary" ng-click="uploadAllDebridTorrent()" ng-disabled="!alldebridApiKey">
+      <svg class="icon icon-fw"><use xlink:href="#icon-upload"></use></svg> Envoyer sur AllDebrid
+    </button>
   </div>
 </script>
 <!-- }}} -->

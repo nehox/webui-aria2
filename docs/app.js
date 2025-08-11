@@ -1,10 +1,10 @@
 !(function(e) {
   function t(t) {
-    for (var a, r, s = t[0], l = t[1], c = t[2], u = 0, p = []; u < s.length; u++)
-      (r = s[u]), o[r] && p.push(o[r][0]), (o[r] = 0);
+    for (var a, r, s = t[0], l = t[1], d = t[2], u = 0, p = []; u < s.length; u++)
+      (r = s[u]), Object.prototype.hasOwnProperty.call(o, r) && o[r] && p.push(o[r][0]), (o[r] = 0);
     for (a in l) Object.prototype.hasOwnProperty.call(l, a) && (e[a] = l[a]);
-    for (d && d(t); p.length; ) p.shift()();
-    return i.push.apply(i, c || []), n();
+    for (c && c(t); p.length; ) p.shift()();
+    return i.push.apply(i, d || []), n();
   }
   function n() {
     for (var e, t = 0; t < i.length; t++) {
@@ -72,8 +72,8 @@
   var s = (window.webpackJsonp = window.webpackJsonp || []),
     l = s.push.bind(s);
   (s.push = t), (s = s.slice());
-  for (var c = 0; c < s.length; c++) t(s[c]);
-  var d = l;
+  for (var d = 0; d < s.length; d++) t(s[d]);
+  var c = l;
   i.push([29, 1]), n();
 })([
   ,
@@ -123,20 +123,20 @@
           var r,
             s,
             l,
-            c = 0,
-            d = "",
+            d = 0,
+            c = "",
             u = 1,
             p = 1,
             h = (e = String(e)).length;
           for (r = 0; r < h || (!t && p > 1); r += 1) {
-            if (((c *= o), (u *= o), r < h)) {
+            if (((d *= o), (u *= o), r < h)) {
               if ((s = n.indexOf(e.charAt(r))) <= -1 || s >= o) throw new RangeError();
-              (p *= o), (c += s);
+              (p *= o), (d += s);
             }
             for (; u >= i; )
-              (u /= i), p > 1 && ((l = c), (c %= u), (d += a.charAt((l - c) / u)), (p /= i));
+              (u /= i), p > 1 && ((l = d), (d %= u), (c += a.charAt((l - d) / u)), (p /= i));
           }
-          return d;
+          return c;
         }
         return (
           (e.btoa = function(e) {
@@ -301,8 +301,8 @@
         "$authconf",
         "$filter",
         function(e, t, n, a, i, r, s, l) {
-          var c,
-            d = [],
+          var d,
+            c = [],
             u = [s],
             p = {},
             h = null,
@@ -327,7 +327,7 @@
           var g = !0,
             v = function() {
               clearTimeout(h), (h = null);
-              var o = (d = _.filter(d, function(e) {
+              var o = (c = _.filter(c, function(e) {
                 return !!e && 2 !== e.once;
               })).slice();
               if (o.length) {
@@ -339,14 +339,14 @@
                   return (
                     (g = !1),
                     (p = u[0]),
-                    (c = p && p.auth && p.auth.token ? p.auth.token : null),
+                    (d = p && p.auth && p.auth.token ? p.auth.token : null),
                     e.init(p),
                     void (h = setTimeout(v, t))
                   );
                 var r = _.map(o, function(e) {
                   var t = e.params;
                   return (
-                    c && (t = ["token:" + c].concat(t || [])),
+                    d && (t = ["token:" + d].concat(t || [])),
                     { methodName: e.name, params: t && t.length ? t : void 0 }
                   );
                 });
@@ -373,7 +373,7 @@
                         void (h = setTimeout(v, t))
                       );
                     u.length &&
-                      (c
+                      (d
                         ? n.addAlert(
                             l("translate")(
                               "Successfully connected to Aria2 through its remote RPC …"
@@ -448,17 +448,21 @@
               once: function(e, t, n, a) {
                 (n = n || o.a.noop),
                   (t = t || []),
-                  d.push({ once: !0, name: "aria2." + e, params: t, cb: n }),
+                  c.push({ once: !0, name: "aria2." + e, params: t, cb: n }),
                   a || this.forceUpdate();
               },
               subscribe: function(e, t, n, a) {
-                n = n || o.a.noop;
-                var i = { once: !1, name: "aria2." + e, params: (t = t || []), cb: n };
-                return d.push(i), a || this.forceUpdate(), i;
+                var i = {
+                  once: !1,
+                  name: "aria2." + e,
+                  params: (t = t || []),
+                  cb: (n = n || o.a.noop)
+                };
+                return c.push(i), a || this.forceUpdate(), i;
               },
               unsubscribe: function(e) {
-                var t = d.indexOf(e);
-                d[t] = null;
+                var t = c.indexOf(e);
+                c[t] = null;
               },
               forceUpdate: function() {
                 h ? (clearTimeout(h), (h = setTimeout(v, 0))) : (f = !0);
@@ -1458,25 +1462,25 @@
       "$name",
       "$titlePattern",
       function(e, t, n) {
-        var a = (function() {
-            var e = new Uint8Array(16),
-              t = function() {
-                for (var t, n = 0; n < 16; n++)
-                  n % 3 || (t = (4294967296 * Math.random()) | 0),
-                    (e[n] = (t >>> ((3 & n) << 3)) & 255);
-                return e;
-              };
-            return window.crypto && crypto.getRandomValues
-              ? function() {
-                  try {
-                    return crypto.getRandomValues(e), e;
-                  } catch (e) {
-                    return t();
-                  }
+        var a,
+          o,
+          i = ((a = new Uint8Array(16)),
+          (o = function() {
+            for (var e, t = 0; t < 16; t++)
+              t % 3 || (e = (4294967296 * Math.random()) | 0),
+                (a[t] = (e >>> ((3 & t) << 3)) & 255);
+            return a;
+          }),
+          window.crypto && crypto.getRandomValues
+            ? function() {
+                try {
+                  return crypto.getRandomValues(a), a;
+                } catch (e) {
+                  return o();
                 }
-              : t;
-          })(),
-          o = {
+              }
+            : o),
+          r = {
             fmtsize: function(e) {
               return (e = +e) <= 1024
                 ? e.toFixed(0) + " B"
@@ -1487,7 +1491,7 @@
                     : (e /= 1024).toFixed(3) + " GB";
             },
             fmtspeed: function(e) {
-              return o.fmtsize(e) + "/s";
+              return r.fmtsize(e) + "/s";
             },
             setCookie: function(e, t) {
               var n = new Date();
@@ -1512,7 +1516,7 @@
               return (
                 Object.freeze(e),
                 function() {
-                  var t = a();
+                  var t = i();
                   return (
                     (t[6] = (15 & t[6]) | 64),
                     (t[8] = (63 & t[8]) | 128),
@@ -1541,7 +1545,7 @@
               );
             })(),
             randStr: function() {
-              return o.uuid();
+              return r.uuid();
             },
             mergeMap: function(e, t, n) {
               t || (t = []);
@@ -1555,8 +1559,8 @@
                 n
                   .replace("{active}", e.numActive || "⌛")
                   .replace("{waiting}", e.numWaiting || "⌛")
-                  .replace("{download_speed}", o.fmtspeed(e.downloadSpeed) || "⌛")
-                  .replace("{upload_speed}", o.fmtspeed(e.uploadSpeed) || "⌛")
+                  .replace("{download_speed}", r.fmtspeed(e.downloadSpeed) || "⌛")
+                  .replace("{upload_speed}", r.fmtspeed(e.uploadSpeed) || "⌛")
                   .replace("{stopped}", e.numStopped || "⌛")
                   .replace("{name}", t)
               );
@@ -1568,10 +1572,10 @@
               if (!e) return [];
               if (o > 1)
                 for (var i = 1 / o, r = 0, s = 0; s < e.length; s++)
-                  for (var l = parseInt(e[s], 16), c = 1; c <= 4; c++) {
-                    var d = l & (1 << (4 - c));
-                    d && 0;
-                    var u = !!d;
+                  for (var l = parseInt(e[s], 16), d = 1; d <= 4; d++) {
+                    var c = l & (1 << (4 - d));
+                    c && 0;
+                    var u = !!c;
                     if (
                       (a >= 1 && n[a - 1].show == u
                         ? (n[a - 1].ratio += i)
@@ -1583,7 +1587,7 @@
               return n;
             }
           };
-        return o;
+        return r;
       }
     ]).name;
   },
@@ -1691,16 +1695,15 @@
           } catch (e) {}
           return function(n, i, r) {
             var s = !1,
-              l = 180,
-              c = 0,
+              l = 0,
               d = 0,
-              u = !1,
-              p = { label: "DOWN", data: [], color: "#00ff00", lines: { show: !0 } },
-              h = { label: "UP", data: [], color: "#0000ff", lines: { show: !0 } };
+              c = !1,
+              u = { label: "DOWN", data: [], color: "#00ff00", lines: { show: !0 } },
+              p = { label: "UP", data: [], color: "#0000ff", lines: { show: !0 } };
             i.height(0.6 * i.width());
-            var f = e.plot(i, [p, h], {
+            var h = e.plot(i, [u, p], {
                 legend: {
-                  show: void 0 == r.nolabel,
+                  show: null == r.nolabel,
                   backgroundOpacity: 0,
                   margin: [10, 20],
                   labelFormatter: function(e, n) {
@@ -1739,22 +1742,22 @@
                   min: 0
                 }
               }),
-              m = function() {
+              f = function() {
                 var e = i.width();
                 0 != e &&
-                  (i.height(0.6 * e), f.setData([p, h]), f.resize(), f.setupGrid(), f.draw());
+                  (i.height(0.6 * e), h.setData([u, p]), h.resize(), h.setupGrid(), h.draw());
               };
             n.$watch(r.dspeed, function(e) {
-              void 0 !== e && ((u = !0), (c = parseFloat(e) || 0));
+              void 0 !== e && ((c = !0), (l = parseFloat(e) || 0));
             }),
               n.$watch(r.uspeed, function(e) {
-                void 0 !== e && ((u = !0), (d = parseFloat(e) || 0));
+                void 0 !== e && ((c = !0), (d = parseFloat(e) || 0));
               }),
               n.$watch(r.draw, function(e) {
                 s = e;
               });
-            var g = setInterval(function() {
-              if (u) {
+            var m = setInterval(function() {
+              if (c) {
                 var e = new Date();
                 (e = Date.UTC(
                   e.getFullYear(),
@@ -1764,16 +1767,16 @@
                   e.getMinutes(),
                   e.getSeconds()
                 )),
-                  p.data.length === l && p.data.shift(),
-                  p.data.push([e, c]),
-                  h.data.length === l && h.data.shift(),
-                  h.data.push([e, d]),
-                  s && m();
+                  180 === u.data.length && u.data.shift(),
+                  u.data.push([e, l]),
+                  180 === p.data.length && p.data.shift(),
+                  p.data.push([e, d]),
+                  s && f();
               }
             }, 1e3);
-            o.a.element(window).bind("resize", m),
+            o.a.element(window).bind("resize", f),
               i.bind("$destroy", function() {
-                clearInterval(g);
+                clearInterval(m);
               });
           };
         }
@@ -1808,48 +1811,49 @@
             require: "ngModel",
             restrict: "A",
             link: function(t, n, a, o) {
-              var i = e(a.ngModel),
-                r = [],
-                s = 0,
+              var i,
+                r = e(a.ngModel),
+                s = [],
                 l = 0,
+                d = 0,
                 c = function() {
-                  return i(t);
-                },
-                d = function(e) {
-                  n.prop("indeterminate", e);
+                  return r(t);
                 },
                 u = function(e) {
-                  o.$setViewValue(e), o.$render();
+                  n.prop("indeterminate", e);
                 },
                 p = function(e) {
-                  return function() {
-                    r.length > 0 && e.apply(this, arguments);
-                  };
+                  o.$setViewValue(e), o.$render();
                 },
                 h = function(e) {
                   return function() {
-                    0 === r.length && e.apply(this, arguments);
+                    s.length > 0 && e.apply(this, arguments);
                   };
                 },
                 f = function(e) {
+                  return function() {
+                    0 === s.length && e.apply(this, arguments);
+                  };
+                },
+                m = function(e) {
                   return function(t) {
                     if (t.targetScope !== t.currentScope) return e.apply(this, arguments);
                   };
                 };
               if (
-                (a.indeterminate && e(a.indeterminate).constant && d(t.$eval(a.indeterminate)),
+                (a.indeterminate && e(a.indeterminate).constant && u(t.$eval(a.indeterminate)),
                 a.indeterminate && e(a.indeterminate).constant && !t.$eval(a.indeterminate))
               )
                 o.$viewChangeListeners.push(
-                  h(function() {
+                  f(function() {
                     t.$emit("childSelectedChange", c());
                   })
                 ),
                   t.$on(
                     "ParentSelectedChange",
-                    f(
-                      h(function(e, t) {
-                        u(t);
+                    m(
+                      f(function(e, t) {
+                        p(t);
                       })
                     )
                   ),
@@ -1858,31 +1862,30 @@
               else {
                 t.$on(
                   "i'm child input",
-                  f(function(e, t) {
-                    r.push(t);
+                  m(function(e, t) {
+                    s.push(t);
                   })
                 );
                 o.$viewChangeListeners.push(
-                  p(
-                    (function(e) {
-                      return function() {
-                        if (!n.prop("indeterminate")) return e.apply(this, arguments);
-                      };
-                    })(function() {
+                  h(
+                    ((i = function() {
                       t.$broadcast("ParentSelectedChange", c());
+                    }),
+                    function() {
+                      if (!n.prop("indeterminate")) return i.apply(this, arguments);
                     })
                   )
                 ),
                   t.$on(
                     "childSelectedChange",
-                    f(
-                      p(function(e, t) {
-                        if (s + l !== r.length) {
-                          (s = 0), (l = 0);
-                          for (var n = 0; n < r.length; n++) r[n]() ? (s += 1) : (l += 1);
-                        } else t ? (s++, l--) : (s--, l++);
-                        var a = 0 === l;
-                        d(a !== s > 0), u(a);
+                    m(
+                      h(function(e, t) {
+                        if (l + d !== s.length) {
+                          (l = 0), (d = 0);
+                          for (var n = 0; n < s.length; n++) s[n]() ? (l += 1) : (d += 1);
+                        } else t ? (l++, d--) : (l--, d++);
+                        var a = 0 === d;
+                        u(a !== l > 0), p(a);
                       })
                     )
                   );
@@ -1937,525 +1940,6 @@
           });
       }
     ]).name;
-  },
-  function(e, t, n) {
-    "use strict";
-    var a = n(0),
-      o = n.n(a);
-    t.a = o.a
-      .module("webui.ctrls.download", [
-        "ui.bootstrap",
-        "webui.services.utils",
-        "webui.services.rpc",
-        "webui.services.rpc.helpers",
-        "webui.services.alerts",
-        "webui.services.settings",
-        "webui.services.modals",
-        "webui.services.configuration",
-        "webui.services.errors"
-      ])
-      .controller("MainCtrl", [
-        "$scope",
-        "$name",
-        "$enable",
-        "$rpc",
-        "$rpchelpers",
-        "$utils",
-        "$alerts",
-        "$modals",
-        "$fileSettings",
-        "$activeInclude",
-        "$waitingExclude",
-        "$pageSize",
-        "$getErrorStatus",
-        "$rootScope",
-        "$filter",
-        function(e, t, n, a, o, i, r, s, l, c, d, u, p, h, f) {
-          (e.name = t), (e.enable = n);
-          var m = /\\/g,
-            g = [];
-          (e.active = []),
-            (e.waiting = []),
-            (e.stopped = []),
-            (e.gstats = {}),
-            (e.hideLinkedMetadata = !0),
-            (e.propFilter = ""),
-            (e.pause = function(e) {
-              a.once("forcePause", [e.gid]);
-            }),
-            (e.resume = function(e) {
-              a.once("unpause", [e.gid]);
-            }),
-            (e.restart = function(t) {
-              a.once("getOption", [t.gid], function(n) {
-                var i = n[0];
-                a.once("getFiles", [t.gid], function(n) {
-                  var a = n[0],
-                    r = _.chain(a)
-                      .map(function(e) {
-                        return e.uris;
-                      })
-                      .filter(function(e) {
-                        return e && e.length;
-                      })
-                      .map(function(e) {
-                        return _.chain(e)
-                          .map(function(e) {
-                            return e.uri;
-                          })
-                          .uniq()
-                          .value();
-                      })
-                      .value();
-                  r.length > 0 &&
-                    (console.log("adding uris:", r, i),
-                    e.remove(
-                      t,
-                      function() {
-                        o.addUris(r, i);
-                      },
-                      !0
-                    ));
-                });
-              });
-            }),
-            (e.canRestart = function(e) {
-              return -1 == ["active", "paused"].indexOf(e.status) && !e.bittorrent;
-            }),
-            (e.remove = function(t, n, o) {
-              setTimeout(function() {
-                if (
-                  o ||
-                  confirm(
-                    f("translate")("Remove {{name}} and associated meta-data?", { name: t.name })
-                  )
-                ) {
-                  var i = "remove";
-                  "stopped" == e.getType(t) && (i = "removeDownloadResult"),
-                    t.followedFrom &&
-                      (e.remove(t.followedFrom, function() {}, !0), (t.followedFrom = null)),
-                    a.once(i, [t.gid], n);
-                  for (var r = [e.active, e.waiting, e.stopped], s = 0; s < r.length; ++s) {
-                    var l = r[s],
-                      c = l.indexOf(t);
-                    if (!(c < 0)) return void l.splice(c, 1);
-                  }
-                }
-              }, 0);
-            }),
-            a.subscribe("tellActive", [], function(t) {
-              e.$apply(function() {
-                i.mergeMap(t[0], e.active, e.getCtx);
-              });
-            }),
-            a.subscribe("tellWaiting", [0, 1e3], function(t) {
-              e.$apply(function() {
-                i.mergeMap(t[0], e.waiting, e.getCtx);
-              });
-            }),
-            a.subscribe("tellStopped", [0, 1e3], function(t) {
-              e.$apply(function() {
-                if (e.hideLinkedMetadata) {
-                  i.mergeMap(t[0], g, e.getCtx);
-                  var n = {};
-                  _.forEach(g, function(e) {
-                    n[e.gid] = e;
-                  }),
-                    _.forEach(e.active, function(e) {
-                      n[e.gid] = e;
-                    }),
-                    _.forEach(e.waiting, function(e) {
-                      n[e.gid] = e;
-                    }),
-                    (e.stopped = _.filter(g, function(e) {
-                      return (
-                        !(e.metadata && e.followedBy && e.followedBy in n) ||
-                        ((n[e.followedBy].followedFrom = e), !1)
-                      );
-                    }));
-                } else i.mergeMap(t[0], e.stopped, e.getCtx);
-              });
-            }),
-            (h.pageTitle = i.getTitle()),
-            a.subscribe("getGlobalStat", [], function(t) {
-              e.$apply(function() {
-                (e.gstats = t[0]), (h.pageTitle = i.getTitle(e.gstats));
-              });
-            }),
-            a.once("getVersion", [], function(t) {
-              e.$apply(function() {
-                e.miscellaneous = t[0];
-              });
-            }),
-            (e.totalDownloads = 0),
-            (e.downloadFilter = ""),
-            (e.downloadFilterCommitted = ""),
-            (e.onDownloadFilter = function() {
-              e.downloadFilterTimer && clearTimeout(e.downloadFilterTimer),
-                (e.downloadFilterTimer = setTimeout(function() {
-                  delete e.downloadFilterTimer,
-                    e.downloadFilterCommitted !== e.downloadFilter &&
-                      ((e.downloadFilterCommitted = e.downloadFilter), e.$digest());
-                }, 500));
-            }),
-            (e.filterDownloads = function(t) {
-              if (!e.downloadFilterCommitted) return t;
-              var n = e.downloadFilterCommitted
-                .replace(/[{}()\[\]\\^$.?]/g, "\\$&")
-                .replace(/\*/g, ".*")
-                .replace(/\./g, ".");
-              return (
-                (n = new RegExp(n, "i")),
-                _.filter(t, function(e) {
-                  return (
-                    !!n.test(e.name) ||
-                    _.filter(e.files, function(e) {
-                      return n.test(e.relpath);
-                    }).length
-                  );
-                })
-              );
-            }),
-            (e.clearFilter = function() {
-              e.downloadFilter = e.downloadFilterCommitted = "";
-            }),
-            (e.toggleStateFilters = function() {
-              (e.filterSpeed = !e.filterSpeed),
-                (e.filterActive = !e.filterActive),
-                (e.filterWaiting = !e.filterWaiting),
-                (e.filterComplete = !e.filterComplete),
-                (e.filterError = !e.filterError),
-                (e.filterPaused = !e.filterPaused),
-                (e.filterRemoved = !e.filterRemoved),
-                e.persistFilters();
-            }),
-            (e.resetFilters = function() {
-              (e.filterSpeed = e.filterActive = e.filterWaiting = e.filterComplete = e.filterError = e.filterPaused = e.filterRemoved = !0),
-                e.clearFilter(),
-                e.persistFilters();
-            }),
-            (e.persistFilters = function() {
-              var t = JSON.stringify({
-                s: e.filterSpeed,
-                a: e.filterActive,
-                w: e.filterWaiting,
-                c: e.filterComplete,
-                e: e.filterError,
-                p: e.filterPaused,
-                r: e.filterRemoved
-              });
-              i.setCookie("aria2filters", t);
-            }),
-            (e.loadFilters = function() {
-              var t = JSON.parse(i.getCookie("aria2filters"));
-              t
-                ? ((e.filterSpeed = !!t.s),
-                  (e.filterActive = !!t.a),
-                  (e.filterWaiting = !!t.w),
-                  (e.filterComplete = !!t.c),
-                  (e.filterError = !!t.e),
-                  (e.filterPaused = !!t.p),
-                  (e.filterRemoved = !!t.r))
-                : e.resetFilters();
-            }),
-            e.loadFilters(),
-            (e.toggleCollapsed = function(t) {
-              if (!t.collapsed)
-                return (
-                  (t.animCollapsed = !0),
-                  void setTimeout(function() {
-                    e.$apply(function() {
-                      t.collapsed = !0;
-                    });
-                  }, 500)
-                );
-              (t.collapsed = !1),
-                setTimeout(function() {
-                  e.$apply(function() {
-                    t.animCollapsed = !1;
-                  });
-                }, 0);
-            }),
-            (e.pageSize = u),
-            (e.currentPage = 1),
-            (e.totalAria2Downloads = function() {
-              return e.active.length + e.waiting.length + e.stopped.length;
-            }),
-            (e.getErrorStatus = function(e) {
-              return p(+e);
-            }),
-            (e.getDownloads = function() {
-              var t = [];
-              e.filterActive
-                ? e.filterSpeed
-                  ? t.push(e.active)
-                  : t.push(
-                      _.filter(e.active, function(e) {
-                        return !+e.uploadSpeed && !+e.downloadSpeed;
-                      })
-                    )
-                : e.filterSpeed &&
-                  t.push(
-                    _.filter(e.active, function(e) {
-                      return +e.uploadSpeed || +e.downloadSpeed;
-                    })
-                  ),
-                e.filterWaiting &&
-                  t.push(
-                    _.filter(e.waiting, function(e) {
-                      return "waiting" == e.status;
-                    })
-                  ),
-                e.filterPaused &&
-                  t.push(
-                    _.filter(e.waiting, function(e) {
-                      return "paused" == e.status;
-                    })
-                  ),
-                e.filterError &&
-                  t.push(
-                    _.filter(e.stopped, function(e) {
-                      return "error" == e.status;
-                    })
-                  ),
-                e.filterComplete &&
-                  t.push(
-                    _.filter(e.stopped, function(e) {
-                      return "complete" == e.status;
-                    })
-                  ),
-                e.filterRemoved &&
-                  t.push(
-                    _.filter(e.stopped, function(e) {
-                      return "removed" == e.status;
-                    })
-                  );
-              var n = t
-                .map(function(e) {
-                  return _.sortBy(e, function(e) {
-                    return -e.completedLength / e.totalLength;
-                  });
-                })
-                .reduce(function(e, t) {
-                  return e.concat(t);
-                }, []);
-              return (
-                (n = e.filterDownloads(n)),
-                (e.totalDownloads = n.length),
-                (n = n.slice((e.currentPage - 1) * e.pageSize)).splice(e.pageSize),
-                n
-              );
-            }),
-            (e.hasDirectURL = function() {
-              return "" != a.getDirectURL();
-            }),
-            (e.getDirectURL = function() {
-              return a.getDirectURL();
-            }),
-            (e.getCtx = function(e, t) {
-              var n;
-              t
-                ? (t.gid !== e.gid && (t.files = []),
-                  (t.dir = e.dir),
-                  (t.status = e.status),
-                  e.verifiedLength && (t.status = "verifying"),
-                  e.verifyIntegrityPending && (t.status = "verifyPending"),
-                  (t.errorCode = e.errorCode),
-                  (t.gid = e.gid),
-                  (t.followedBy =
-                    e.followedBy && 1 == e.followedBy.length ? e.followedBy[0] : null),
-                  (t.followedFrom = null),
-                  (t.numPieces = e.numPieces),
-                  (t.connections = e.connections),
-                  void 0 === e.numSeeders
-                    ? (t.numSeeders = "")
-                    : ((t.connectionsTitle = "Connections (Seeders)"),
-                      (t.numSeeders = " (" + e.numSeeders + ")")),
-                  (t.bitfield = e.bitfield),
-                  t.totalLength !== e.totalLength &&
-                    ((t.totalLength = e.totalLength),
-                    (t.fmtTotalLength = i.fmtsize(e.totalLength))),
-                  t.completedLength !== e.completedLength &&
-                    ((t.completedLength = e.completedLength),
-                    (t.fmtCompletedLength = i.fmtsize(e.completedLength))),
-                  e.verifiedLength
-                    ? t.verifiedLength !== e.verifiedLength && (t.verifiedLength = e.verifiedLength)
-                    : delete t.verifiedLength,
-                  e.verifyIntegrityPending
-                    ? t.verifyIntegrityPending !== e.verifyIntegrityPending &&
-                      (t.verifyIntegrityPending = e.verifyIntegrityPending)
-                    : delete t.verifyIntegrityPending,
-                  t.uploadLength !== e.uploadLength &&
-                    ((t.uploadLength = e.uploadLength),
-                    (t.fmtUploadLength = i.fmtsize(e.uploadLength))),
-                  t.pieceLength !== e.pieceLength &&
-                    ((t.pieceLength = e.pieceLength),
-                    (t.fmtPieceLength = i.fmtsize(e.pieceLength))),
-                  t.downloadSpeed !== e.downloadSpeed &&
-                    ((t.downloadSpeed = e.downloadSpeed),
-                    (t.fmtDownloadSpeed = i.fmtspeed(e.downloadSpeed))),
-                  t.uploadSpeed !== e.uploadSpeed &&
-                    ((t.uploadSpeed = e.uploadSpeed),
-                    (t.fmtUploadSpeed = i.fmtspeed(e.uploadSpeed))))
-                : ((t = {
-                    dir: e.dir,
-                    status: e.status,
-                    gid: e.gid,
-                    followedBy: e.followedBy && 1 == e.followedBy.length ? e.followedBy[0] : null,
-                    followedFrom: null,
-                    numPieces: e.numPieces,
-                    connections: e.connections,
-                    connectionsTitle: "Connections",
-                    numSeeders: e.numSeeders,
-                    bitfield: e.bitfield,
-                    errorCode: e.errorCode,
-                    totalLength: e.totalLength,
-                    fmtTotalLength: i.fmtsize(e.totalLength),
-                    completedLength: e.completedLength,
-                    fmtCompletedLength: i.fmtsize(e.completedLength),
-                    uploadLength: e.uploadLength,
-                    fmtUploadLength: i.fmtsize(e.uploadLength),
-                    pieceLength: e.pieceLength,
-                    fmtPieceLength: i.fmtsize(e.pieceLength),
-                    downloadSpeed: e.downloadSpeed,
-                    fmtDownloadSpeed: i.fmtspeed(e.downloadSpeed),
-                    uploadSpeed: e.uploadSpeed,
-                    fmtUploadSpeed: i.fmtspeed(e.uploadSpeed),
-                    collapsed: !0,
-                    animCollapsed: !0,
-                    files: []
-                  }),
-                  e.verifiedLength &&
-                    ((t.verifiedLength = e.verifiedLength), (t.status = "verifying")),
-                  e.verifyIntegrityPending &&
-                    ((t.verifyIntegrityPending = e.verifyIntegrityPending),
-                    (t.status = "verifyPending")));
-              var a,
-                o = e.files;
-              if (o) {
-                for (var r = t.files, s = 0; s < o.length; ++s) {
-                  var l = r[s] || (r[s] = {}),
-                    c = o[s];
-                  c.path !== l.path &&
-                    ((l.index = +c.index),
-                    (l.path = c.path),
-                    (l.length = c.length),
-                    (l.fmtLength = i.fmtsize(c.length)),
-                    (l.relpath = c.path.replace(m, "/")),
-                    l.relpath
-                      ? l.relpath.startsWith("[") ||
-                        (l.relpath = l.relpath.substr(t.dir.length + 1))
-                      : (l.relpath = (c.uris && c.uris[0] && c.uris[0].uri) || "Unknown")),
-                    (l.selected = "true" === c.selected);
-                }
-                (r.length = o.length), r.length && (n = r[0].relpath);
-              } else delete t.files;
-              return (
-                e.bittorrent
-                  ? ((a = e.bittorrent.info && e.bittorrent.info.name), (t.bittorrent = !0))
-                  : delete t.bittorrent,
-                (t.name = a || n || "Unknown"),
-                (t.metadata = t.name.startsWith("[METADATA]")),
-                t.metadata && (t.name = t.name.substr(10)),
-                t
-              );
-            }),
-            (e.hasStatus = function e(t, n) {
-              return _.isArray(n)
-                ? 0 != n.length && (e(t, n[0]) || e(t, n.slice(1)))
-                : t.status == n;
-            }),
-            (e.getEta = function(e) {
-              return (e.totalLength - e.completedLength) / e.downloadSpeed;
-            }),
-            (e.getProgressClass = function(e) {
-              switch (e.status) {
-                case "paused":
-                  return "progress-bar-info";
-                case "error":
-                  return "progress-bar-danger";
-                case "removed":
-                  return "progress-bar-warning";
-                case "active":
-                  return "active";
-                case "verifying":
-                  return "progress-bar-warning";
-                case "complete":
-                  return "progress-bar-success";
-                default:
-                  return "";
-              }
-            }),
-            (e.getProgress = function(e) {
-              var t = 0;
-              return (
-                (t = (t = e.verifiedLength
-                  ? (e.verifiedLength / e.totalLength) * 100 || 0
-                  : (e.completedLength / e.totalLength) * 100 || 0).toFixed(2)) || (t = 0),
-                t
-              );
-            }),
-            (e.getRatio = function(e) {
-              var t = 0;
-              return (t = (t = e.uploadLength / e.completedLength || 0).toFixed(2)) || (t = 0), t;
-            }),
-            (e.getType = function(e) {
-              var t = e.status;
-              return (
-                "paused" == t && (t = "waiting"),
-                -1 != ["error", "removed", "complete"].indexOf(t) && (t = "stopped"),
-                t
-              );
-            }),
-            (e.selectFiles = function(e) {
-              console.log("got back files for the torrent ..."),
-                s.invoke("selectFiles", e.files, function(t) {
-                  var n = "";
-                  _.forEach(t, function(e) {
-                    e.selected && (n += "," + e.index);
-                  }),
-                    (n = n.slice(1)),
-                    a.once("changeOption", [e.gid, { "select-file": n }], function(e) {
-                      console.log("changed indexes to:", n, e);
-                    });
-                });
-            }),
-            (e.showSettings = function(t) {
-              var n = e.getType(t),
-                o = {};
-              return (
-                a.once("getOption", [t.gid], function(e) {
-                  var i = e[0],
-                    r = _.cloneDeep(l);
-                  for (var u in r)
-                    ("active" == n && -1 == c.indexOf(u)) ||
-                      ("waiting" == n && -1 != d.indexOf(u)) ||
-                      ((o[u] = r[u]), (o[u].val = i[u] || o[u].val));
-                  s.invoke("settings", o, t.name + " settings", "Change", function(e) {
-                    var n = {};
-                    for (var o in e) n[o] = e[o].val;
-                    a.once("changeOption", [t.gid, n]);
-                  });
-                }),
-                !1
-              );
-            }),
-            (e.moveDown = function(e) {
-              a.once("changePosition", [e.gid, 1, "POS_CUR"]);
-            }),
-            (e.moveUp = function(e) {
-              a.once("changePosition", [e.gid, -1, "POS_CUR"]);
-            });
-        }
-      ])
-      .filter("objFilter", function() {
-        return function(e, t) {
-          e = e || {};
-          var n = {};
-          for (var a in e) a.startsWith(t) && (n[a] = e[a]);
-          return n;
-        };
-      }).name;
   },
   function(e, t, n) {
     "use strict";
@@ -2661,6 +2145,57 @@
                 }
               };
             }),
+            (t.getAllDebrid = {
+              open: function(e, a) {
+                var o = this;
+                console.log("🏗️ Ouverture modal getAllDebrid avec données:", e);
+                var i = t.$new();
+                e
+                  ? ((i.alldebrid = e),
+                    console.log("🔑 Objet AllDebrid assigné au modalScope:", i.alldebrid),
+                    (i.alldebridApiKey = e.apiKey),
+                    (i.alldebridApiKeySaved = e.apiKeySaved),
+                    (i.alldebridError = e.error),
+                    (i.alldebridSuccess = e.success),
+                    (i.alldebridLinks = e.links))
+                  : ((i.alldebrid = {
+                      apiKey: localStorage.getItem("alldebridApiKey") || "",
+                      apiKeySaved: !1,
+                      error: null,
+                      success: null,
+                      links: null
+                    }),
+                    (i.alldebridApiKey = i.alldebrid.apiKey),
+                    (i.alldebridApiKeySaved = !1),
+                    console.log(
+                      "🔑 Objet AllDebrid créé par défaut dans modalScope:",
+                      i.alldebrid
+                    )),
+                  (i.saveAllDebridApiKey = t.saveAllDebridApiKey),
+                  (i.uploadAllDebridTorrent = function() {
+                    return (
+                      console.log("🎯 Upload torrent appelé depuis modalScope"),
+                      console.log("🎯 modalScope.downloadPath:", i.downloadPath),
+                      (t.downloadPath = i.downloadPath),
+                      t.uploadAllDebridTorrent.call(i)
+                    );
+                  }),
+                  (i.downloadPath = t.downloadPath),
+                  (this.inst = n.open({
+                    templateUrl: "getAllDebrid.html",
+                    scope: i,
+                    windowClass: "modal-large"
+                  })),
+                  this.inst.result.then(
+                    function() {
+                      delete o.inst, a && a();
+                    },
+                    function() {
+                      delete o.inst;
+                    }
+                  );
+              }
+            }),
             e.each(["about", "server_info"], function(e) {
               t[e] = {
                 open: function() {
@@ -2688,6 +2223,7 @@
                 "selectFiles",
                 "settings",
                 "connection",
+                "getAllDebrid",
                 "server_info",
                 "about"
               ],
@@ -2727,7 +2263,7 @@
         "$utils",
         "$translate",
         "$filter",
-        function(e, t, n, a, o, i, r, s, l, c) {
+        function(e, t, n, a, o, i, r, s, l, d) {
           (e.isFeatureEnabled = function(e) {
             return a.isFeatureEnabled(e);
           }),
@@ -2753,6 +2289,9 @@
             (e.addTorrents = function() {
               t.invoke("getTorrents", _.bind(a.addTorrents, a));
             }),
+            (e.openAllDebridModal = function() {
+              e.$parent.openAllDebridModal();
+            }),
             (e.changeCSettings = function() {
               t.invoke("connection", n.getConfiguration(), _.bind(n.configure, n));
             }),
@@ -2761,27 +2300,27 @@
                 var a = s.getCookie("aria2props");
                 (a && a.indexOf) || (a = []);
                 var l = e[0],
-                  d = {};
+                  c = {};
                 for (var u in (_.forEach([o, i], function(e) {
                   for (var t in e)
                     -1 == r.indexOf(t) &&
-                      ((d[t] = _.cloneDeep(e[t])), (d[t].starred = -1 != a.indexOf(t)));
+                      ((c[t] = _.cloneDeep(e[t])), (c[t].starred = -1 != a.indexOf(t)));
                 }),
                 l))
                   u in r ||
-                    (u in d
-                      ? (d[u].val = l[u])
-                      : (d[u] = { name: u, val: l[u], desc: "", starred: -1 != a.indexOf(u) }));
+                    (u in c
+                      ? (c[u].val = l[u])
+                      : (c[u] = { name: u, val: l[u], desc: "", starred: -1 != a.indexOf(u) }));
                 t.invoke(
                   "settings",
-                  _.cloneDeep(d),
-                  c("translate")("Global Settings"),
-                  c("translate")("Save"),
+                  _.cloneDeep(c),
+                  d("translate")("Global Settings"),
+                  d("translate")("Save"),
                   function(e) {
                     var t = {},
                       a = [];
                     for (var o in e)
-                      d[o].val != e[o].val && (t[o] = e[o].val), e[o].starred && a.push(o);
+                      c[o].val != e[o].val && (t[o] = e[o].val), e[o].starred && a.push(o);
                     console.log("saving aria2 settings:", t),
                       console.log("saving aria2 starred:", a),
                       n.once("changeGlobalOption", [t]),
@@ -2846,11 +2385,11 @@
             }),
             a.subscribe("getGlobalOption", [], function(t) {
               for (var a = t[0], r = e.getProps(), s = [], l = 0; l < r.length; l++) {
-                var c = {};
+                var d = {};
                 r[l] in o
-                  ? ((c = o[r[l]]), r[l] in a && (c.val = a[r[l]]), (c.name = r[l]), s.push(c))
+                  ? ((d = o[r[l]]), r[l] in a && (d.val = a[r[l]]), (d.name = r[l]), s.push(d))
                   : r[l] in i
-                    ? ((c = i[r[l]]), r[l] in a && (c.val = a[r[l]]), (c.name = r[l]), s.push(c))
+                    ? ((d = i[r[l]]), r[l] in a && (d.val = a[r[l]]), (d.name = r[l]), s.push(d))
                     : r[l] in a && s.push({ name: r[l], val: a[r[l]] });
               }
               n.mergeMap(s, e.properties, function(e, t) {
@@ -2871,6 +2410,1024 @@
   },
   function(e, t, n) {
     "use strict";
+    var a = n(0),
+      o = n.n(a);
+    o.a.module("webui.services.alldebrid", []).factory("$alldebrid", [
+      "$q",
+      function(e) {
+        let t = localStorage.getItem("alldebridApiKey") || "";
+        function n(n, a, o, i) {
+          const r = { Authorization: "Bearer " + t };
+          let s = { method: a, headers: r };
+          return (
+            o &&
+              (i
+                ? (s.body = o)
+                : ((r["Content-Type"] = "application/x-www-form-urlencoded"),
+                  (s.body = new URLSearchParams(o)))),
+            fetch("https://api.alldebrid.com/v4" + n, s)
+              .then(e => e.json())
+              .catch(t => e.reject(t))
+          );
+        }
+        function a(t) {
+          const a = new FormData();
+          return (
+            a.append("files[0]", t),
+            n("/magnet/upload/file", "POST", a, !0).then(t => {
+              if (
+                (console.log("🔍 Réponse uploadTorrentFile:", t),
+                "success" === t.status && t.data.files && t.data.files[0])
+              ) {
+                const e = t.data.files[0];
+                return console.log("✅ Format files détecté:", e), e;
+              }
+              return console.log("❌ Format de réponse non reconnu:", t), e.reject(t);
+            })
+          );
+        }
+        function o(t) {
+          return n("/magnet/status", "POST", { id: t }, !1).then(t => {
+            if (
+              (console.log("🔍 Réponse getMagnetStatusWithLinks (v4):", t),
+              console.log("🔍 Structure res.data:", t.data),
+              console.log("🔍 res.data.magnets:", t.data.magnets),
+              "success" === t.status && t.data.magnets)
+            ) {
+              let e;
+              return (
+                console.log(
+                  "🔍 Type de magnets:",
+                  typeof t.data.magnets,
+                  Array.isArray(t.data.magnets)
+                ),
+                Array.isArray(t.data.magnets)
+                  ? ((e = t.data.magnets[0]), console.log("📋 Magnet depuis array[0]:", e))
+                  : ((e = t.data.magnets), console.log("📋 Magnet depuis objet direct:", e)),
+                console.log("✅ Magnet extrait (avec liens):", e),
+                e
+              );
+            }
+            return console.log("❌ Format getMagnetStatusWithLinks non reconnu:", t), e.reject(t);
+          });
+        }
+        function i(t) {
+          return n("/v4.1/magnet/status", "POST", { id: t }, !1).then(t => {
+            if (
+              (console.log("🔍 Réponse getMagnetStatus (v4.1):", t),
+              "success" === t.status && t.data.magnets)
+            ) {
+              const e = t.data.magnets[0];
+              return console.log("✅ Magnet extrait:", e), e;
+            }
+            return console.log("❌ Format getMagnetStatus non reconnu:", t), e.reject(t);
+          });
+        }
+        function r(t) {
+          return n("/link/unlock", "POST", { link: t }, !1).then(
+            n => (
+              console.log("🔓 Réponse unlockLink:", n, "pour", t),
+              "success" === n.status && n.data.link
+                ? (console.log("✅ Lien direct obtenu:", n.data.link),
+                  { directLink: n.data.link, filename: n.data.filename, size: n.data.filesize })
+                : (console.log("❌ Impossible de déverrouiller le lien:", n), e.reject(n))
+            )
+          );
+        }
+        function s(t) {
+          return n("/magnet/files", "POST", { id: [t] }, !1).then(
+            t => (
+              console.log("🔍 Réponse getFilesLinks:", t),
+              "success" === t.status &&
+              t.data.magnets &&
+              t.data.magnets[0] &&
+              t.data.magnets[0].files
+                ? (console.log("✅ Files récupérés:", t.data.magnets[0].files),
+                  t.data.magnets[0].files)
+                : (console.log("❌ Format getFilesLinks non reconnu:", t), e.reject(t))
+            )
+          );
+        }
+        return {
+          setApiKey: function(e) {
+            (t = e), localStorage.setItem("alldebridApiKey", e);
+          },
+          uploadTorrentFile: a,
+          getMagnetStatus: i,
+          getMagnetStatusWithLinks: o,
+          unlockLink: r,
+          getFilesLinks: s,
+          uploadTorrentToAllDebrid: function(e, t) {
+            a(e).then(
+              function(e) {
+                console.log("🔍 Réponse uploadTorrentFile dans uploadTorrentToAllDebrid:", e),
+                  e && e.id
+                    ? (console.log("📋 Upload réussi, ID magnet:", e.id),
+                      e.ready
+                        ? (console.log("✅ Magnet déjà prêt, récupération des liens via v4..."),
+                          o(e.id).then(
+                            function(n) {
+                              if (
+                                (console.log("📊 Status avec liens:", n),
+                                console.log("🔍 Vérification status.links:", n.links),
+                                console.log(
+                                  "🔍 Type de status.links:",
+                                  typeof n.links,
+                                  Array.isArray(n.links)
+                                ),
+                                console.log(
+                                  "🔍 Longueur status.links:",
+                                  n.links ? n.links.length : "undefined"
+                                ),
+                                n.links && n.links.length > 0)
+                              ) {
+                                console.log("✅ Liens AllDebrid récupérés:", n.links),
+                                  console.log("🔓 Déverrouillage des liens AllDebrid...");
+                                const e = n.links.map(
+                                  e => (
+                                    console.log("🔓 Déverrouillage du lien:", e.link),
+                                    r(e.link).then(
+                                      e => (
+                                        console.log("✅ Lien déverrouillé:", e),
+                                        { name: e.filename, size: e.size, link: e.directLink }
+                                      ),
+                                      t => (
+                                        console.log("❌ Erreur déverrouillage lien:", e.link, t),
+                                        null
+                                      )
+                                    )
+                                  )
+                                );
+                                console.log("🔄 Attente des déverrouillages..."),
+                                  Promise.all(e).then(e => {
+                                    const n = e.filter(e => null !== e);
+                                    console.log("✅ Liens directs déverrouillés:", n),
+                                      t && t(null, n);
+                                  });
+                              } else
+                                console.log(
+                                  "⚠️ Pas de liens dans le status, tentative getFilesLinks..."
+                                ),
+                                  s(e.id).then(
+                                    function(e) {
+                                      console.log("✅ Fichiers récupérés en fallback:", e),
+                                        t && t(null, e);
+                                    },
+                                    function(e) {
+                                      console.log("❌ Erreur getFilesLinks fallback:", e),
+                                        t &&
+                                          t(
+                                            "Impossible de récupérer les liens pour ce magnet prêt"
+                                          );
+                                    }
+                                  );
+                            },
+                            function(e) {
+                              console.log("❌ Erreur getMagnetStatusWithLinks:", e), t && t(e);
+                            }
+                          ))
+                        : (console.log("⏳ Magnet en cours de traitement, polling..."),
+                          (function(e, t) {
+                            !(function n() {
+                              i(e).then(
+                                function(a) {
+                                  console.log("📊 Status polling:", a),
+                                    4 === a.statusCode
+                                      ? (console.log(
+                                          "✅ Magnet ready, récupération des fichiers..."
+                                        ),
+                                        s(e).then(
+                                          function(e) {
+                                            console.log("✅ Liens récupérés:", e), t && t(null, e);
+                                          },
+                                          function(e) {
+                                            console.log("❌ Erreur getFilesLinks:", e), t && t(e);
+                                          }
+                                        ))
+                                      : a.statusCode >= 5
+                                        ? (console.log("❌ Erreur statut:", a),
+                                          t && t("Erreur AllDebrid: " + a.status))
+                                        : (console.log("⏳ En attente, re-polling dans 5s..."),
+                                          setTimeout(n, 5e3));
+                                },
+                                function(e) {
+                                  console.log("❌ Erreur getMagnetStatus:", e), t && t(e);
+                                }
+                              );
+                            })();
+                          })(e.id, t)))
+                    : (console.log("❌ Réponse upload sans ID:", e),
+                      t && t("Réponse AllDebrid sans ID de magnet"));
+              },
+              function(e) {
+                console.log("❌ Erreur uploadTorrentFile:", e), t && t(e);
+              }
+            );
+          }
+        };
+      }
+    ]).name,
+      (t.a = o.a
+        .module("webui.ctrls.download", [
+          "ui.bootstrap",
+          "webui.services.utils",
+          "webui.services.rpc",
+          "webui.services.rpc.helpers",
+          "webui.services.alerts",
+          "webui.services.settings",
+          "webui.services.modals",
+          "webui.services.configuration",
+          "webui.services.errors",
+          "webui.services.alldebrid"
+        ])
+        .controller("MainCtrl", [
+          "$scope",
+          "$name",
+          "$enable",
+          "$rpc",
+          "$rpchelpers",
+          "$utils",
+          "$alerts",
+          "$modals",
+          "$fileSettings",
+          "$activeInclude",
+          "$waitingExclude",
+          "$pageSize",
+          "$getErrorStatus",
+          "$rootScope",
+          "$filter",
+          "$modal",
+          "$alldebrid",
+          function(e, t, n, a, o, i, r, s, l, d, c, u, p, h, f, m, g) {
+            s.register("getAllDebrid", function(t, n) {
+              console.log("🎭 Ouverture modal AllDebrid"),
+                console.log("🔑 Clé API initiale:", e.alldebridApiKey);
+              var a = e.$new(!0);
+              Object.assign(a, e),
+                (a.alldebridApiKey =
+                  e.alldebridApiKey || localStorage.getItem("alldebridApiKey") || ""),
+                console.log("🔑 Clé API dans modalScope:", a.alldebridApiKey),
+                m.open({ templateUrl: "getAllDebrid.html", scope: a }).result.finally(function() {
+                  console.log("🎭 Fermeture modal AllDebrid"),
+                    (e.alldebridApiKey = a.alldebridApiKey),
+                    console.log("🔄 Clé API synchronisée:", e.alldebridApiKey),
+                    n && n();
+                });
+            }),
+              (e.openAllDebridModal = function() {
+                (e.alldebrid.apiKey =
+                  e.alldebridApiKey || localStorage.getItem("alldebridApiKey") || ""),
+                  console.log("🚀 Ouverture modal AllDebrid avec clé:", e.alldebrid.apiKey),
+                  s.invoke("getAllDebrid", e.alldebrid, function() {
+                    (e.alldebridApiKey = e.alldebrid.apiKey),
+                      console.log("🔄 Synchronisation après fermeture modal:", e.alldebridApiKey);
+                  });
+              }),
+              (e.downloadPath = ""),
+              (e.alldebrid = {
+                apiKey: localStorage.getItem("alldebridApiKey") || "",
+                apiKeySaved: !1,
+                error: null,
+                success: null,
+                links: null
+              }),
+              console.log("🔄 Chargement initial - Clé API récupérée:", e.alldebrid.apiKey),
+              console.log(
+                "🔄 Chargement initial - localStorage:",
+                localStorage.getItem("alldebridApiKey")
+              ),
+              (e.alldebridApiKey = e.alldebrid.apiKey),
+              (e.alldebridApiKeySaved = e.alldebrid.apiKeySaved),
+              (e.saveAllDebridApiKey = function() {
+                console.log("🔑 === DÉBUT SAUVEGARDE API KEY ==="),
+                  console.log("🔍 Context du scope:", this),
+                  console.log(
+                    "🔍 Scope actuel:",
+                    e === this ? "scope principal" : "scope différent"
+                  ),
+                  console.log(
+                    "🔑 Clé API depuis l'objet alldebrid (scope):",
+                    e.alldebrid ? e.alldebrid.apiKey : "objet manquant"
+                  ),
+                  console.log(
+                    "🔑 Clé API depuis l'objet alldebrid (this):",
+                    this.alldebrid ? this.alldebrid.apiKey : "objet manquant"
+                  ),
+                  console.log("🔑 Clé API depuis scope direct:", e.alldebridApiKey),
+                  console.log("🔑 Clé API depuis this direct:", this.alldebridApiKey);
+                var t =
+                  (this.alldebrid && this.alldebrid.apiKey) ||
+                  (e.alldebrid && e.alldebrid.apiKey) ||
+                  this.alldebridApiKey ||
+                  e.alldebridApiKey ||
+                  "";
+                if (
+                  (console.log("🔑 Clé API finale utilisée:", t),
+                  console.log("🔑 Type de la clé:", typeof t),
+                  console.log("🔑 Longueur de la clé:", t ? t.length : 0),
+                  console.log("🔑 Clé vide ou undefined?", !t),
+                  !t || "" === t.trim())
+                )
+                  return (
+                    console.log("❌ Clé API vide, sauvegarde annulée"),
+                    void (e.alldebrid
+                      ? (e.alldebrid.error = "Veuillez entrer une clé API valide")
+                      : (e.alldebridError = "Veuillez entrer une clé API valide"))
+                  );
+                try {
+                  localStorage.setItem("alldebridApiKey", t),
+                    console.log("💾 Clé sauvegardée dans localStorage");
+                  var n = localStorage.getItem("alldebridApiKey");
+                  console.log("✅ Clé récupérée depuis localStorage:", n),
+                    console.log("🔄 Comparaison clés égales:", n === t),
+                    g.setApiKey(t),
+                    console.log("🔧 Service AllDebrid mis à jour avec la nouvelle clé"),
+                    e.alldebrid &&
+                      ((e.alldebrid.apiKey = t),
+                      (e.alldebrid.apiKeySaved = !0),
+                      (e.alldebrid.error = null)),
+                    (e.alldebridApiKey = t),
+                    (e.alldebridApiKeySaved = !0),
+                    (e.alldebridError = null),
+                    console.log("✨ Indicateur de sauvegarde affiché"),
+                    setTimeout(function() {
+                      e.$apply(function() {
+                        e.alldebrid && (e.alldebrid.apiKeySaved = !1),
+                          (e.alldebridApiKeySaved = !1),
+                          console.log("⏰ Indicateur de sauvegarde masqué");
+                      });
+                    }, 2e3);
+                } catch (t) {
+                  console.error("❌ Erreur lors de la sauvegarde:", t);
+                  var a = "Erreur lors de la sauvegarde: " + t.message;
+                  e.alldebrid ? (e.alldebrid.error = a) : (e.alldebridError = a);
+                }
+                console.log("🔑 === FIN SAUVEGARDE API KEY ===");
+              }),
+              (e.uploadAllDebridTorrent = function() {
+                console.log("🚀 === DÉBUT UPLOAD ALLDEBRID TORRENT ==="),
+                  console.log("🔑 Clé API actuelle dans scope:", e.alldebridApiKey),
+                  console.log(
+                    "🔑 Clé depuis localStorage:",
+                    localStorage.getItem("alldebridApiKey")
+                  ),
+                  console.log("🔑 Type de la clé:", typeof e.alldebridApiKey),
+                  console.log("🔑 Clé vide?", !e.alldebridApiKey),
+                  (e.alldebridLinks = null),
+                  (e.alldebridError = null),
+                  (e.alldebridSuccess = null);
+                var t = e.alldebridApiKey || localStorage.getItem("alldebridApiKey");
+                if (!t || "" === t.trim())
+                  return (
+                    console.log("❌ Aucune clé API configurée"),
+                    void (e.alldebridError = "Veuillez d'abord configurer votre clé API AllDebrid.")
+                  );
+                console.log("🔍 Recherche de l'élément input file...");
+                var n =
+                  document.getElementById("alldebrid-torrent-modal") ||
+                  document.getElementById("alldebrid-torrent");
+                if (
+                  (console.log("📂 Élément input trouvé:", !!n),
+                  console.log("📂 Input ID:", n ? n.id : "aucun"),
+                  console.log("📂 Input files:", n ? n.files : "aucun"),
+                  console.log("📂 Nombre de fichiers:", n && n.files ? n.files.length : 0),
+                  !n)
+                )
+                  return (
+                    console.log("❌ Élément input file non trouvé"),
+                    void (e.alldebridError = "Erreur: élément de sélection de fichier non trouvé.")
+                  );
+                if (!n.files || !n.files.length)
+                  return (
+                    console.log("❌ Aucun fichier sélectionné"),
+                    void (e.alldebridError = "Veuillez sélectionner un fichier .torrent.")
+                  );
+                var a = n.files[0];
+                console.log("📁 Fichier sélectionné:", a.name),
+                  console.log("📁 Taille du fichier:", a.size, "bytes"),
+                  console.log("📁 Type MIME:", a.type);
+                var i = "";
+                if (this.downloadPath)
+                  (i = this.downloadPath),
+                    console.log("📁 Chemin depuis this.downloadPath (modalScope):", i);
+                else if (e.downloadPath)
+                  (i = e.downloadPath),
+                    console.log("📁 Chemin depuis scope.downloadPath (mainScope):", i);
+                else {
+                  var r = document.getElementById("download-path-modal");
+                  console.log("📁 Element DOM trouvé:", r),
+                    console.log("📁 Valeur de l'élément:", r ? r.value : "Element inexistant"),
+                    r && r.value
+                      ? ((i = r.value), console.log("📁 Chemin depuis DOM direct:", i))
+                      : console.log("⚠️ Aucun chemin trouvé dans toutes les sources");
+                }
+                console.log("📁 Chemin de téléchargement final:", i),
+                  (e.alldebridError = "Envoi en cours..."),
+                  console.log("🔧 Configuration du service AllDebrid avec la clé:", t),
+                  g.setApiKey(t),
+                  console.log("🌐 Début de l'upload vers AllDebrid..."),
+                  g.uploadTorrentToAllDebrid(a, function(t, n) {
+                    if (
+                      (console.log("📥 Réponse de AllDebrid reçue"),
+                      console.log("❌ Erreur:", t),
+                      console.log("🔗 Liens:", n),
+                      t)
+                    )
+                      console.log("❌ Erreur lors de l'upload:", t),
+                        (e.alldebridError =
+                          "string" == typeof t ? t : (t && t.message) || "Erreur inconnue."),
+                        (e.alldebridLinks = null);
+                    else {
+                      if (
+                        (console.log("✅ Upload réussi, liens reçus:", n),
+                        (e.alldebridLinks = n),
+                        (e.alldebridError = null),
+                        n && n.length)
+                      ) {
+                        console.log("📤 Extraction et envoi des liens vers aria2...");
+                        var a = (function(e) {
+                          var t = [];
+                          return Array.isArray(e) && e[0] && e[0].link && e[0].name
+                            ? (console.log("📋 Format liens directs déverrouillés détecté"),
+                              e.forEach(function(e) {
+                                t.push({ name: e.name, size: e.size, link: e.link });
+                              }),
+                              t)
+                            : Array.isArray(e) && e[0] && e[0].link && e[0].filename
+                              ? (console.log("📋 Format liens directs v4 détecté (legacy)"),
+                                e.forEach(function(e) {
+                                  t.push({ name: e.filename, size: e.size, link: e.link });
+                                }),
+                                t)
+                              : (console.log("📋 Format files hiérarchique détecté"),
+                                Array.isArray(e) &&
+                                  e.forEach(function e(n) {
+                                    n.l
+                                      ? t.push({ name: n.n, size: n.s, link: n.l })
+                                      : n.e && n.e.forEach(e);
+                                  }),
+                                t);
+                        })(n);
+                        if ((console.log("🔗 Liens extraits:", a), a.length > 0)) {
+                          var r = a.map(function(e) {
+                              return (
+                                console.log("🔗 Lien traité:", e.link, "pour", e.name), [e.link]
+                              );
+                            }),
+                            s = { dir: i };
+                          console.log("⚙️ Paramètres aria2:", s),
+                            o.addUris(r, s, function() {
+                              console.log("✅ Liens ajoutés à aria2 avec succès"),
+                                (e.alldebridSuccess =
+                                  "Liens envoyés au serveur et ajoutés à la file de téléchargement."),
+                                e.$apply(function() {
+                                  setTimeout(function() {
+                                    e.$apply(function() {
+                                      e.alldebridSuccess = null;
+                                    });
+                                  }, 4e3);
+                                });
+                            });
+                        } else
+                          console.log(
+                            "⚠️ Aucun lien de téléchargement trouvé dans la réponse AllDebrid"
+                          ),
+                            (e.alldebridError = "Aucun lien de téléchargement trouvé.");
+                      } else
+                        console.log("⚠️ Aucun fichier reçu d'AllDebrid"),
+                          (e.alldebridError = "Aucun fichier reçu d'AllDebrid.");
+                    }
+                    e.$apply(), console.log("🚀 === FIN UPLOAD ALLDEBRID TORRENT ===");
+                  });
+              }),
+              (e.downloadFileToPath = function(e, t, n) {
+                var a = document.createElement("a");
+                (a.href = e),
+                  (a.download = n ? n + "/" + t : t),
+                  document.body.appendChild(a),
+                  a.click(),
+                  document.body.removeChild(a);
+              }),
+              (e.uploadTorrentToAllDebrid = function(e, t) {
+                g.uploadTorrentFile(e).then(
+                  function(e) {
+                    !(function n() {
+                      g.getMagnetStatus(e).then(
+                        function(a) {
+                          4 === a.statusCode
+                            ? g.getFilesLinks(e).then(
+                                function(e) {
+                                  t && t(null, e);
+                                },
+                                function(e) {
+                                  t && t(e);
+                                }
+                              )
+                            : a.statusCode >= 5
+                              ? t && t("Erreur AllDebrid: " + a.status)
+                              : setTimeout(n, 5e3);
+                        },
+                        function(e) {
+                          t && t(e);
+                        }
+                      );
+                    })();
+                  },
+                  function(e) {
+                    t && t(e);
+                  }
+                );
+              }),
+              (e.name = t),
+              (e.enable = n);
+            var v = /\\/g,
+              b = [];
+            (e.active = []),
+              (e.waiting = []),
+              (e.stopped = []),
+              (e.gstats = {}),
+              (e.hideLinkedMetadata = !0),
+              (e.propFilter = ""),
+              (e.pause = function(e) {
+                a.once("forcePause", [e.gid]);
+              }),
+              (e.resume = function(e) {
+                a.once("unpause", [e.gid]);
+              }),
+              (e.restart = function(t) {
+                a.once("getOption", [t.gid], function(n) {
+                  var i = n[0];
+                  a.once("getFiles", [t.gid], function(n) {
+                    var a = n[0],
+                      r = _.chain(a)
+                        .map(function(e) {
+                          return e.uris;
+                        })
+                        .filter(function(e) {
+                          return e && e.length;
+                        })
+                        .map(function(e) {
+                          return _.chain(e)
+                            .map(function(e) {
+                              return e.uri;
+                            })
+                            .uniq()
+                            .value();
+                        })
+                        .value();
+                    r.length > 0 &&
+                      (console.log("adding uris:", r, i),
+                      e.remove(
+                        t,
+                        function() {
+                          o.addUris(r, i);
+                        },
+                        !0
+                      ));
+                  });
+                });
+              }),
+              (e.canRestart = function(e) {
+                return -1 == ["active", "paused"].indexOf(e.status) && !e.bittorrent;
+              }),
+              (e.remove = function(t, n, o) {
+                setTimeout(function() {
+                  if (
+                    o ||
+                    confirm(
+                      f("translate")("Remove {{name}} and associated meta-data?", { name: t.name })
+                    )
+                  ) {
+                    var i = "remove";
+                    "stopped" == e.getType(t) && (i = "removeDownloadResult"),
+                      t.followedFrom &&
+                        (e.remove(t.followedFrom, function() {}, !0), (t.followedFrom = null)),
+                      a.once(i, [t.gid], n);
+                    for (var r = [e.active, e.waiting, e.stopped], s = 0; s < r.length; ++s) {
+                      var l = r[s],
+                        d = l.indexOf(t);
+                      if (!(d < 0)) return void l.splice(d, 1);
+                    }
+                  }
+                }, 0);
+              }),
+              a.subscribe("tellActive", [], function(t) {
+                e.$apply(function() {
+                  i.mergeMap(t[0], e.active, e.getCtx);
+                });
+              }),
+              a.subscribe("tellWaiting", [0, 1e3], function(t) {
+                e.$apply(function() {
+                  i.mergeMap(t[0], e.waiting, e.getCtx);
+                });
+              }),
+              a.subscribe("tellStopped", [0, 1e3], function(t) {
+                e.$apply(function() {
+                  if (e.hideLinkedMetadata) {
+                    i.mergeMap(t[0], b, e.getCtx);
+                    var n = {};
+                    _.forEach(b, function(e) {
+                      n[e.gid] = e;
+                    }),
+                      _.forEach(e.active, function(e) {
+                        n[e.gid] = e;
+                      }),
+                      _.forEach(e.waiting, function(e) {
+                        n[e.gid] = e;
+                      }),
+                      (e.stopped = _.filter(b, function(e) {
+                        return (
+                          !(e.metadata && e.followedBy && e.followedBy in n) ||
+                          ((n[e.followedBy].followedFrom = e), !1)
+                        );
+                      }));
+                  } else i.mergeMap(t[0], e.stopped, e.getCtx);
+                });
+              }),
+              (h.pageTitle = i.getTitle()),
+              a.subscribe("getGlobalStat", [], function(t) {
+                e.$apply(function() {
+                  (e.gstats = t[0]), (h.pageTitle = i.getTitle(e.gstats));
+                });
+              }),
+              a.once("getVersion", [], function(t) {
+                e.$apply(function() {
+                  e.miscellaneous = t[0];
+                });
+              }),
+              (e.totalDownloads = 0),
+              (e.downloadFilter = ""),
+              (e.downloadFilterCommitted = ""),
+              (e.onDownloadFilter = function() {
+                e.downloadFilterTimer && clearTimeout(e.downloadFilterTimer),
+                  (e.downloadFilterTimer = setTimeout(function() {
+                    delete e.downloadFilterTimer,
+                      e.downloadFilterCommitted !== e.downloadFilter &&
+                        ((e.downloadFilterCommitted = e.downloadFilter), e.$digest());
+                  }, 500));
+              }),
+              (e.filterDownloads = function(t) {
+                if (!e.downloadFilterCommitted) return t;
+                var n = e.downloadFilterCommitted
+                  .replace(/[{}()\[\]\\^$.?]/g, "\\$&")
+                  .replace(/\*/g, ".*")
+                  .replace(/\./g, ".");
+                return (
+                  (n = new RegExp(n, "i")),
+                  _.filter(t, function(e) {
+                    return (
+                      !!n.test(e.name) ||
+                      _.filter(e.files, function(e) {
+                        return n.test(e.relpath);
+                      }).length
+                    );
+                  })
+                );
+              }),
+              (e.clearFilter = function() {
+                e.downloadFilter = e.downloadFilterCommitted = "";
+              }),
+              (e.toggleStateFilters = function() {
+                (e.filterSpeed = !e.filterSpeed),
+                  (e.filterActive = !e.filterActive),
+                  (e.filterWaiting = !e.filterWaiting),
+                  (e.filterComplete = !e.filterComplete),
+                  (e.filterError = !e.filterError),
+                  (e.filterPaused = !e.filterPaused),
+                  (e.filterRemoved = !e.filterRemoved),
+                  e.persistFilters();
+              }),
+              (e.resetFilters = function() {
+                (e.filterSpeed = e.filterActive = e.filterWaiting = e.filterComplete = e.filterError = e.filterPaused = e.filterRemoved = !0),
+                  e.clearFilter(),
+                  e.persistFilters();
+              }),
+              (e.persistFilters = function() {
+                var t = JSON.stringify({
+                  s: e.filterSpeed,
+                  a: e.filterActive,
+                  w: e.filterWaiting,
+                  c: e.filterComplete,
+                  e: e.filterError,
+                  p: e.filterPaused,
+                  r: e.filterRemoved
+                });
+                i.setCookie("aria2filters", t);
+              }),
+              (e.loadFilters = function() {
+                var t = JSON.parse(i.getCookie("aria2filters"));
+                t
+                  ? ((e.filterSpeed = !!t.s),
+                    (e.filterActive = !!t.a),
+                    (e.filterWaiting = !!t.w),
+                    (e.filterComplete = !!t.c),
+                    (e.filterError = !!t.e),
+                    (e.filterPaused = !!t.p),
+                    (e.filterRemoved = !!t.r))
+                  : e.resetFilters();
+              }),
+              e.loadFilters(),
+              (e.toggleCollapsed = function(t) {
+                if (!t.collapsed)
+                  return (
+                    (t.animCollapsed = !0),
+                    void setTimeout(function() {
+                      e.$apply(function() {
+                        t.collapsed = !0;
+                      });
+                    }, 500)
+                  );
+                (t.collapsed = !1),
+                  setTimeout(function() {
+                    e.$apply(function() {
+                      t.animCollapsed = !1;
+                    });
+                  }, 0);
+              }),
+              (e.pageSize = u),
+              (e.currentPage = 1),
+              (e.totalAria2Downloads = function() {
+                return e.active.length + e.waiting.length + e.stopped.length;
+              }),
+              (e.getErrorStatus = function(e) {
+                return p(+e);
+              }),
+              (e.getDownloads = function() {
+                var t = [];
+                e.filterActive
+                  ? e.filterSpeed
+                    ? t.push(e.active)
+                    : t.push(
+                        _.filter(e.active, function(e) {
+                          return !+e.uploadSpeed && !+e.downloadSpeed;
+                        })
+                      )
+                  : e.filterSpeed &&
+                    t.push(
+                      _.filter(e.active, function(e) {
+                        return +e.uploadSpeed || +e.downloadSpeed;
+                      })
+                    ),
+                  e.filterWaiting &&
+                    t.push(
+                      _.filter(e.waiting, function(e) {
+                        return "waiting" == e.status;
+                      })
+                    ),
+                  e.filterPaused &&
+                    t.push(
+                      _.filter(e.waiting, function(e) {
+                        return "paused" == e.status;
+                      })
+                    ),
+                  e.filterError &&
+                    t.push(
+                      _.filter(e.stopped, function(e) {
+                        return "error" == e.status;
+                      })
+                    ),
+                  e.filterComplete &&
+                    t.push(
+                      _.filter(e.stopped, function(e) {
+                        return "complete" == e.status;
+                      })
+                    ),
+                  e.filterRemoved &&
+                    t.push(
+                      _.filter(e.stopped, function(e) {
+                        return "removed" == e.status;
+                      })
+                    );
+                var n = t
+                  .map(function(e) {
+                    return _.sortBy(e, function(e) {
+                      return -e.completedLength / e.totalLength;
+                    });
+                  })
+                  .reduce(function(e, t) {
+                    return e.concat(t);
+                  }, []);
+                return (
+                  (n = e.filterDownloads(n)),
+                  (e.totalDownloads = n.length),
+                  (n = n.slice((e.currentPage - 1) * e.pageSize)).splice(e.pageSize),
+                  n
+                );
+              }),
+              (e.hasDirectURL = function() {
+                return "" != a.getDirectURL();
+              }),
+              (e.getDirectURL = function() {
+                return a.getDirectURL();
+              }),
+              (e.getCtx = function(e, t) {
+                var n;
+                t
+                  ? (t.gid !== e.gid && (t.files = []),
+                    (t.dir = e.dir),
+                    (t.status = e.status),
+                    e.verifiedLength && (t.status = "verifying"),
+                    e.verifyIntegrityPending && (t.status = "verifyPending"),
+                    (t.errorCode = e.errorCode),
+                    (t.gid = e.gid),
+                    (t.followedBy =
+                      e.followedBy && 1 == e.followedBy.length ? e.followedBy[0] : null),
+                    (t.followedFrom = null),
+                    (t.numPieces = e.numPieces),
+                    (t.connections = e.connections),
+                    void 0 === e.numSeeders
+                      ? (t.numSeeders = "")
+                      : ((t.connectionsTitle = "Connections (Seeders)"),
+                        (t.numSeeders = " (" + e.numSeeders + ")")),
+                    (t.bitfield = e.bitfield),
+                    t.totalLength !== e.totalLength &&
+                      ((t.totalLength = e.totalLength),
+                      (t.fmtTotalLength = i.fmtsize(e.totalLength))),
+                    t.completedLength !== e.completedLength &&
+                      ((t.completedLength = e.completedLength),
+                      (t.fmtCompletedLength = i.fmtsize(e.completedLength))),
+                    e.verifiedLength
+                      ? t.verifiedLength !== e.verifiedLength &&
+                        (t.verifiedLength = e.verifiedLength)
+                      : delete t.verifiedLength,
+                    e.verifyIntegrityPending
+                      ? t.verifyIntegrityPending !== e.verifyIntegrityPending &&
+                        (t.verifyIntegrityPending = e.verifyIntegrityPending)
+                      : delete t.verifyIntegrityPending,
+                    t.uploadLength !== e.uploadLength &&
+                      ((t.uploadLength = e.uploadLength),
+                      (t.fmtUploadLength = i.fmtsize(e.uploadLength))),
+                    t.pieceLength !== e.pieceLength &&
+                      ((t.pieceLength = e.pieceLength),
+                      (t.fmtPieceLength = i.fmtsize(e.pieceLength))),
+                    t.downloadSpeed !== e.downloadSpeed &&
+                      ((t.downloadSpeed = e.downloadSpeed),
+                      (t.fmtDownloadSpeed = i.fmtspeed(e.downloadSpeed))),
+                    t.uploadSpeed !== e.uploadSpeed &&
+                      ((t.uploadSpeed = e.uploadSpeed),
+                      (t.fmtUploadSpeed = i.fmtspeed(e.uploadSpeed))))
+                  : ((t = {
+                      dir: e.dir,
+                      status: e.status,
+                      gid: e.gid,
+                      followedBy: e.followedBy && 1 == e.followedBy.length ? e.followedBy[0] : null,
+                      followedFrom: null,
+                      numPieces: e.numPieces,
+                      connections: e.connections,
+                      connectionsTitle: "Connections",
+                      numSeeders: e.numSeeders,
+                      bitfield: e.bitfield,
+                      errorCode: e.errorCode,
+                      totalLength: e.totalLength,
+                      fmtTotalLength: i.fmtsize(e.totalLength),
+                      completedLength: e.completedLength,
+                      fmtCompletedLength: i.fmtsize(e.completedLength),
+                      uploadLength: e.uploadLength,
+                      fmtUploadLength: i.fmtsize(e.uploadLength),
+                      pieceLength: e.pieceLength,
+                      fmtPieceLength: i.fmtsize(e.pieceLength),
+                      downloadSpeed: e.downloadSpeed,
+                      fmtDownloadSpeed: i.fmtspeed(e.downloadSpeed),
+                      uploadSpeed: e.uploadSpeed,
+                      fmtUploadSpeed: i.fmtspeed(e.uploadSpeed),
+                      collapsed: !0,
+                      animCollapsed: !0,
+                      files: []
+                    }),
+                    e.verifiedLength &&
+                      ((t.verifiedLength = e.verifiedLength), (t.status = "verifying")),
+                    e.verifyIntegrityPending &&
+                      ((t.verifyIntegrityPending = e.verifyIntegrityPending),
+                      (t.status = "verifyPending")));
+                var a,
+                  o = e.files;
+                if (o) {
+                  for (var r = t.files, s = 0; s < o.length; ++s) {
+                    var l = r[s] || (r[s] = {}),
+                      d = o[s];
+                    d.path !== l.path &&
+                      ((l.index = +d.index),
+                      (l.path = d.path),
+                      (l.length = d.length),
+                      (l.fmtLength = i.fmtsize(d.length)),
+                      (l.relpath = d.path.replace(v, "/")),
+                      l.relpath
+                        ? l.relpath.startsWith("[") ||
+                          (l.relpath = l.relpath.substr(t.dir.length + 1))
+                        : (l.relpath = (d.uris && d.uris[0] && d.uris[0].uri) || "Unknown")),
+                      (l.selected = "true" === d.selected);
+                  }
+                  (r.length = o.length), r.length && (n = r[0].relpath);
+                } else delete t.files;
+                return (
+                  e.bittorrent
+                    ? ((a = e.bittorrent.info && e.bittorrent.info.name), (t.bittorrent = !0))
+                    : delete t.bittorrent,
+                  (t.name = a || n || "Unknown"),
+                  (t.metadata = t.name.startsWith("[METADATA]")),
+                  t.metadata && (t.name = t.name.substr(10)),
+                  t
+                );
+              }),
+              (e.hasStatus = function e(t, n) {
+                return _.isArray(n)
+                  ? 0 != n.length && (e(t, n[0]) || e(t, n.slice(1)))
+                  : t.status == n;
+              }),
+              (e.getEta = function(e) {
+                return (e.totalLength - e.completedLength) / e.downloadSpeed;
+              }),
+              (e.getProgressClass = function(e) {
+                switch (e.status) {
+                  case "paused":
+                    return "progress-bar-info";
+                  case "error":
+                    return "progress-bar-danger";
+                  case "removed":
+                    return "progress-bar-warning";
+                  case "active":
+                    return "active";
+                  case "verifying":
+                    return "progress-bar-warning";
+                  case "complete":
+                    return "progress-bar-success";
+                  default:
+                    return "";
+                }
+              }),
+              (e.getProgress = function(e) {
+                var t = 0;
+                return (
+                  (t = (t = e.verifiedLength
+                    ? (e.verifiedLength / e.totalLength) * 100 || 0
+                    : (e.completedLength / e.totalLength) * 100 || 0).toFixed(2)) || (t = 0),
+                  t
+                );
+              }),
+              (e.getRatio = function(e) {
+                var t = 0;
+                return (t = (t = e.uploadLength / e.completedLength || 0).toFixed(2)) || (t = 0), t;
+              }),
+              (e.getType = function(e) {
+                var t = e.status;
+                return (
+                  "paused" == t && (t = "waiting"),
+                  -1 != ["error", "removed", "complete"].indexOf(t) && (t = "stopped"),
+                  t
+                );
+              }),
+              (e.selectFiles = function(e) {
+                console.log("got back files for the torrent ..."),
+                  s.invoke("selectFiles", e.files, function(t) {
+                    var n = "";
+                    _.forEach(t, function(e) {
+                      e.selected && (n += "," + e.index);
+                    }),
+                      (n = n.slice(1)),
+                      a.once("changeOption", [e.gid, { "select-file": n }], function(e) {
+                        console.log("changed indexes to:", n, e);
+                      });
+                  });
+              }),
+              (e.showSettings = function(t) {
+                var n = e.getType(t),
+                  o = {};
+                return (
+                  a.once("getOption", [t.gid], function(e) {
+                    var i = e[0],
+                      r = _.cloneDeep(l);
+                    for (var u in r)
+                      ("active" == n && -1 == d.indexOf(u)) ||
+                        ("waiting" == n && -1 != c.indexOf(u)) ||
+                        ((o[u] = r[u]), (o[u].val = i[u] || o[u].val));
+                    s.invoke("settings", o, t.name + " settings", "Change", function(e) {
+                      var n = {};
+                      for (var o in e) n[o] = e[o].val;
+                      a.once("changeOption", [t.gid, n]);
+                    });
+                  }),
+                  !1
+                );
+              }),
+              (e.moveDown = function(e) {
+                a.once("changePosition", [e.gid, 1, "POS_CUR"]);
+              }),
+              (e.moveUp = function(e) {
+                a.once("changePosition", [e.gid, -1, "POS_CUR"]);
+              });
+          }
+        ])
+        .filter("objFilter", function() {
+          return function(e, t) {
+            e = e || {};
+            var n = {};
+            for (var a in e) a.startsWith(t) && (n[a] = e[a]);
+            return n;
+          };
+        }).name);
+  },
+  function(e, t, n) {
+    "use strict";
     n.r(t),
       function(e) {
         var t = n(0),
@@ -2880,8 +3437,8 @@
           r = n(4),
           s = n(5),
           l = n(7),
-          c = n(8),
-          d = n(9),
+          d = n(8),
+          c = n(9),
           u = n(10),
           p = n(11),
           h = n(12),
@@ -2894,17 +3451,18 @@
           y = n(19),
           k = n(20),
           S = n(21),
-          T = n(22),
-          C = n(23),
-          P = n(24),
-          A = n(25),
-          x = n(26),
-          R = n(27),
-          D = n(28);
+          A = n(22),
+          T = n(23),
+          C = n(24),
+          P = n(28),
+          x = n(25),
+          R = n(26),
+          D = n(27);
         n(32),
           n(33),
           n(34),
           n(35),
+          n(39),
           n(40),
           n(41),
           n(42),
@@ -2919,16 +3477,15 @@
           n(51),
           n(52),
           n(53),
-          n(54),
-          n(55);
-        var $ = a.a.module("webui", [
+          n(54);
+        var M = a.a.module("webui", [
           v.a,
           s.a,
           l.a,
           i.a,
           r.a,
-          c.a,
           d.a,
+          c.a,
           u.a,
           p.a,
           h.a,
@@ -2941,46 +3498,46 @@
           y.a,
           k.a,
           S.a,
-          T.a,
-          P.a,
           A.a,
+          C.a,
+          P.a,
           x.a,
           R.a,
           D.a,
           "ui.bootstrap",
           "pascalprecht.translate"
         ]);
-        function M(e, t) {
+        function $(e, t) {
           for (var n in t) t.hasOwnProperty(n) && ((e[n] && e[n].length) || (e[n] = t[n]));
           return e;
         }
-        $.config([
+        M.config([
           "$translateProvider",
           "$locationProvider",
           function(e, t) {
             e
               .translations("en_US", translations.en_US)
-              .translations("nl_NL", M(translations.nl_NL, translations.en_US))
-              .translations("th_TH", M(translations.th_TH, translations.en_US))
-              .translations("zh_CN", M(translations.zh_CN, translations.en_US))
-              .translations("zh_TW", M(translations.zh_TW, translations.en_US))
-              .translations("pl_PL", M(translations.pl_PL, translations.en_US))
-              .translations("fr_FR", M(translations.fr_FR, translations.en_US))
-              .translations("de_DE", M(translations.de_DE, translations.en_US))
-              .translations("es_ES", M(translations.es_ES, translations.en_US))
-              .translations("ru_RU", M(translations.ru_RU, translations.en_US))
-              .translations("it_IT", M(translations.it_IT, translations.en_US))
-              .translations("tr_TR", M(translations.tr_TR, translations.en_US))
-              .translations("cs_CZ", M(translations.cs_CZ, translations.en_US))
-              .translations("fa_IR", M(translations.fa_IR, translations.en_US))
-              .translations("id_ID", M(translations.id_ID, translations.en_US))
-              .translations("pt_BR", M(translations.pt_BR, translations.en_US))
+              .translations("nl_NL", $(translations.nl_NL, translations.en_US))
+              .translations("th_TH", $(translations.th_TH, translations.en_US))
+              .translations("zh_CN", $(translations.zh_CN, translations.en_US))
+              .translations("zh_TW", $(translations.zh_TW, translations.en_US))
+              .translations("pl_PL", $(translations.pl_PL, translations.en_US))
+              .translations("fr_FR", $(translations.fr_FR, translations.en_US))
+              .translations("de_DE", $(translations.de_DE, translations.en_US))
+              .translations("es_ES", $(translations.es_ES, translations.en_US))
+              .translations("ru_RU", $(translations.ru_RU, translations.en_US))
+              .translations("it_IT", $(translations.it_IT, translations.en_US))
+              .translations("tr_TR", $(translations.tr_TR, translations.en_US))
+              .translations("cs_CZ", $(translations.cs_CZ, translations.en_US))
+              .translations("fa_IR", $(translations.fa_IR, translations.en_US))
+              .translations("id_ID", $(translations.id_ID, translations.en_US))
+              .translations("pt_BR", $(translations.pt_BR, translations.en_US))
               .useSanitizeValueStrategy("escapeParameters")
               .determinePreferredLanguage(),
               t.html5Mode({ enabled: !0, requireBase: !1 });
           }
         ]),
-          $.directive("textarea", C.a),
+          M.directive("textarea", T.a),
           "serviceWorker" in navigator &&
             "https:" === location.protocol &&
             window.addEventListener("load", () => {
@@ -3300,15 +3857,15 @@
                   return angular.isDefined(a) ? a : n;
                 }
                 var l = o[0],
-                  c = o[1];
+                  d = o[1];
                 n.find("input").css({ display: "none" }),
-                  (c.$render = function() {
-                    n.toggleClass(l.activeClass, angular.equals(c.$modelValue, i()));
+                  (d.$render = function() {
+                    n.toggleClass(l.activeClass, angular.equals(d.$modelValue, i()));
                   }),
                   n.bind(l.toggleEvent, function() {
                     a.disabled ||
                       t.$apply(function() {
-                        c.$setViewValue(n.hasClass(l.activeClass) ? r() : i()), c.$render();
+                        d.$setViewValue(n.hasClass(l.activeClass) ? r() : i()), d.$render();
                       });
                   }),
                   n.on("keypress", function(o) {
@@ -3316,7 +3873,7 @@
                       32 !== o.which ||
                       e[0].activeElement !== n[0] ||
                       t.$apply(function() {
-                        c.$setViewValue(n.hasClass(l.activeClass) ? r() : i()), c.$render();
+                        d.$setViewValue(n.hasClass(l.activeClass) ? r() : i()), d.$render();
                       });
                   });
               }
@@ -3364,17 +3921,17 @@
             function r() {
               s();
               var t = +e.interval;
-              !isNaN(t) && t > 0 && (c = n(l, t));
+              !isNaN(t) && t > 0 && (d = n(l, t));
             }
             function s() {
-              c && (n.cancel(c), (c = null));
+              d && (n.cancel(d), (d = null));
             }
             function l() {
               var t = +e.interval;
-              d && !isNaN(t) && t > 0 && p.length ? e.next() : e.pause();
+              c && !isNaN(t) && t > 0 && p.length ? e.next() : e.pause();
             }
-            var c,
-              d,
+            var d,
+              c,
               u = this,
               p = (u.slides = e.slides = []),
               h = angular.version.minor >= 4,
@@ -3412,10 +3969,10 @@
               e.$watch("interval", r),
               e.$on("$destroy", s),
               (e.play = function() {
-                d || ((d = !0), r());
+                c || ((c = !0), r());
               }),
               (e.pause = function() {
-                e.noPause || ((d = !1), s());
+                e.noPause || ((c = !1), s());
               }),
               (u.addSlide = function(t, n) {
                 (t.$element = n),
@@ -3496,16 +4053,16 @@
                 beforeAddClass: function(e, r, s) {
                   if ("active" == r && e.parent() && !e.parent().data(a)) {
                     var l = !1,
-                      c = e.data(o),
-                      d = "next" == c ? "left" : "right",
-                      u = n.bind(this, e, d + " " + c, s);
+                      d = e.data(o),
+                      c = "next" == d ? "left" : "right",
+                      u = n.bind(this, e, c + " " + d, s);
                     return (
-                      e.addClass(c),
+                      e.addClass(d),
                       i
-                        ? i(e, { addClass: d })
+                        ? i(e, { addClass: c })
                             .start()
                             .done(u)
-                        : t.addClass(e, d).then(function() {
+                        : t.addClass(e, c).then(function() {
                             l || u(), s();
                           }),
                       function() {
@@ -3518,15 +4075,15 @@
                 beforeRemoveClass: function(e, r, s) {
                   if ("active" === r && e.parent() && !e.parent().data(a)) {
                     var l = !1,
-                      c = "next" == e.data(o) ? "left" : "right",
-                      d = n.bind(this, e, c, s);
+                      d = "next" == e.data(o) ? "left" : "right",
+                      c = n.bind(this, e, d, s);
                     return (
                       i
-                        ? i(e, { addClass: c })
+                        ? i(e, { addClass: d })
                             .start()
-                            .done(d)
-                        : t.addClass(e, c).then(function() {
-                            l || d(), s();
+                            .done(c)
+                        : t.addClass(e, d).then(function() {
+                            l || c(), s();
                           }),
                       function() {
                         l = !0;
@@ -3685,9 +4242,9 @@
               this.parsers[i] || (this.parsers[i] = a(i));
             var s = this.parsers[i],
               l = s.regex,
-              c = s.map,
-              d = n.match(l);
-            if (d && d.length) {
+              d = s.map,
+              c = n.match(l);
+            if (c && c.length) {
               var u, p;
               angular.isDate(r) && !isNaN(r.getTime())
                 ? (u = {
@@ -3709,9 +4266,9 @@
                     seconds: 0,
                     milliseconds: 0
                   }));
-              for (var h = 1, f = d.length; f > h; h++) {
-                var m = c[h - 1];
-                m.apply && m.apply.call(u, d[h]);
+              for (var h = 1, f = c.length; f > h; h++) {
+                var m = d[h - 1];
+                m.apply && m.apply.call(u, c[h]);
               }
               return (
                 (function(e, t, n) {
@@ -3788,8 +4345,8 @@
                 r,
                 s,
                 l = n.split("-"),
-                c = l[0],
-                d = l[1] || "center";
+                d = l[0],
+                c = l[1] || "center";
               (o = a ? this.offset(e) : this.position(e)),
                 (i = t.prop("offsetWidth")),
                 (r = t.prop("offsetHeight"));
@@ -3815,18 +4372,18 @@
                     return o.top + o.height;
                   }
                 };
-              switch (c) {
+              switch (d) {
                 case "right":
-                  s = { top: p[d](), left: u[c]() };
-                  break;
-                case "left":
-                  s = { top: p[d](), left: o.left - i };
-                  break;
-                case "bottom":
                   s = { top: p[c](), left: u[d]() };
                   break;
+                case "left":
+                  s = { top: p[c](), left: o.left - i };
+                  break;
+                case "bottom":
+                  s = { top: p[d](), left: u[c]() };
+                  break;
                 default:
-                  s = { top: o.top - r, left: u[d]() };
+                  s = { top: o.top - r, left: u[c]() };
               }
               return s;
             }
@@ -3864,7 +4421,7 @@
           "$datepickerSuppressError",
           function(e, t, n, a, o, i, r, s) {
             var l = this,
-              c = { $setViewValue: angular.noop };
+              d = { $setViewValue: angular.noop };
             (this.modes = ["day", "month", "year"]),
               angular.forEach(
                 [
@@ -3913,7 +4470,7 @@
                 ? ((this.activeDate = e.$parent.$eval(t.initDate) || new Date()),
                   e.$parent.$watch(t.initDate, function(e) {
                     e &&
-                      (c.$isEmpty(c.$modelValue) || c.$invalid) &&
+                      (d.$isEmpty(d.$modelValue) || d.$invalid) &&
                       ((l.activeDate = e), l.refreshView());
                   }))
                 : (this.activeDate = new Date()),
@@ -3921,13 +4478,13 @@
                 return 0 === l.compare(t.date, l.activeDate) && ((e.activeDateId = t.uid), !0);
               }),
               (this.init = function(e) {
-                (c = e).$render = function() {
+                (d = e).$render = function() {
                   l.render();
                 };
               }),
               (this.render = function() {
-                if (c.$viewValue) {
-                  var e = new Date(c.$viewValue);
+                if (d.$viewValue) {
+                  var e = new Date(d.$viewValue);
                   !isNaN(e)
                     ? (this.activeDate = e)
                     : s ||
@@ -3940,12 +4497,12 @@
               (this.refreshView = function() {
                 if (this.element) {
                   this._refreshView();
-                  var e = c.$viewValue ? new Date(c.$viewValue) : null;
-                  c.$setValidity("dateDisabled", !e || (this.element && !this.isDisabled(e)));
+                  var e = d.$viewValue ? new Date(d.$viewValue) : null;
+                  d.$setValidity("dateDisabled", !e || (this.element && !this.isDisabled(e)));
                 }
               }),
               (this.createDateObject = function(e, t) {
-                var n = c.$viewValue ? new Date(c.$viewValue) : null;
+                var n = d.$viewValue ? new Date(d.$viewValue) : null;
                 return {
                   date: e,
                   label: i(e, t),
@@ -3975,10 +4532,10 @@
               }),
               (e.select = function(t) {
                 if (e.datepickerMode === l.minMode) {
-                  var n = c.$viewValue ? new Date(c.$viewValue) : new Date(0, 0, 0, 0, 0, 0, 0);
+                  var n = d.$viewValue ? new Date(d.$viewValue) : new Date(0, 0, 0, 0, 0, 0, 0);
                   n.setFullYear(t.getFullYear(), t.getMonth(), t.getDate()),
-                    c.$setViewValue(n),
-                    c.$render();
+                    d.$setViewValue(n),
+                    d.$render();
                 } else
                   (l.activeDate = t),
                     (e.datepickerMode = l.modes[l.modes.indexOf(e.datepickerMode) - 1]);
@@ -4006,10 +4563,10 @@
                 39: "right",
                 40: "down"
               });
-            var d = function() {
+            var c = function() {
               l.element[0].focus();
             };
-            e.$on("datepicker.focus", d),
+            e.$on("datepicker.focus", c),
               (e.keydown = function(t) {
                 var n = e.keys[t.which];
                 if (n && !t.shiftKey && !t.altKey)
@@ -4019,11 +4576,11 @@
                     "enter" === n || "space" === n)
                   ) {
                     if (l.isDisabled(l.activeDate)) return;
-                    e.select(l.activeDate), d();
+                    e.select(l.activeDate), c();
                   } else
                     !t.ctrlKey || ("up" !== n && "down" !== n)
                       ? (l.handleKeyDown(n, t), l.refreshView())
-                      : (e.toggleMode("up" === n ? 1 : -1), d());
+                      : (e.toggleMode("up" === n ? 1 : -1), c());
               });
           }
         ])
@@ -4078,34 +4635,34 @@
                     i = new Date(n, a, 1),
                     s = o.startingDay - i.getDay(),
                     l = s > 0 ? 7 - s : -s,
-                    c = new Date(i);
-                  l > 0 && c.setDate(1 - l);
+                    d = new Date(i);
+                  l > 0 && d.setDate(1 - l);
                   for (
-                    var d = (function(e, t) {
+                    var c = (function(e, t) {
                         for (var n, a = new Array(t), i = new Date(e), r = 0; t > r; )
                           (n = new Date(i)),
                             o.fixTimeZone(n),
                             (a[r++] = n),
                             i.setDate(i.getDate() + 1);
                         return a;
-                      })(c, 42),
+                      })(d, 42),
                       u = 0;
                     42 > u;
                     u++
                   )
-                    d[u] = angular.extend(o.createDateObject(d[u], o.formatDay), {
-                      secondary: d[u].getMonth() !== a,
+                    c[u] = angular.extend(o.createDateObject(c[u], o.formatDay), {
+                      secondary: c[u].getMonth() !== a,
                       uid: t.uniqueId + "-" + u
                     });
                   t.labels = new Array(7);
                   for (var p = 0; 7 > p; p++)
                     t.labels[p] = {
-                      abbr: e(d[p].date, o.formatDayHeader),
-                      full: e(d[p].date, "EEEE")
+                      abbr: e(c[p].date, o.formatDayHeader),
+                      full: e(c[p].date, "EEEE")
                     };
                   if (
                     ((t.title = e(o.activeDate, o.formatDayTitle)),
-                    (t.rows = o.split(d, 7)),
+                    (t.rows = o.split(c, 7)),
                     t.showWeeks)
                   ) {
                     t.weekNumbers = [];
@@ -4280,7 +4837,7 @@
                 dateDisabled: "&",
                 customClass: "&"
               },
-              link: function(c, d, u, p) {
+              link: function(d, c, u, p) {
                 function h(e) {
                   return e.replace(/([A-Z])/g, function(e) {
                     return "-" + e.toLowerCase();
@@ -4288,13 +4845,13 @@
                 }
                 var f,
                   m = angular.isDefined(u.closeOnDateSelection)
-                    ? c.$parent.$eval(u.closeOnDateSelection)
+                    ? d.$parent.$eval(u.closeOnDateSelection)
                     : s.closeOnDateSelection,
                   g = angular.isDefined(u.datepickerAppendToBody)
-                    ? c.$parent.$eval(u.datepickerAppendToBody)
+                    ? d.$parent.$eval(u.datepickerAppendToBody)
                     : s.appendToBody,
                   v = angular.isDefined(u.onOpenFocus)
-                    ? c.$parent.$eval(u.onOpenFocus)
+                    ? d.$parent.$eval(u.onOpenFocus)
                     : s.onOpenFocus,
                   b = angular.isDefined(u.datepickerPopupTemplateUrl)
                     ? u.datepickerPopupTemplateUrl
@@ -4303,20 +4860,20 @@
                     ? u.datepickerTemplateUrl
                     : s.datepickerTemplateUrl,
                   y = {};
-                (c.showButtonBar = angular.isDefined(u.showButtonBar)
-                  ? c.$parent.$eval(u.showButtonBar)
+                (d.showButtonBar = angular.isDefined(u.showButtonBar)
+                  ? d.$parent.$eval(u.showButtonBar)
                   : s.showButtonBar),
-                  (c.getText = function(e) {
-                    return c[e + "Text"] || s[e + "Text"];
+                  (d.getText = function(e) {
+                    return d[e + "Text"] || s[e + "Text"];
                   }),
-                  (c.isDisabled = function(e) {
+                  (d.isDisabled = function(e) {
                     return (
                       "today" === e && (e = new Date()),
-                      (c.watchData.minDate && c.compare(e, y.minDate) < 0) ||
-                        (c.watchData.maxDate && c.compare(e, y.maxDate) > 0)
+                      (d.watchData.minDate && d.compare(e, y.minDate) < 0) ||
+                        (d.watchData.maxDate && d.compare(e, y.maxDate) > 0)
                     );
                   }),
-                  (c.compare = function(e, t) {
+                  (d.compare = function(e, t) {
                     return (
                       new Date(e.getFullYear(), e.getMonth(), e.getDate()) -
                       new Date(t.getFullYear(), t.getMonth(), t.getDate())
@@ -4343,23 +4900,23 @@
                   "ng-change": "dateSelection(date)",
                   "template-url": b
                 });
-                var T = angular.element(S.children()[0]);
+                var A = angular.element(S.children()[0]);
                 if (
-                  (T.attr("template-url", w),
+                  (A.attr("template-url", w),
                   k &&
                     "month" === u.type &&
-                    (T.attr("datepicker-mode", '"month"'), T.attr("min-mode", "month")),
+                    (A.attr("datepicker-mode", '"month"'), A.attr("min-mode", "month")),
                   u.datepickerOptions)
                 ) {
-                  var C = c.$parent.$eval(u.datepickerOptions);
-                  C &&
-                    C.initDate &&
-                    ((c.initDate = C.initDate), T.attr("init-date", "initDate"), delete C.initDate),
-                    angular.forEach(C, function(e, t) {
-                      T.attr(h(t), e);
+                  var T = d.$parent.$eval(u.datepickerOptions);
+                  T &&
+                    T.initDate &&
+                    ((d.initDate = T.initDate), A.attr("init-date", "initDate"), delete T.initDate),
+                    angular.forEach(T, function(e, t) {
+                      A.attr(h(t), e);
                     });
                 }
-                (c.watchData = {}),
+                (d.watchData = {}),
                   angular.forEach(
                     [
                       "minMode",
@@ -4374,29 +4931,29 @@
                       if (u[e]) {
                         var n = t(u[e]);
                         if (
-                          (c.$parent.$watch(n, function(t) {
-                            (c.watchData[e] = t),
+                          (d.$parent.$watch(n, function(t) {
+                            (d.watchData[e] = t),
                               ("minDate" === e || "maxDate" === e) && (y[e] = new Date(t));
                           }),
-                          T.attr(h(e), "watchData." + e),
+                          A.attr(h(e), "watchData." + e),
                           "datepickerMode" === e)
                         ) {
                           var a = n.assign;
-                          c.$watch("watchData." + e, function(e, t) {
-                            angular.isFunction(a) && e !== t && a(c.$parent, e);
+                          d.$watch("watchData." + e, function(e, t) {
+                            angular.isFunction(a) && e !== t && a(d.$parent, e);
                           });
                         }
                       }
                     }
                   ),
                   u.dateDisabled &&
-                    T.attr("date-disabled", "dateDisabled({ date: date, mode: mode })"),
-                  u.showWeeks && T.attr("show-weeks", u.showWeeks),
+                    A.attr("date-disabled", "dateDisabled({ date: date, mode: mode })"),
+                  u.showWeeks && A.attr("show-weeks", u.showWeeks),
                   u.customClass &&
-                    T.attr("custom-class", "customClass({ date: date, mode: mode })"),
+                    A.attr("custom-class", "customClass({ date: date, mode: mode })"),
                   k
                     ? p.$formatters.push(function(e) {
-                        return (c.date = e), e;
+                        return (d.date = e), e;
                       })
                     : ((p.$$parserName = "date"),
                       (p.$validators.date = function(e, t) {
@@ -4416,90 +4973,90 @@
                         if ((angular.isNumber(e) && (e = new Date(e)), !e)) return null;
                         if (angular.isDate(e) && !isNaN(e)) return e;
                         if (angular.isString(e)) {
-                          var t = r.parse(e, f, c.date);
+                          var t = r.parse(e, f, d.date);
                           return isNaN(t) ? void 0 : t;
                         }
                       }),
                       p.$formatters.push(function(e) {
-                        return (c.date = e), p.$isEmpty(e) ? e : i(e, f);
+                        return (d.date = e), p.$isEmpty(e) ? e : i(e, f);
                       })),
-                  (c.dateSelection = function(e) {
-                    angular.isDefined(e) && (c.date = e);
-                    var t = c.date ? i(c.date, f) : null;
-                    d.val(t), p.$setViewValue(t), m && ((c.isOpen = !1), d[0].focus());
+                  (d.dateSelection = function(e) {
+                    angular.isDefined(e) && (d.date = e);
+                    var t = d.date ? i(d.date, f) : null;
+                    c.val(t), p.$setViewValue(t), m && ((d.isOpen = !1), c[0].focus());
                   }),
                   p.$viewChangeListeners.push(function() {
-                    c.date = r.parse(p.$viewValue, f, c.date);
+                    d.date = r.parse(p.$viewValue, f, d.date);
                   });
-                var P = function(e) {
-                    !c.isOpen ||
-                      d[0].contains(e.target) ||
+                var C = function(e) {
+                    !d.isOpen ||
+                      c[0].contains(e.target) ||
                       S[0].contains(e.target) ||
-                      c.$apply(function() {
-                        c.isOpen = !1;
+                      d.$apply(function() {
+                        d.isOpen = !1;
                       });
                   },
-                  A = function(e) {
-                    27 === e.which && c.isOpen
+                  P = function(e) {
+                    27 === e.which && d.isOpen
                       ? (e.preventDefault(),
                         e.stopPropagation(),
-                        c.$apply(function() {
-                          c.isOpen = !1;
+                        d.$apply(function() {
+                          d.isOpen = !1;
                         }),
-                        d[0].focus())
+                        c[0].focus())
                       : 40 !== e.which ||
-                        c.isOpen ||
+                        d.isOpen ||
                         (e.preventDefault(),
                         e.stopPropagation(),
-                        c.$apply(function() {
-                          c.isOpen = !0;
+                        d.$apply(function() {
+                          d.isOpen = !0;
                         }));
                   };
-                d.bind("keydown", A),
-                  (c.keydown = function(e) {
-                    27 === e.which && ((c.isOpen = !1), d[0].focus());
+                c.bind("keydown", P),
+                  (d.keydown = function(e) {
+                    27 === e.which && ((d.isOpen = !1), c[0].focus());
                   }),
-                  c.$watch("isOpen", function(e) {
+                  d.$watch("isOpen", function(e) {
                     e
-                      ? ((c.position = g ? o.offset(d) : o.position(d)),
-                        (c.position.top = c.position.top + d.prop("offsetHeight")),
+                      ? ((d.position = g ? o.offset(c) : o.position(c)),
+                        (d.position.top = d.position.top + c.prop("offsetHeight")),
                         l(
                           function() {
-                            v && c.$broadcast("datepicker.focus"), n.bind("click", P);
+                            v && d.$broadcast("datepicker.focus"), n.bind("click", C);
                           },
                           0,
                           !1
                         ))
-                      : n.unbind("click", P);
+                      : n.unbind("click", C);
                   }),
-                  (c.select = function(e) {
+                  (d.select = function(e) {
                     if ("today" === e) {
                       var t = new Date();
-                      angular.isDate(c.date)
-                        ? (e = new Date(c.date)).setFullYear(
+                      angular.isDate(d.date)
+                        ? (e = new Date(d.date)).setFullYear(
                             t.getFullYear(),
                             t.getMonth(),
                             t.getDate()
                           )
                         : (e = new Date(t.setHours(0, 0, 0, 0)));
                     }
-                    c.dateSelection(e);
+                    d.dateSelection(e);
                   }),
-                  (c.close = function() {
-                    (c.isOpen = !1), d[0].focus();
+                  (d.close = function() {
+                    (d.isOpen = !1), c[0].focus();
                   });
-                var x = e(S)(c);
+                var x = e(S)(d);
                 S.remove(),
-                  g ? n.find("body").append(x) : d.after(x),
-                  c.$on("$destroy", function() {
-                    !0 === c.isOpen &&
+                  g ? n.find("body").append(x) : c.after(x),
+                  d.$on("$destroy", function() {
+                    !0 === d.isOpen &&
                       (a.$$phase ||
-                        c.$apply(function() {
-                          c.isOpen = !1;
+                        d.$apply(function() {
+                          d.isOpen = !1;
                         })),
                       x.remove(),
-                      d.unbind("keydown", A),
-                      n.unbind("click", P);
+                      c.unbind("keydown", P),
+                      n.unbind("click", C);
                   });
               }
             };
@@ -4562,8 +5119,8 @@
           "$document",
           "$compile",
           "$templateRequest",
-          function(e, t, n, a, o, i, r, s, l, c) {
-            var d,
+          function(e, t, n, a, o, i, r, s, l, d) {
+            var c,
               u,
               p = this,
               h = e.$new(),
@@ -4658,9 +5215,9 @@
                   t)
                 )
                   p.dropdownMenuTemplateUrl &&
-                    c(p.dropdownMenuTemplateUrl).then(function(e) {
-                      (d = h.$new()),
-                        l(e.trim())(d, function(e) {
+                    d(p.dropdownMenuTemplateUrl).then(function(e) {
+                      (c = h.$new()),
+                        l(e.trim())(c, function(e) {
                           var t = e;
                           p.dropdownMenu.replaceWith(t), (p.dropdownMenu = t);
                         });
@@ -4669,7 +5226,7 @@
                     o.open(h);
                 else {
                   if (p.dropdownMenuTemplateUrl) {
-                    d && d.$destroy();
+                    c && c.$destroy();
                     var b = angular.element('<ul class="dropdown-menu"></ul>');
                     p.dropdownMenu.replaceWith(b), (p.dropdownMenu = b);
                   }
@@ -4953,12 +5510,12 @@
           "$$multiMap",
           "$$stackedMap",
           function(e, t, n, a, o, i, r, s, l) {
-            function c() {
+            function d() {
               for (var e = -1, t = b.keys(), n = 0; n < t.length; n++)
                 b.get(t[n]).value.backdrop && (e = n);
               return e;
             }
-            function d(e, t) {
+            function c(e, t) {
               var a = n.find("body").eq(0),
                 o = b.get(e).value;
               b.remove(e),
@@ -4967,7 +5524,7 @@
                   w.remove(t, e), a.toggleClass(t, w.hasKey(t));
                 }),
                 (function() {
-                  if (f && -1 == c()) {
+                  if (f && -1 == d()) {
                     u(f, m, function() {
                       null;
                     }),
@@ -5017,7 +5574,7 @@
               w = s.createNew(),
               y = { NOW_CLOSING_EVENT: "modal.stack.now-closing" };
             return (
-              o.$watch(c, function(e) {
+              o.$watch(d, function(e) {
                 m && (m.index = e);
               }),
               n.bind("keydown", function(e) {
@@ -5053,13 +5610,13 @@
                 }),
                   w.put(r, e);
                 var s = n.find("body").eq(0),
-                  l = c();
+                  l = d();
                 if (l >= 0 && !f) {
                   (m = o.$new(!0)).index = l;
-                  var d = angular.element('<div modal-backdrop="modal-backdrop"></div>');
-                  d.attr("backdrop-class", t.backdropClass),
-                    t.animation && d.attr("modal-animation", "true"),
-                    (f = a(d)(m)),
+                  var c = angular.element('<div modal-backdrop="modal-backdrop"></div>');
+                  c.attr("backdrop-class", t.backdropClass),
+                    t.animation && c.attr("modal-animation", "true"),
+                    (f = a(c)(m)),
                     s.append(f);
                 }
                 var u = angular.element('<div modal-window="modal-window"></div>');
@@ -5085,7 +5642,7 @@
                 return n && p(n, t, !0)
                   ? ((n.value.modalScope.$$uibDestructionScheduled = !0),
                     n.value.deferred.resolve(t),
-                    d(e, n.value.modalOpener),
+                    c(e, n.value.modalOpener),
                     !0)
                   : !n;
               }),
@@ -5094,7 +5651,7 @@
                 return n && p(n, t, !1)
                   ? ((n.value.modalScope.$$uibDestructionScheduled = !0),
                     n.value.deferred.reject(t),
-                    d(e, n.value.modalOpener),
+                    c(e, n.value.modalOpener),
                     !0)
                   : !n;
               }),
@@ -5166,19 +5723,19 @@
                     n
                   );
                 }
-                var c = {},
-                  d = null;
+                var d = {},
+                  c = null;
                 return (
-                  (c.getPromiseChain = function() {
-                    return d;
+                  (d.getPromiseChain = function() {
+                    return c;
                   }),
-                  (c.open = function(t) {
+                  (d.open = function(t) {
                     var o = a.defer(),
-                      c = a.defer(),
+                      d = a.defer(),
                       u = a.defer(),
                       p = {
                         result: o.promise,
-                        opened: c.promise,
+                        opened: d.promise,
                         rendered: u.promise,
                         close: function(e) {
                           return r.close(p, e);
@@ -5195,8 +5752,8 @@
                     var h,
                       f = a.all([s(t)].concat(l(t.resolve)));
                     return (
-                      (h = d = a
-                        .all([d])
+                      (h = c = a
+                        .all([c])
                         .then(
                           function() {
                             return f;
@@ -5216,12 +5773,12 @@
                               });
                             var s,
                               l = {},
-                              d = 1;
+                              c = 1;
                             t.controller &&
                               ((l.$scope = a),
                               (l.$modalInstance = p),
                               angular.forEach(t.resolve, function(t, n) {
-                                l[n] = e[d++];
+                                l[n] = e[c++];
                               }),
                               (s = i(t.controller, l)),
                               t.controllerAs &&
@@ -5241,19 +5798,19 @@
                                 size: t.size,
                                 openedClass: t.openedClass
                               }),
-                              c.resolve(!0);
+                              d.resolve(!0);
                           },
                           function(e) {
-                            c.reject(e), o.reject(e);
+                            d.reject(e), o.reject(e);
                           }
                         )
                         .finally(function() {
-                          d === h && (d = null);
+                          c === h && (c = null);
                         })),
                       p
                     );
                   }),
-                  c
+                  d
                 );
               }
             ]
@@ -5352,8 +5909,8 @@
                 var s = i[0],
                   l = i[1];
                 if (l) {
-                  var c = angular.isDefined(o.maxSize) ? n.$parent.$eval(o.maxSize) : t.maxSize,
-                    d = angular.isDefined(o.rotate) ? n.$parent.$eval(o.rotate) : t.rotate;
+                  var d = angular.isDefined(o.maxSize) ? n.$parent.$eval(o.maxSize) : t.maxSize,
+                    c = angular.isDefined(o.rotate) ? n.$parent.$eval(o.rotate) : t.rotate;
                   (n.boundaryLinks = angular.isDefined(o.boundaryLinks)
                     ? n.$parent.$eval(o.boundaryLinks)
                     : t.boundaryLinks),
@@ -5363,7 +5920,7 @@
                     s.init(l, t),
                     o.maxSize &&
                       n.$parent.$watch(e(o.maxSize), function(e) {
-                        (c = parseInt(e, 10)), s.render();
+                        (d = parseInt(e, 10)), s.render();
                       });
                   var u = s.render;
                   s.render = function() {
@@ -5374,18 +5931,18 @@
                           var n = [],
                             a = 1,
                             o = t,
-                            i = angular.isDefined(c) && t > c;
+                            i = angular.isDefined(d) && t > d;
                           i &&
-                            (d
-                              ? (o = (a = Math.max(e - Math.floor(c / 2), 1)) + c - 1) > t &&
-                                (a = (o = t) - c + 1)
-                              : ((a = (Math.ceil(e / c) - 1) * c + 1),
-                                (o = Math.min(a + c - 1, t))));
+                            (c
+                              ? (o = (a = Math.max(e - Math.floor(d / 2), 1)) + d - 1) > t &&
+                                (a = (o = t) - d + 1)
+                              : ((a = (Math.ceil(e / d) - 1) * d + 1),
+                                (o = Math.min(a + d - 1, t))));
                           for (var s = a; o >= s; s++) {
                             var l = r(s, s, s === e);
                             n.push(l);
                           }
-                          if (i && !d) {
+                          if (i && !c) {
                             if (a > 1) {
                               var u = r(a - 1, "...", !1);
                               n.unshift(u);
@@ -5453,16 +6010,14 @@
               "$interpolate",
               "$rootScope",
               "$parse",
-              function(a, o, i, r, s, l, c, d) {
+              function(a, o, i, r, s, l, d, c) {
                 return function(a, u, p, h) {
                   function f(e) {
-                    var n = (e || h.trigger || p).split(" ");
-                    return {
-                      show: n,
-                      hide: n.map(function(e) {
+                    var n = (e || h.trigger || p).split(" "),
+                      a = n.map(function(e) {
                         return t[e] || e;
-                      })
-                    };
+                      });
+                    return { show: n, hide: a };
                   }
                   h = angular.extend({}, e, n, h);
                   var m = (function(e) {
@@ -5509,37 +6064,37 @@
                                 t = parseInt(e, 10);
                               D.popupDelay = isNaN(t) ? h.popupDelay : t;
                             })(),
-                            D.popupDelay ? C || (C = i(v, D.popupDelay, !1)) : v());
+                            D.popupDelay ? T || (T = i(v, D.popupDelay, !1)) : v());
                         }
                         function g() {
-                          b(), c.$$phase || c.$digest();
+                          b(), d.$$phase || d.$digest();
                         }
                         function v() {
                           return (
-                            (C = null),
-                            T && (i.cancel(T), (T = null)),
+                            (T = null),
+                            A && (i.cancel(A), (A = null)),
                             (h.useContentExp
                             ? D.contentExp()
                             : D.content)
                               ? (k && w(),
                                 (S = D.$new()),
                                 (k = n(S, function(e) {
-                                  A ? r.find("body").append(e) : t.after(e);
+                                  P ? r.find("body").append(e) : t.after(e);
                                 })),
                                 h.useContentExp &&
                                   (S.$watch("contentExp()", function(e) {
                                     !e && D.isOpen && b();
                                   }),
                                   S.$watch(function() {
-                                    $ ||
-                                      (($ = !0),
+                                    M ||
+                                      ((M = !0),
                                       S.$$postDigest(function() {
-                                        ($ = !1), D.isOpen && I();
+                                        (M = !1), D.isOpen && I();
                                       }));
                                   })),
                                 (D.isOpen = !0),
-                                M && M.assign(D.origScope, D.isOpen),
-                                c.$$phase || D.$apply(),
+                                $ && $.assign(D.origScope, D.isOpen),
+                                d.$$phase || D.$apply(),
                                 k.css({ display: "block" }),
                                 void I())
                               : angular.noop
@@ -5547,15 +6102,15 @@
                         }
                         function b() {
                           (D.isOpen = !1),
-                            M && M.assign(D.origScope, D.isOpen),
+                            $ && $.assign(D.origScope, D.isOpen),
+                            i.cancel(T),
+                            (T = null),
                             i.cancel(C),
                             (C = null),
-                            i.cancel(P),
-                            (P = null),
-                            D.animation ? T || (T = i(w, 500)) : w();
+                            D.animation ? A || (A = i(w, 500)) : w();
                         }
                         function w() {
-                          (T = null),
+                          (A = null),
                             k && (k.remove(), (k = null)),
                             S && (S.$destroy(), (S = null));
                         }
@@ -5565,29 +6120,29 @@
                         }
                         var k,
                           S,
+                          A,
                           T,
                           C,
-                          P,
-                          A = !!angular.isDefined(h.appendToBody) && h.appendToBody,
+                          P = !!angular.isDefined(h.appendToBody) && h.appendToBody,
                           x = f(void 0),
                           R = angular.isDefined(o[u + "Enable"]),
                           D = e.$new(!0),
-                          $ = !1,
-                          M = !!angular.isDefined(o[u + "IsOpen"]) && d(o[u + "IsOpen"]),
+                          M = !1,
+                          $ = !!angular.isDefined(o[u + "IsOpen"]) && c(o[u + "IsOpen"]),
                           I = function() {
                             k &&
-                              (P ||
-                                (P = i(
+                              (C ||
+                                (C = i(
                                   function() {
                                     k.css({ top: 0, left: 0, width: "auto", height: "auto" });
                                     var e = s.position(k),
-                                      n = s.positionElements(t, k, D.placement, A);
+                                      n = s.positionElements(t, k, D.placement, P);
                                     (n.top += "px"),
                                       (n.left += "px"),
                                       (n.width = e.width + "px"),
                                       (n.height = e.height + "px"),
                                       k.css(n),
-                                      (P = null);
+                                      (C = null);
                                   },
                                   0,
                                   !1
@@ -5603,7 +6158,7 @@
                               (D.content = e), !e && D.isOpen ? b() : I();
                             }),
                           o.$observe("disabled", function(e) {
-                            C && e && (i.cancel(C), (C = null)), e && D.isOpen && b();
+                            T && e && (i.cancel(T), (T = null)), e && D.isOpen && b();
                           }),
                           o.$observe(u + "Title", function(e) {
                             (D.title = e), I();
@@ -5611,8 +6166,8 @@
                           o.$observe(u + "Placement", function() {
                             D.isOpen && (y(), I());
                           }),
-                          M &&
-                            e.$watch(M, function(e) {
+                          $ &&
+                            e.$watch($, function(e) {
                               e !== D.isOpen && p();
                             });
                         var E = function() {
@@ -5638,12 +6193,12 @@
                         var z = e.$eval(o[u + "Animation"]);
                         D.animation = angular.isDefined(z) ? !!z : h.animation;
                         var U = e.$eval(o[u + "AppendToBody"]);
-                        (A = angular.isDefined(U) ? U : A) &&
+                        (P = angular.isDefined(U) ? U : P) &&
                           e.$on("$locationChangeSuccess", function() {
                             D.isOpen && b();
                           }),
                           e.$on("$destroy", function() {
-                            i.cancel(T), i.cancel(C), i.cancel(P), E(), w(), (D = null);
+                            i.cancel(A), i.cancel(T), i.cancel(C), E(), w(), (D = null);
                           });
                       };
                     }
@@ -5662,18 +6217,18 @@
               link: function(o, i, r) {
                 var s,
                   l,
-                  c,
-                  d = o.$eval(r.tooltipTemplateTranscludeScope),
+                  d,
+                  c = o.$eval(r.tooltipTemplateTranscludeScope),
                   u = 0,
                   p = function() {
                     l && (l.remove(), (l = null)),
                       s && (s.$destroy(), (s = null)),
-                      c &&
-                        (e.leave(c).then(function() {
+                      d &&
+                        (e.leave(d).then(function() {
                           l = null;
                         }),
-                        (l = c),
-                        (c = null));
+                        (l = d),
+                        (d = null));
                   };
                 o.$watch(t.parseAsResourceUrl(r.tooltipTemplateTransclude), function(t) {
                   var r = ++u;
@@ -5681,11 +6236,11 @@
                     ? (a(t, !0).then(
                         function(a) {
                           if (r === u) {
-                            var o = d.$new(),
+                            var o = c.$new(),
                               l = n(a)(o, function(t) {
                                 p(), e.enter(t, i);
                               });
-                            (c = l), (s = o).$emit("$includeContentLoaded", t);
+                            (d = l), (s = o).$emit("$includeContentLoaded", t);
                           }
                         },
                         function() {
@@ -6211,10 +6766,10 @@
             function l(e) {
               return angular.isDefined(e) && e.toString().length < 2 ? "0" + e : e.toString();
             }
-            function c(e) {
-              d(), m.$setViewValue(new Date(f)), u(e);
+            function d(e) {
+              c(), m.$setViewValue(new Date(f)), u(e);
             }
-            function d() {
+            function c() {
               m.$setValidity("time", !0), (e.invalidHours = !1), (e.invalidMinutes = !1);
             }
             function u(t) {
@@ -6231,7 +6786,7 @@
               return a.setHours(n.getHours(), n.getMinutes()), a;
             }
             function h(e) {
-              (f = p(f, e)), c();
+              (f = p(f, e)), d();
             }
             var f = new Date(),
               m = { $setViewValue: angular.noop },
@@ -6299,7 +6854,7 @@
                   if (((e.showMeridian = !!t), m.$error.time)) {
                     var n = r(),
                       a = s();
-                    angular.isDefined(n) && angular.isDefined(a) && (f.setHours(n), c());
+                    angular.isDefined(n) && angular.isDefined(a) && (f.setHours(n), d());
                   } else u();
                 }),
               (this.setupMousewheelEvents = function(t, n) {
@@ -6341,7 +6896,7 @@
                   var e = r(),
                     t = s();
                   angular.isDefined(e) && angular.isDefined(t)
-                    ? (f.setHours(e), b > f || f > w ? a(!0) : c("h"))
+                    ? (f.setHours(e), b > f || f > w ? a(!0) : d("h"))
                     : a(!0);
                 }),
                   t.bind("blur", function(t) {
@@ -6355,7 +6910,7 @@
                     var e = s(),
                       t = r();
                     angular.isDefined(e) && angular.isDefined(t)
-                      ? (f.setMinutes(e), b > f || f > w ? a(void 0, !0) : c("m"))
+                      ? (f.setMinutes(e), b > f || f > w ? a(void 0, !0) : d("m"))
                       : a(void 0, !0);
                   }),
                   n.bind("blur", function(t) {
@@ -6376,7 +6931,7 @@
                   : (t && (f = t),
                     b > f || f > w
                       ? (m.$setValidity("time", !1), (e.invalidHours = !0), (e.invalidMinutes = !0))
-                      : d(),
+                      : c(),
                     u());
               }),
               (e.showSpinners = angular.isDefined(t.showSpinners)
@@ -6435,13 +6990,13 @@
                 i = i || {};
                 var s = e.defer(),
                   l = r[i.animation ? "animationEndEventName" : "transitionEndEventName"],
-                  c = function(e) {
+                  d = function(e) {
                     n.$apply(function() {
-                      a.unbind(l, c), s.resolve(a);
+                      a.unbind(l, d), s.resolve(a);
                     });
                   };
                 return (
-                  l && a.bind(l, c),
+                  l && a.bind(l, d),
                   t(function() {
                     angular.isString(o)
                       ? a.addClass(o)
@@ -6451,7 +7006,7 @@
                       l || s.resolve(a);
                   }),
                   (s.promise.cancel = function() {
-                    l && a.unbind(l, c), s.reject("Transition cancelled");
+                    l && a.unbind(l, d), s.reject("Transition cancelled");
                   }),
                   s.promise
                 );
@@ -6510,53 +7065,52 @@
           "$position",
           "typeaheadParser",
           function(e, t, n, a, o, i, r, s, l) {
-            var c = [9, 13, 27, 38, 40],
-              d = 200;
+            var d = [9, 13, 27, 38, 40];
             return {
               require: ["ngModel", "^?ngModelOptions"],
-              link: function(u, p, h, f) {
+              link: function(c, u, p, h) {
+                function f() {
+                  z.moveInProgress || ((z.moveInProgress = !0), z.$digest()),
+                    j && a.cancel(j),
+                    (j = a(function() {
+                      z.matches.length && m(), (z.moveInProgress = !1), z.$digest();
+                    }, 200));
+                }
                 function m() {
-                  U.moveInProgress || ((U.moveInProgress = !0), U.$digest()),
-                    N && a.cancel(N),
-                    (N = a(function() {
-                      U.matches.length && g(), (U.moveInProgress = !1), U.$digest();
-                    }, d));
+                  (z.position = R ? s.offset(u) : s.position(u)),
+                    (z.position.top += u.prop("offsetHeight"));
                 }
-                function g() {
-                  (U.position = D ? s.offset(p) : s.position(p)),
-                    (U.position.top += p.prop("offsetHeight"));
-                }
-                var v = f[0],
-                  b = f[1],
-                  w = u.$eval(h.typeaheadMinLength);
-                w || 0 === w || (w = 1);
-                var y,
-                  k,
-                  S = u.$eval(h.typeaheadWaitMs) || 0,
-                  T = !1 !== u.$eval(h.typeaheadEditable),
-                  C = t(h.typeaheadLoading).assign || angular.noop,
-                  P = t(h.typeaheadOnSelect),
-                  A =
-                    !!angular.isDefined(h.typeaheadSelectOnBlur) &&
-                    u.$eval(h.typeaheadSelectOnBlur),
-                  x = t(h.typeaheadNoResults).assign || angular.noop,
-                  R = h.typeaheadInputFormatter ? t(h.typeaheadInputFormatter) : void 0,
-                  D = !!h.typeaheadAppendToBody && u.$eval(h.typeaheadAppendToBody),
-                  $ = !1 !== u.$eval(h.typeaheadFocusFirst),
-                  M = !!h.typeaheadSelectOnExact && u.$eval(h.typeaheadSelectOnExact),
-                  I = t(h.ngModel),
-                  E = t(h.ngModel + "($$$p)"),
-                  z = l.parse(h.typeahead),
-                  U = u.$new(),
-                  L = u.$on("$destroy", function() {
-                    U.$destroy();
+                var g = h[0],
+                  v = h[1],
+                  b = c.$eval(p.typeaheadMinLength);
+                b || 0 === b || (b = 1);
+                var w,
+                  y,
+                  k = c.$eval(p.typeaheadWaitMs) || 0,
+                  S = !1 !== c.$eval(p.typeaheadEditable),
+                  A = t(p.typeaheadLoading).assign || angular.noop,
+                  T = t(p.typeaheadOnSelect),
+                  C =
+                    !!angular.isDefined(p.typeaheadSelectOnBlur) &&
+                    c.$eval(p.typeaheadSelectOnBlur),
+                  P = t(p.typeaheadNoResults).assign || angular.noop,
+                  x = p.typeaheadInputFormatter ? t(p.typeaheadInputFormatter) : void 0,
+                  R = !!p.typeaheadAppendToBody && c.$eval(p.typeaheadAppendToBody),
+                  D = !1 !== c.$eval(p.typeaheadFocusFirst),
+                  M = !!p.typeaheadSelectOnExact && c.$eval(p.typeaheadSelectOnExact),
+                  $ = t(p.ngModel),
+                  I = t(p.ngModel + "($$$p)"),
+                  E = l.parse(p.typeahead),
+                  z = c.$new(),
+                  U = c.$on("$destroy", function() {
+                    z.$destroy();
                   });
-                U.$on("$destroy", L);
-                var F = "typeahead-" + U.$id + "-" + Math.floor(1e4 * Math.random());
-                p.attr({ "aria-autocomplete": "list", "aria-expanded": !1, "aria-owns": F });
-                var O = angular.element("<div typeahead-popup></div>");
-                O.attr({
-                  id: F,
+                z.$on("$destroy", U);
+                var L = "typeahead-" + z.$id + "-" + Math.floor(1e4 * Math.random());
+                u.attr({ "aria-autocomplete": "list", "aria-expanded": !1, "aria-owns": L });
+                var F = angular.element("<div typeahead-popup></div>");
+                F.attr({
+                  id: L,
                   matches: "matches",
                   active: "activeIdx",
                   select: "select(activeIdx)",
@@ -6564,167 +7118,167 @@
                   query: "query",
                   position: "position"
                 }),
-                  angular.isDefined(h.typeaheadTemplateUrl) &&
-                    O.attr("template-url", h.typeaheadTemplateUrl),
-                  angular.isDefined(h.typeaheadPopupTemplateUrl) &&
-                    O.attr("popup-template-url", h.typeaheadPopupTemplateUrl);
-                var B = function() {
-                    (U.matches = []), (U.activeIdx = -1), p.attr("aria-expanded", !1);
+                  angular.isDefined(p.typeaheadTemplateUrl) &&
+                    F.attr("template-url", p.typeaheadTemplateUrl),
+                  angular.isDefined(p.typeaheadPopupTemplateUrl) &&
+                    F.attr("popup-template-url", p.typeaheadPopupTemplateUrl);
+                var O = function() {
+                    (z.matches = []), (z.activeIdx = -1), u.attr("aria-expanded", !1);
                   },
-                  j = function(e) {
-                    return F + "-option-" + e;
+                  B = function(e) {
+                    return L + "-option-" + e;
                   };
-                U.$watch("activeIdx", function(e) {
+                z.$watch("activeIdx", function(e) {
                   0 > e
-                    ? p.removeAttr("aria-activedescendant")
-                    : p.attr("aria-activedescendant", j(e));
+                    ? u.removeAttr("aria-activedescendant")
+                    : u.attr("aria-activedescendant", B(e));
                 });
-                var N,
-                  H = function(e) {
+                var j,
+                  N = function(e) {
                     var t = { $viewValue: e };
-                    C(u, !0),
-                      x(u, !1),
-                      n.when(z.source(u, t)).then(
+                    A(c, !0),
+                      P(c, !1),
+                      n.when(E.source(c, t)).then(
                         function(n) {
-                          var a = e === v.$viewValue;
-                          if (a && y)
+                          var a = e === g.$viewValue;
+                          if (a && w)
                             if (n && n.length > 0) {
-                              (U.activeIdx = $ ? 0 : -1), x(u, !1), (U.matches.length = 0);
+                              (z.activeIdx = D ? 0 : -1), P(c, !1), (z.matches.length = 0);
                               for (var o = 0; o < n.length; o++)
-                                (t[z.itemName] = n[o]),
-                                  U.matches.push({
-                                    id: j(o),
-                                    label: z.viewMapper(U, t),
+                                (t[E.itemName] = n[o]),
+                                  z.matches.push({
+                                    id: B(o),
+                                    label: E.viewMapper(z, t),
                                     model: n[o]
                                   });
-                              (U.query = e),
-                                g(),
-                                p.attr("aria-expanded", !0),
+                              (z.query = e),
+                                m(),
+                                u.attr("aria-expanded", !0),
                                 M &&
-                                  1 === U.matches.length &&
+                                  1 === z.matches.length &&
                                   (function(e, t) {
                                     return (
-                                      !!(U.matches.length > t && e) &&
-                                      e.toUpperCase() === U.matches[t].label.toUpperCase()
+                                      !!(z.matches.length > t && e) &&
+                                      e.toUpperCase() === z.matches[t].label.toUpperCase()
                                     );
                                   })(e, 0) &&
-                                  U.select(0);
-                            } else B(), x(u, !0);
-                          a && C(u, !1);
+                                  z.select(0);
+                            } else O(), P(c, !0);
+                          a && A(c, !1);
                         },
                         function() {
-                          B(), C(u, !1), x(u, !0);
+                          O(), A(c, !1), P(c, !0);
                         }
                       );
                   };
-                D && (angular.element(i).bind("resize", m), o.find("body").bind("scroll", m)),
-                  (U.moveInProgress = !1),
-                  B(),
-                  (U.query = void 0);
-                var W,
-                  V = function() {
-                    W && a.cancel(W);
+                R && (angular.element(i).bind("resize", f), o.find("body").bind("scroll", f)),
+                  (z.moveInProgress = !1),
+                  O(),
+                  (z.query = void 0);
+                var H,
+                  W = function() {
+                    H && a.cancel(H);
                   };
-                v.$parsers.unshift(function(e) {
+                g.$parsers.unshift(function(e) {
                   return (
-                    (y = !0),
-                    0 === w || (e && e.length >= w)
-                      ? S > 0
-                        ? (V(),
+                    (w = !0),
+                    0 === b || (e && e.length >= b)
+                      ? k > 0
+                        ? (W(),
                           (function(e) {
-                            W = a(function() {
-                              H(e);
-                            }, S);
+                            H = a(function() {
+                              N(e);
+                            }, k);
                           })(e))
-                        : H(e)
-                      : (C(u, !1), V(), B()),
-                    T
+                        : N(e)
+                      : (A(c, !1), W(), O()),
+                    S
                       ? e
                       : e
-                        ? void v.$setValidity("editable", !1)
-                        : (v.$setValidity("editable", !0), null)
+                        ? void g.$setValidity("editable", !1)
+                        : (g.$setValidity("editable", !0), null)
                   );
                 }),
-                  v.$formatters.push(function(e) {
+                  g.$formatters.push(function(e) {
                     var t,
                       n = {};
                     return (
-                      T || v.$setValidity("editable", !0),
-                      R
-                        ? ((n.$model = e), R(u, n))
-                        : ((n[z.itemName] = e),
-                          (t = z.viewMapper(u, n)),
-                          (n[z.itemName] = void 0),
-                          t !== z.viewMapper(u, n) ? t : e)
+                      S || g.$setValidity("editable", !0),
+                      x
+                        ? ((n.$model = e), x(c, n))
+                        : ((n[E.itemName] = e),
+                          (t = E.viewMapper(c, n)),
+                          (n[E.itemName] = void 0),
+                          t !== E.viewMapper(c, n) ? t : e)
                     );
                   }),
-                  (U.select = function(e) {
+                  (z.select = function(e) {
                     var t,
                       n,
                       o = {};
-                    (k = !0),
-                      (o[z.itemName] = n = U.matches[e].model),
-                      (t = z.modelMapper(u, o)),
+                    (y = !0),
+                      (o[E.itemName] = n = z.matches[e].model),
+                      (t = E.modelMapper(c, o)),
                       (function(e, t) {
-                        angular.isFunction(I(u)) && b && b.$options && b.$options.getterSetter
-                          ? E(e, { $$$p: t })
-                          : I.assign(e, t);
-                      })(u, t),
-                      v.$setValidity("editable", !0),
-                      v.$setValidity("parse", !0),
-                      P(u, { $item: n, $model: t, $label: z.viewMapper(u, o) }),
-                      B(),
-                      !1 !== U.$eval(h.typeaheadFocusOnSelect) &&
+                        angular.isFunction($(c)) && v && v.$options && v.$options.getterSetter
+                          ? I(e, { $$$p: t })
+                          : $.assign(e, t);
+                      })(c, t),
+                      g.$setValidity("editable", !0),
+                      g.$setValidity("parse", !0),
+                      T(c, { $item: n, $model: t, $label: E.viewMapper(c, o) }),
+                      O(),
+                      !1 !== z.$eval(p.typeaheadFocusOnSelect) &&
                         a(
                           function() {
-                            p[0].focus();
+                            u[0].focus();
                           },
                           0,
                           !1
                         );
                   }),
-                  p.bind("keydown", function(e) {
-                    if (0 !== U.matches.length && -1 !== c.indexOf(e.which)) {
-                      if (-1 === U.activeIdx && (9 === e.which || 13 === e.which))
-                        return B(), void U.$digest();
+                  u.bind("keydown", function(e) {
+                    if (0 !== z.matches.length && -1 !== d.indexOf(e.which)) {
+                      if (-1 === z.activeIdx && (9 === e.which || 13 === e.which))
+                        return O(), void z.$digest();
                       e.preventDefault(),
                         40 === e.which
-                          ? ((U.activeIdx = (U.activeIdx + 1) % U.matches.length), U.$digest())
+                          ? ((z.activeIdx = (z.activeIdx + 1) % z.matches.length), z.$digest())
                           : 38 === e.which
-                            ? ((U.activeIdx =
-                                (U.activeIdx > 0 ? U.activeIdx : U.matches.length) - 1),
-                              U.$digest())
+                            ? ((z.activeIdx =
+                                (z.activeIdx > 0 ? z.activeIdx : z.matches.length) - 1),
+                              z.$digest())
                             : 13 === e.which || 9 === e.which
-                              ? U.$apply(function() {
-                                  U.select(U.activeIdx);
+                              ? z.$apply(function() {
+                                  z.select(z.activeIdx);
                                 })
-                              : 27 === e.which && (e.stopPropagation(), B(), U.$digest());
+                              : 27 === e.which && (e.stopPropagation(), O(), z.$digest());
                     }
                   }),
-                  p.bind("blur", function() {
-                    A &&
-                      U.matches.length &&
-                      -1 !== U.activeIdx &&
-                      !k &&
-                      ((k = !0),
-                      U.$apply(function() {
-                        U.select(U.activeIdx);
+                  u.bind("blur", function() {
+                    C &&
+                      z.matches.length &&
+                      -1 !== z.activeIdx &&
+                      !y &&
+                      ((y = !0),
+                      z.$apply(function() {
+                        z.select(z.activeIdx);
                       })),
-                      (y = !1),
-                      (k = !1);
+                      (w = !1),
+                      (y = !1);
                   });
-                var Y = function(e) {
-                  p[0] !== e.target &&
+                var V = function(e) {
+                  u[0] !== e.target &&
                     3 !== e.which &&
-                    0 !== U.matches.length &&
-                    (B(), r.$$phase || U.$digest());
+                    0 !== z.matches.length &&
+                    (O(), r.$$phase || z.$digest());
                 };
-                o.bind("click", Y),
-                  u.$on("$destroy", function() {
-                    o.unbind("click", Y), D && q.remove(), O.remove();
+                o.bind("click", V),
+                  c.$on("$destroy", function() {
+                    o.unbind("click", V), R && q.remove(), F.remove();
                   });
-                var q = e(O)(U);
-                D ? o.find("body").append(q) : p.after(q);
+                var q = e(F)(z);
+                R ? o.find("body").append(q) : u.after(q);
               }
             };
           }
@@ -7615,8 +8169,8 @@
                 hooks: {}
               },
               l = null,
-              c = null,
               d = null,
+              c = null,
               u = null,
               p = null,
               h = [],
@@ -7666,12 +8220,12 @@
                   n <= a && (n = a + 1);
                   var i,
                     l = [],
-                    c = s.colors,
-                    d = c.length,
+                    d = s.colors,
+                    c = d.length,
                     u = 0;
                   for (t = 0; t < n; t++)
-                    (i = e.color.parse(c[t % d] || "#666")),
-                      t % d == 0 && t && (u = u >= 0 ? (u < 0.5 ? -u - 0.2 : 0) : -u),
+                    (i = e.color.parse(d[t % c] || "#666")),
+                      t % c == 0 && t && (u = u >= 0 ? (u < 0.5 ? -u - 0.2 : 0) : -u),
                       (l[t] = i.scale("rgb", 1 + u));
                   var p,
                     m = 0;
@@ -7692,8 +8246,8 @@
                       v && (p.lines.show = !0);
                     }
                     null == p.lines.zero && (p.lines.zero = !!p.lines.fill),
-                      (p.xaxis = P(h, S(p, "x"))),
-                      (p.yaxis = P(f, S(p, "y")));
+                      (p.xaxis = C(h, S(p, "x"))),
+                      (p.yaxis = C(f, S(p, "y")));
                   }
                 })(),
                 (function() {
@@ -7704,8 +8258,8 @@
                     i,
                     s,
                     l,
-                    c,
                     d,
+                    c,
                     u,
                     p,
                     h,
@@ -7717,7 +8271,7 @@
                       n > e.datamax && n != g && (e.datamax = n);
                   }
                   for (
-                    e.each(T(), function(e, t) {
+                    e.each(A(), function(e, t) {
                       (t.datamin = f), (t.datamax = m), (t.used = !1);
                     }),
                       t = 0;
@@ -7748,25 +8302,25 @@
                         var S = null == (u = p[n]);
                         if (!S)
                           for (o = 0; o < l; ++o)
-                            (c = u[o]),
-                              (d = h[o]) &&
-                                (d.number &&
-                                  null != c &&
-                                  ((c = +c),
-                                  isNaN(c)
-                                    ? (c = null)
-                                    : c == 1 / 0
-                                      ? (c = g)
-                                      : c == -1 / 0 && (c = -g)),
-                                null == c &&
-                                  (d.required && (S = !0),
-                                  null != d.defaultValue && (c = d.defaultValue))),
-                              (s[a + o] = c);
+                            (d = u[o]),
+                              (c = h[o]) &&
+                                (c.number &&
+                                  null != d &&
+                                  ((d = +d),
+                                  isNaN(d)
+                                    ? (d = null)
+                                    : d == 1 / 0
+                                      ? (d = g)
+                                      : d == -1 / 0 && (d = -g)),
+                                null == d &&
+                                  (c.required && (S = !0),
+                                  null != c.defaultValue && (d = c.defaultValue))),
+                              (s[a + o] = d);
                         if (S)
                           for (o = 0; o < l; ++o)
-                            null != (c = s[a + o]) &&
-                              !1 !== (d = h[o]).autoscale &&
-                              (d.x && v(i.xaxis, c, c), d.y && v(i.yaxis, c, c)),
+                            null != (d = s[a + o]) &&
+                              !1 !== (c = h[o]).autoscale &&
+                              (c.x && v(i.xaxis, d, d), c.y && v(i.yaxis, d, d)),
                               (s[a + o] = null);
                         else if (
                           k &&
@@ -7788,20 +8342,20 @@
                       (s = i.datapoints.points),
                       (l = i.datapoints.pointsize),
                       (h = i.datapoints.format);
-                    var C = f,
-                      P = f,
-                      A = m,
+                    var T = f,
+                      C = f,
+                      P = m,
                       x = m;
                     for (n = 0; n < s.length; n += l)
                       if (null != s[n])
                         for (o = 0; o < l; ++o)
-                          (c = s[n + o]),
-                            (d = h[o]) &&
-                              !1 !== d.autoscale &&
-                              c != g &&
-                              c != -g &&
-                              (d.x && (c < C && (C = c), c > A && (A = c)),
-                              d.y && (c < P && (P = c), c > x && (x = c)));
+                          (d = s[n + o]),
+                            (c = h[o]) &&
+                              !1 !== c.autoscale &&
+                              d != g &&
+                              d != -g &&
+                              (c.x && (d < T && (T = d), d > P && (P = d)),
+                              c.y && (d < C && (C = d), d > x && (x = d)));
                     if (i.bars.show) {
                       var R;
                       switch (i.bars.align) {
@@ -7815,12 +8369,12 @@
                           R = -i.bars.barWidth / 2;
                       }
                       i.bars.horizontal
-                        ? ((P += R), (x += R + i.bars.barWidth))
-                        : ((C += R), (A += R + i.bars.barWidth));
+                        ? ((C += R), (x += R + i.bars.barWidth))
+                        : ((T += R), (P += R + i.bars.barWidth));
                     }
-                    v(i.xaxis, C, A), v(i.yaxis, P, x);
+                    v(i.xaxis, T, P), v(i.yaxis, C, x);
                   }
-                  e.each(T(), function(e, t) {
+                  e.each(A(), function(e, t) {
                     t.datamin == f && (t.datamin = null), t.datamax == m && (t.datamax = null);
                   });
                 })();
@@ -7829,12 +8383,12 @@
               var n = e[t + "axis"];
               return "object" == typeof n && (n = n.n), "number" != typeof n && (n = 1), n;
             }
-            function T() {
+            function A() {
               return e.grep(h.concat(f), function(e) {
                 return e;
               });
             }
-            function C(e) {
+            function T(e) {
               var t,
                 n,
                 a = {};
@@ -7842,7 +8396,7 @@
               for (t = 0; t < f.length; ++t) (n = f[t]) && n.used && (a["y" + n.n] = n.c2p(e.top));
               return void 0 !== a.x1 && (a.x = a.x1), void 0 !== a.y1 && (a.y = a.y1), a;
             }
-            function P(t, n) {
+            function C(t, n) {
               return (
                 t[n - 1] ||
                   (t[n - 1] = {
@@ -7853,12 +8407,12 @@
                 t[n - 1]
               );
             }
-            function A() {
+            function P() {
               L && clearTimeout(L),
-                d.unbind("mousemove", F),
-                d.unbind("mouseleave", O),
-                d.unbind("click", B),
-                y(b.shutdown, [d]);
+                c.unbind("mousemove", F),
+                c.unbind("mouseleave", O),
+                c.unbind("click", B),
+                y(b.shutdown, [c]);
             }
             function x(t) {
               var n = t.labelWidth,
@@ -7866,8 +8420,8 @@
                 o = t.options.position,
                 i = "x" === t.direction,
                 r = t.options.tickLength,
-                c = s.grid.axisMargin,
-                d = s.grid.labelMargin,
+                d = s.grid.axisMargin,
+                c = s.grid.labelMargin,
                 u = !0,
                 p = !0,
                 g = !0,
@@ -7878,30 +8432,30 @@
                   (n === t ? (v = !0) : n.options.position === o && (v ? (p = !1) : (u = !1)),
                   v || (g = !1));
               }),
-                p && (c = 0),
+                p && (d = 0),
                 null == r && (r = g ? "full" : 5),
-                isNaN(+r) || (d += +r),
+                isNaN(+r) || (c += +r),
                 i
-                  ? ((a += d),
+                  ? ((a += c),
                     "bottom" == o
-                      ? ((m.bottom += a + c), (t.box = { top: l.height - m.bottom, height: a }))
-                      : ((t.box = { top: m.top + c, height: a }), (m.top += a + c)))
-                  : ((n += d),
+                      ? ((m.bottom += a + d), (t.box = { top: l.height - m.bottom, height: a }))
+                      : ((t.box = { top: m.top + d, height: a }), (m.top += a + d)))
+                  : ((n += c),
                     "left" == o
-                      ? ((t.box = { left: m.left + c, width: n }), (m.left += n + c))
-                      : ((m.right += n + c), (t.box = { left: l.width - m.right, width: n }))),
+                      ? ((t.box = { left: m.left + d, width: n }), (m.left += n + d))
+                      : ((m.right += n + d), (t.box = { left: l.width - m.right, width: n }))),
                 (t.position = o),
                 (t.tickLength = r),
-                (t.box.padding = d),
+                (t.box.padding = c),
                 (t.innermost = u);
             }
             function R() {
               var n,
-                a = T(),
+                a = A(),
                 o = s.grid.show;
               for (var i in m) {
-                var c = s.grid.margin || 0;
-                m[i] = "number" == typeof c ? c : c[i] || 0;
+                var d = s.grid.margin || 0;
+                m[i] = "number" == typeof d ? d : d[i] || 0;
               }
               for (var i in (y(b.processOffset, [m]), m))
                 "object" == typeof s.grid.borderWidth
@@ -7939,11 +8493,11 @@
                 }),
                 o)
               ) {
-                var d = e.grep(a, function(e) {
+                var c = e.grep(a, function(e) {
                   return e.show || e.reserveSpace;
                 });
                 for (
-                  e.each(d, function(t, n) {
+                  e.each(c, function(t, n) {
                     !(function(t) {
                       var n,
                         a = t.options;
@@ -7956,14 +8510,14 @@
                         r = a.tickDecimals;
                       null != r && i > r && (i = r);
                       var s,
-                        c = Math.pow(10, -i),
-                        d = o / c;
-                      d < 1.5
+                        d = Math.pow(10, -i),
+                        c = o / d;
+                      c < 1.5
                         ? (s = 1)
-                        : d < 3
-                          ? ((s = 2), d > 2.25 && (null == r || i + 1 <= r) && ((s = 2.5), ++i))
-                          : (s = d < 7.5 ? 5 : 10);
-                      (s *= c), null != a.minTickSize && s < a.minTickSize && (s = a.minTickSize);
+                        : c < 3
+                          ? ((s = 2), c > 2.25 && (null == r || i + 1 <= r) && ((s = 2.5), ++i))
+                          : (s = c < 7.5 ? 5 : 10);
+                      (s *= d), null != a.minTickSize && s < a.minTickSize && (s = a.minTickSize);
                       if (
                         ((t.delta = o),
                         (t.tickDecimals = Math.max(0, null != r ? r : i)),
@@ -7974,16 +8528,16 @@
                       t.tickGenerator ||
                         ((t.tickGenerator = function(e) {
                           var t,
-                            n = [],
-                            a = (function(e, t) {
-                              return t * Math.floor(e / t);
-                            })(e.min, e.tickSize),
-                            o = 0,
-                            i = Number.NaN;
+                            n,
+                            a,
+                            o = [],
+                            i = ((n = e.min), (a = e.tickSize) * Math.floor(n / a)),
+                            r = 0,
+                            s = Number.NaN;
                           do {
-                            (t = i), (i = a + o * e.tickSize), n.push(i), ++o;
-                          } while (i < e.max && i != t);
-                          return n;
+                            (t = s), (s = i + r * e.tickSize), o.push(s), ++r;
+                          } while (s < e.max && s != t);
+                          return o;
                         }),
                         (t.tickFormatter = function(e, t) {
                           var n = t.tickDecimals ? Math.pow(10, t.tickDecimals) : 1,
@@ -8074,25 +8628,25 @@
                               e.n +
                               "-axis " +
                               r,
-                            c = t.font || "flot-tick-label tickLabel",
-                            d = 0;
-                          d < n.length;
-                          ++d
+                            d = t.font || "flot-tick-label tickLabel",
+                            c = 0;
+                          c < n.length;
+                          ++c
                         ) {
-                          var u = n[d];
+                          var u = n[c];
                           if (u.label) {
-                            var p = l.getTextInfo(s, u.label, c, null, i);
+                            var p = l.getTextInfo(s, u.label, d, null, i);
                             (a = Math.max(a, p.width)), (o = Math.max(o, p.height));
                           }
                         }
                         (e.labelWidth = t.labelWidth || a), (e.labelHeight = t.labelHeight || o);
                       })(n);
                   }),
-                    n = d.length - 1;
+                    n = c.length - 1;
                   n >= 0;
                   --n
                 )
-                  x(d[n]);
+                  x(c[n]);
                 !(function() {
                   var t,
                     n = s.grid.minBorderMargin;
@@ -8100,7 +8654,7 @@
                     for (n = 0, t = 0; t < r.length; ++t)
                       n = Math.max(n, 2 * (r[t].points.radius + r[t].points.lineWidth / 2));
                   var a = { left: n, right: n, top: n, bottom: n };
-                  e.each(T(), function(e, t) {
+                  e.each(A(), function(e, t) {
                     t.reserveSpace &&
                       t.ticks &&
                       t.ticks.length &&
@@ -8115,7 +8669,7 @@
                     (m.top = Math.ceil(Math.max(a.top, m.top))),
                     (m.bottom = Math.ceil(Math.max(a.bottom, m.bottom)));
                 })(),
-                  e.each(d, function(e, t) {
+                  e.each(c, function(e, t) {
                     !(function(e) {
                       "x" == e.direction
                         ? ((e.box.left = m.left - e.labelWidth / 2),
@@ -8159,17 +8713,17 @@
                   })(t);
                 }),
                 o &&
-                  e.each(T(), function(e, t) {
+                  e.each(A(), function(e, t) {
                     var n,
                       a,
                       o,
                       i,
                       r,
                       s = t.box,
-                      c = t.direction + "Axis " + t.direction + t.n + "Axis",
-                      d = "flot-" + t.direction + "-axis flot-" + t.direction + t.n + "-axis " + c,
+                      d = t.direction + "Axis " + t.direction + t.n + "Axis",
+                      c = "flot-" + t.direction + "-axis flot-" + t.direction + t.n + "-axis " + d,
                       u = t.options.font || "flot-tick-label tickLabel";
-                    if ((l.removeText(d), t.show && 0 != t.ticks.length))
+                    if ((l.removeText(c), t.show && 0 != t.ticks.length))
                       for (var p = 0; p < t.ticks.length; ++p)
                         !(n = t.ticks[p]).label ||
                           n.v < t.min ||
@@ -8185,7 +8739,7 @@
                               "left" == t.position
                                 ? ((a = s.left + s.width - s.padding), (i = "right"))
                                 : (a = s.left + s.padding)),
-                          l.addText(d, a, o, n.label, u, null, null, i, r));
+                          l.addText(c, a, o, n.label, u, null, null, i, r));
                   }),
                 (function() {
                   null != s.legend.container
@@ -8193,12 +8747,12 @@
                     : t.find(".legend").remove();
                   if (!s.legend.show) return;
                   for (
-                    var n, a, o = [], i = [], l = !1, c = s.legend.labelFormatter, d = 0;
-                    d < r.length;
-                    ++d
+                    var n, a, o = [], i = [], l = !1, d = s.legend.labelFormatter, c = 0;
+                    c < r.length;
+                    ++c
                   )
-                    (n = r[d]).label &&
-                      (a = c ? c(n.label, n) : n.label) &&
+                    (n = r[c]).label &&
+                      (a = d ? d(n.label, n) : n.label) &&
                       i.push({ label: a, color: n.color });
                   if (s.legend.sorted)
                     if (e.isFunction(s.legend.sorted)) i.sort(s.legend.sorted);
@@ -8209,9 +8763,9 @@
                         return e.label == t.label ? 0 : e.label < t.label != u ? 1 : -1;
                       });
                     }
-                  for (var d = 0; d < i.length; ++d) {
-                    var p = i[d];
-                    d % s.legend.noColumns == 0 && (l && o.push("</tr>"), o.push("<tr>"), (l = !0)),
+                  for (c = 0; c < i.length; ++c) {
+                    var p = i[c];
+                    c % s.legend.noColumns == 0 && (l && o.push("</tr>"), o.push("<tr>"), (l = !0)),
                       o.push(
                         '<td class="legendColorBox"><div style="border:1px solid ' +
                           s.legend.labelBoxBorderColor +
@@ -8283,12 +8837,12 @@
                 (u.fillStyle = G(s.grid.backgroundColor, v, 0, "rgba(255, 255, 255, 0)")),
                 u.fillRect(0, 0, g, v),
                 u.restore()),
-                e.show && !e.aboveData && M();
+                e.show && !e.aboveData && $();
               for (var t = 0; t < r.length; ++t) y(b.drawSeries, [u, r[t]]), I(r[t]);
-              y(b.draw, [u]), e.show && e.aboveData && M(), l.render(), N();
+              y(b.draw, [u]), e.show && e.aboveData && $(), l.render(), N();
             }
-            function $(e, t) {
-              for (var n, a, o, i, r = T(), s = 0; s < r.length; ++s)
+            function M(e, t) {
+              for (var n, a, o, i, r = A(), s = 0; s < r.length; ++s)
                 if (
                   (n = r[s]).direction == t &&
                   (e[(i = t + n.n + "axis")] || 1 != n.n || (i = t + "axis"), e[i])
@@ -8305,7 +8859,7 @@
               }
               return { from: a, to: o, axis: n };
             }
-            function M() {
+            function $() {
               var t, n, a, o;
               u.save(), u.translate(m.left, m.top);
               var i = s.grid.markings;
@@ -8322,114 +8876,114 @@
                   ++t
                 ) {
                   var r = i[t],
-                    l = $(r, "x"),
-                    c = $(r, "y");
+                    l = M(r, "x"),
+                    d = M(r, "y");
                   if (
                     (null == l.from && (l.from = l.axis.min),
                     null == l.to && (l.to = l.axis.max),
-                    null == c.from && (c.from = c.axis.min),
-                    null == c.to && (c.to = c.axis.max),
+                    null == d.from && (d.from = d.axis.min),
+                    null == d.to && (d.to = d.axis.max),
                     !(
                       l.to < l.axis.min ||
                       l.from > l.axis.max ||
-                      c.to < c.axis.min ||
-                      c.from > c.axis.max
+                      d.to < d.axis.min ||
+                      d.from > d.axis.max
                     ))
                   ) {
                     (l.from = Math.max(l.from, l.axis.min)),
                       (l.to = Math.min(l.to, l.axis.max)),
-                      (c.from = Math.max(c.from, c.axis.min)),
-                      (c.to = Math.min(c.to, c.axis.max));
-                    var d = l.from === l.to,
-                      p = c.from === c.to;
-                    if (!d || !p)
+                      (d.from = Math.max(d.from, d.axis.min)),
+                      (d.to = Math.min(d.to, d.axis.max));
+                    var c = l.from === l.to,
+                      p = d.from === d.to;
+                    if (!c || !p)
                       if (
                         ((l.from = Math.floor(l.axis.p2c(l.from))),
                         (l.to = Math.floor(l.axis.p2c(l.to))),
-                        (c.from = Math.floor(c.axis.p2c(c.from))),
-                        (c.to = Math.floor(c.axis.p2c(c.to))),
-                        d || p)
+                        (d.from = Math.floor(d.axis.p2c(d.from))),
+                        (d.to = Math.floor(d.axis.p2c(d.to))),
+                        c || p)
                       ) {
                         var h = r.lineWidth || s.grid.markingsLineWidth,
                           f = h % 2 ? 0.5 : 0;
                         u.beginPath(),
                           (u.strokeStyle = r.color || s.grid.markingsColor),
                           (u.lineWidth = h),
-                          d
-                            ? (u.moveTo(l.to + f, c.from), u.lineTo(l.to + f, c.to))
-                            : (u.moveTo(l.from, c.to + f), u.lineTo(l.to, c.to + f)),
+                          c
+                            ? (u.moveTo(l.to + f, d.from), u.lineTo(l.to + f, d.to))
+                            : (u.moveTo(l.from, d.to + f), u.lineTo(l.to, d.to + f)),
                           u.stroke();
                       } else
                         (u.fillStyle = r.color || s.grid.markingsColor),
-                          u.fillRect(l.from, c.to, l.to - l.from, c.from - c.to);
+                          u.fillRect(l.from, d.to, l.to - l.from, d.from - d.to);
                   }
                 }
-              (n = T()), (a = s.grid.borderWidth);
+              (n = A()), (a = s.grid.borderWidth);
               for (var b = 0; b < n.length; ++b) {
                 var y,
                   k,
                   S,
-                  C,
-                  P = n[b],
-                  A = P.box,
-                  x = P.tickLength;
-                if (P.show && 0 != P.ticks.length) {
+                  T,
+                  C = n[b],
+                  P = C.box,
+                  x = C.tickLength;
+                if (C.show && 0 != C.ticks.length) {
                   for (
                     u.lineWidth = 1,
-                      "x" == P.direction
+                      "x" == C.direction
                         ? ((y = 0),
                           (k =
                             "full" == x
-                              ? "top" == P.position
+                              ? "top" == C.position
                                 ? 0
                                 : v
-                              : A.top - m.top + ("top" == P.position ? A.height : 0)))
+                              : P.top - m.top + ("top" == C.position ? P.height : 0)))
                         : ((k = 0),
                           (y =
                             "full" == x
-                              ? "left" == P.position
+                              ? "left" == C.position
                                 ? 0
                                 : g
-                              : A.left - m.left + ("left" == P.position ? A.width : 0))),
-                      P.innermost ||
-                        ((u.strokeStyle = P.options.color),
+                              : P.left - m.left + ("left" == C.position ? P.width : 0))),
+                      C.innermost ||
+                        ((u.strokeStyle = C.options.color),
                         u.beginPath(),
-                        (S = C = 0),
-                        "x" == P.direction ? (S = g + 1) : (C = v + 1),
+                        (S = T = 0),
+                        "x" == C.direction ? (S = g + 1) : (T = v + 1),
                         1 == u.lineWidth &&
-                          ("x" == P.direction
+                          ("x" == C.direction
                             ? (k = Math.floor(k) + 0.5)
                             : (y = Math.floor(y) + 0.5)),
                         u.moveTo(y, k),
-                        u.lineTo(y + S, k + C),
+                        u.lineTo(y + S, k + T),
                         u.stroke()),
-                      u.strokeStyle = P.options.tickColor,
+                      u.strokeStyle = C.options.tickColor,
                       u.beginPath(),
                       t = 0;
-                    t < P.ticks.length;
+                    t < C.ticks.length;
                     ++t
                   ) {
-                    var R = P.ticks[t].v;
-                    (S = C = 0),
+                    var R = C.ticks[t].v;
+                    (S = T = 0),
                       isNaN(R) ||
-                        R < P.min ||
-                        R > P.max ||
+                        R < C.min ||
+                        R > C.max ||
                         ("full" == x &&
-                          (("object" == typeof a && a[P.position] > 0) || a > 0) &&
-                          (R == P.min || R == P.max)) ||
-                        ("x" == P.direction
-                          ? ((y = P.p2c(R)),
-                            (C = "full" == x ? -v : x),
-                            "top" == P.position && (C = -C))
-                          : ((k = P.p2c(R)),
+                          (("object" == typeof a && a[C.position] > 0) || a > 0) &&
+                          (R == C.min || R == C.max)) ||
+                        ("x" == C.direction
+                          ? ((y = C.p2c(R)),
+                            (T = "full" == x ? -v : x),
+                            "top" == C.position && (T = -T))
+                          : ((k = C.p2c(R)),
                             (S = "full" == x ? -g : x),
-                            "left" == P.position && (S = -S)),
+                            "left" == C.position && (S = -S)),
                         1 == u.lineWidth &&
-                          ("x" == P.direction
+                          ("x" == C.direction
                             ? (y = Math.floor(y) + 0.5)
                             : (k = Math.floor(k) + 0.5)),
                         u.moveTo(y, k),
-                        u.lineTo(y + S, k + C));
+                        u.lineTo(y + S, k + T));
                   }
                   u.stroke();
                 }
@@ -8481,41 +9035,41 @@
                       s = null,
                       l = null;
                     u.beginPath();
-                    for (var c = r; c < i.length; c += r) {
-                      var d = i[c - r],
-                        p = i[c - r + 1],
-                        h = i[c],
-                        f = i[c + 1];
-                      if (null != d && null != h) {
+                    for (var d = r; d < i.length; d += r) {
+                      var c = i[d - r],
+                        p = i[d - r + 1],
+                        h = i[d],
+                        f = i[d + 1];
+                      if (null != c && null != h) {
                         if (p <= f && p < o.min) {
                           if (f < o.min) continue;
-                          (d = ((o.min - p) / (f - p)) * (h - d) + d), (p = o.min);
+                          (c = ((o.min - p) / (f - p)) * (h - c) + c), (p = o.min);
                         } else if (f <= p && f < o.min) {
                           if (p < o.min) continue;
-                          (h = ((o.min - p) / (f - p)) * (h - d) + d), (f = o.min);
+                          (h = ((o.min - p) / (f - p)) * (h - c) + c), (f = o.min);
                         }
                         if (p >= f && p > o.max) {
                           if (f > o.max) continue;
-                          (d = ((o.max - p) / (f - p)) * (h - d) + d), (p = o.max);
+                          (c = ((o.max - p) / (f - p)) * (h - c) + c), (p = o.max);
                         } else if (f >= p && f > o.max) {
                           if (p > o.max) continue;
-                          (h = ((o.max - p) / (f - p)) * (h - d) + d), (f = o.max);
+                          (h = ((o.max - p) / (f - p)) * (h - c) + c), (f = o.max);
                         }
-                        if (d <= h && d < a.min) {
+                        if (c <= h && c < a.min) {
                           if (h < a.min) continue;
-                          (p = ((a.min - d) / (h - d)) * (f - p) + p), (d = a.min);
-                        } else if (h <= d && h < a.min) {
-                          if (d < a.min) continue;
-                          (f = ((a.min - d) / (h - d)) * (f - p) + p), (h = a.min);
+                          (p = ((a.min - c) / (h - c)) * (f - p) + p), (c = a.min);
+                        } else if (h <= c && h < a.min) {
+                          if (c < a.min) continue;
+                          (f = ((a.min - c) / (h - c)) * (f - p) + p), (h = a.min);
                         }
-                        if (d >= h && d > a.max) {
+                        if (c >= h && c > a.max) {
                           if (h > a.max) continue;
-                          (p = ((a.max - d) / (h - d)) * (f - p) + p), (d = a.max);
-                        } else if (h >= d && h > a.max) {
-                          if (d > a.max) continue;
-                          (f = ((a.max - d) / (h - d)) * (f - p) + p), (h = a.max);
+                          (p = ((a.max - c) / (h - c)) * (f - p) + p), (c = a.max);
+                        } else if (h >= c && h > a.max) {
+                          if (c > a.max) continue;
+                          (f = ((a.max - c) / (h - c)) * (f - p) + p), (h = a.max);
                         }
-                        (d == s && p == l) || u.moveTo(a.p2c(d) + t, o.p2c(p) + n),
+                        (c == s && p == l) || u.moveTo(a.p2c(c) + t, o.p2c(p) + n),
                           (s = h),
                           (l = f),
                           u.lineTo(a.p2c(h) + t, o.p2c(f) + n);
@@ -8550,26 +9104,29 @@
                   i &&
                     ((u.fillStyle = i),
                     (function(e, t, n) {
-                      var a = e.points,
-                        o = e.pointsize,
-                        i = Math.min(Math.max(0, n.min), n.max),
-                        r = 0,
-                        s = !1,
-                        l = 1,
-                        c = 0,
-                        d = 0;
-                      for (; !(o > 0 && r > a.length + o); ) {
+                      for (
+                        var a = e.points,
+                          o = e.pointsize,
+                          i = Math.min(Math.max(0, n.min), n.max),
+                          r = 0,
+                          s = !1,
+                          l = 1,
+                          d = 0,
+                          c = 0;
+                        !(o > 0 && r > a.length + o);
+
+                      ) {
                         var p = a[(r += o) - o],
                           h = a[r - o + l],
                           f = a[r],
                           m = a[r + l];
                         if (s) {
                           if (o > 0 && null != p && null == f) {
-                            (d = r), (o = -o), (l = 2);
+                            (c = r), (o = -o), (l = 2);
                             continue;
                           }
-                          if (o < 0 && r == c + o) {
-                            u.fill(), (s = !1), (l = 1), (r = c = d + (o = -o));
+                          if (o < 0 && r == d + o) {
+                            u.fill(), (s = !1), (l = 1), (r = d = c + (o = -o));
                             continue;
                           }
                         }
@@ -8647,12 +9204,12 @@
                         }
                       : null;
                     (function(t, n, a, o, i, r) {
-                      for (var s = t.points, l = t.pointsize, c = 0; c < s.length; c += l)
-                        null != s[c] &&
+                      for (var s = t.points, l = t.pointsize, d = 0; d < s.length; d += l)
+                        null != s[d] &&
                           E(
-                            s[c],
-                            s[c + 1],
-                            s[c + 2],
+                            s[d],
+                            s[d + 1],
+                            s[d + 2],
                             n,
                             a,
                             o,
@@ -8668,9 +9225,9 @@
                 e.points.show &&
                   (function(e) {
                     function t(e, t, n, a, o, i, r, s) {
-                      for (var l = e.points, c = e.pointsize, d = 0; d < l.length; d += c) {
-                        var p = l[d],
-                          h = l[d + 1];
+                      for (var l = e.points, d = e.pointsize, c = 0; c < l.length; c += d) {
+                        var p = l[c],
+                          h = l[c + 1];
                         null == p ||
                           p < i.min ||
                           p > i.max ||
@@ -8707,9 +9264,9 @@
                       u.restore();
                   })(e);
             }
-            function E(e, t, n, a, o, i, r, s, l, c, d) {
+            function E(e, t, n, a, o, i, r, s, l, d, c) {
               var u, p, h, f, m, g, v, b, w;
-              c
+              d
                 ? ((b = g = v = !0),
                   (m = !1),
                   (f = t + a),
@@ -8733,7 +9290,7 @@
                   (p = r.p2c(p)),
                   (f = s.p2c(f)),
                   i && ((l.fillStyle = i(h, f)), l.fillRect(u, f, p - u, h - f)),
-                  d > 0 &&
+                  c > 0 &&
                     (m || g || v || b) &&
                     (l.beginPath(),
                     l.moveTo(u, h),
@@ -8769,7 +9326,7 @@
                 return v;
               }),
               (w.offset = function() {
-                var e = d.offset();
+                var e = c.offset();
                 return (e.left += m.left), (e.top += m.top), e;
               }),
               (w.getData = function() {
@@ -8790,7 +9347,7 @@
               (w.getYAxes = function() {
                 return f;
               }),
-              (w.c2p = C),
+              (w.c2p = T),
               (w.p2c = function(e) {
                 var t,
                   n,
@@ -8828,15 +9385,15 @@
                   top: parseInt(f[S(e, "y") - 1].p2c(+e.y) + m.top, 10)
                 };
               }),
-              (w.shutdown = A),
+              (w.shutdown = P),
               (w.destroy = function() {
-                A(),
+                P(),
                   t.removeData("plot").empty(),
                   (r = []),
                   (s = null),
                   (l = null),
-                  (c = null),
                   (d = null),
+                  (c = null),
                   (u = null),
                   (p = null),
                   (h = []),
@@ -8848,7 +9405,7 @@
               (w.resize = function() {
                 var e = t.width(),
                   n = t.height();
-                l.resize(e, n), c.resize(e, n);
+                l.resize(e, n), d.resize(e, n);
               }),
               (w.hooks = b),
               (function() {
@@ -8884,7 +9441,7 @@
                   i,
                   r = t.css("font-size"),
                   l = r ? +r.replace("px", "") : 13,
-                  c = {
+                  d = {
                     style: t.css("font-style"),
                     size: Math.round(0.8 * l),
                     variant: t.css("font-variant"),
@@ -8896,7 +9453,7 @@
                     (o = e.extend(!0, {}, s.xaxis, o)),
                     (s.xaxes[a] = o),
                     o.font &&
-                      ((o.font = e.extend({}, c, o.font)),
+                      ((o.font = e.extend({}, d, o.font)),
                       o.font.color || (o.font.color = o.color),
                       o.font.lineHeight || (o.font.lineHeight = Math.round(1.15 * o.font.size)));
                 for (i = s.yaxes.length || 1, a = 0; a < i; ++a)
@@ -8904,7 +9461,7 @@
                     (o = e.extend(!0, {}, s.yaxis, o)),
                     (s.yaxes[a] = o),
                     o.font &&
-                      ((o.font = e.extend({}, c, o.font)),
+                      ((o.font = e.extend({}, d, o.font)),
                       o.font.color || (o.font.color = o.color),
                       o.font.lineHeight || (o.font.lineHeight = Math.round(1.15 * o.font.size)));
                 s.xaxis.noTicks && null == s.xaxis.ticks && (s.xaxis.ticks = s.xaxis.noTicks);
@@ -8926,10 +9483,10 @@
                 s.bars && e.extend(!0, s.series.bars, s.bars);
                 null != s.shadowSize && (s.series.shadowSize = s.shadowSize);
                 null != s.highlightColor && (s.series.highlightColor = s.highlightColor);
-                for (a = 0; a < s.xaxes.length; ++a) P(h, a + 1).options = s.xaxes[a];
-                for (a = 0; a < s.yaxes.length; ++a) P(f, a + 1).options = s.yaxes[a];
-                for (var d in b)
-                  s.hooks[d] && s.hooks[d].length && (b[d] = b[d].concat(s.hooks[d]));
+                for (a = 0; a < s.xaxes.length; ++a) C(h, a + 1).options = s.xaxes[a];
+                for (a = 0; a < s.yaxes.length; ++a) C(f, a + 1).options = s.yaxes[a];
+                for (var c in b)
+                  s.hooks[c] && s.hooks[c].length && (b[c] = b[c].concat(s.hooks[c]));
                 y(b.processOptions, [s]);
               })(o),
               (function() {
@@ -8942,21 +9499,21 @@
                   .remove(),
                   "static" == t.css("position") && t.css("position", "relative");
                 (l = new n("flot-base", t)),
-                  (c = new n("flot-overlay", t)),
+                  (d = new n("flot-overlay", t)),
                   (u = l.context),
-                  (p = c.context),
-                  (d = e(c.element).unbind());
+                  (p = d.context),
+                  (c = e(d.element).unbind());
                 var a = t.data("plot");
-                a && (a.shutdown(), c.clear());
+                a && (a.shutdown(), d.clear());
                 t.data("plot", w);
               })(),
               k(a),
               R(),
               D(),
               (function() {
-                s.grid.hoverable && (d.mousemove(F), d.bind("mouseleave", O));
-                s.grid.clickable && d.click(B);
-                y(b.bindEvents, [d]);
+                s.grid.hoverable && (c.mousemove(F), c.bind("mouseleave", O));
+                s.grid.clickable && c.click(B);
+                y(b.bindEvents, [c]);
               })();
             var U = [],
               L = null;
@@ -8978,18 +9535,18 @@
               });
             }
             function j(e, n, a) {
-              var o = d.offset(),
+              var o = c.offset(),
                 i = n.pageX - o.left - m.left,
                 l = n.pageY - o.top - m.top,
-                c = C({ left: i, top: l });
-              (c.pageX = n.pageX), (c.pageY = n.pageY);
+                d = T({ left: i, top: l });
+              (d.pageX = n.pageX), (d.pageY = n.pageY);
               var u = (function(e, t, n) {
                 var a,
                   o,
                   i,
                   l = s.grid.mouseActiveRadius,
-                  c = l * l + 1,
-                  d = null;
+                  d = l * l + 1,
+                  c = null;
                 for (a = r.length - 1; a >= 0; --a)
                   if (n(r[a])) {
                     var u = r[a],
@@ -9012,39 +9569,39 @@
                         if (null != w && !(w - m > v || w - m < -v || y - g > b || y - g < -b)) {
                           var k = Math.abs(p.p2c(w) - e),
                             S = Math.abs(h.p2c(y) - t),
-                            T = k * k + S * S;
-                          T < c && ((c = T), (d = [a, o / i]));
+                            A = k * k + S * S;
+                          A < d && ((d = A), (c = [a, o / i]));
                         }
                       }
-                    if (u.bars.show && !d) {
-                      var C, P;
+                    if (u.bars.show && !c) {
+                      var T, C;
                       switch (u.bars.align) {
                         case "left":
-                          C = 0;
+                          T = 0;
                           break;
                         case "right":
-                          C = -u.bars.barWidth;
+                          T = -u.bars.barWidth;
                           break;
                         default:
-                          C = -u.bars.barWidth / 2;
+                          T = -u.bars.barWidth / 2;
                       }
-                      for (P = C + u.bars.barWidth, o = 0; o < f.length; o += i) {
+                      for (C = T + u.bars.barWidth, o = 0; o < f.length; o += i) {
                         (w = f[o]), (y = f[o + 1]);
-                        var A = f[o + 2];
+                        var P = f[o + 2];
                         null != w &&
-                          (r[a].bars.horizontal
-                            ? m <= Math.max(A, w) && m >= Math.min(A, w) && g >= y + C && g <= y + P
-                            : m >= w + C &&
-                              m <= w + P &&
-                              g >= Math.min(A, y) &&
-                              g <= Math.max(A, y)) &&
-                          (d = [a, o / i]);
+                          ((r[a].bars.horizontal
+                            ? m <= Math.max(P, w) && m >= Math.min(P, w) && g >= y + T && g <= y + C
+                            : m >= w + T &&
+                              m <= w + C &&
+                              g >= Math.min(P, y) &&
+                              g <= Math.max(P, y)) &&
+                            (c = [a, o / i]));
                       }
                     }
                   }
-                return d
-                  ? ((a = d[0]),
-                    (o = d[1]),
+                return c
+                  ? ((a = c[0]),
+                    (o = c[1]),
                     (i = r[a].datapoints.pointsize),
                     {
                       datapoint: r[a].datapoints.points.slice(o * i, (o + 1) * i),
@@ -9071,7 +9628,7 @@
                 }
                 u && W(u.series, u.datapoint, e);
               }
-              t.trigger(e, [c, u]);
+              t.trigger(e, [d, u]);
             }
             function N() {
               var e = s.interaction.redrawOverlayInterval;
@@ -9080,11 +9637,11 @@
             function H() {
               var e, t;
               for (
-                L = null, p.save(), c.clear(), p.translate(m.left, m.top), e = 0;
+                L = null, p.save(), d.clear(), p.translate(m.left, m.top), e = 0;
                 e < U.length;
                 ++e
               )
-                (t = U[e]).series.bars.show ? _(t.series, t.point) : q(t.series, t.point);
+                (t = U[e]).series.bars.show ? _(t.series, t.point) : Y(t.series, t.point);
               p.restore(), y(b.drawOverlay, [p]);
             }
             function W(e, t, n) {
@@ -9092,7 +9649,7 @@
                 var a = e.datapoints.pointsize;
                 t = e.datapoints.points.slice(a * t, a * (t + 1));
               }
-              var o = Y(e, t);
+              var o = q(e, t);
               -1 == o ? (U.push({ series: e, point: t, auto: n }), N()) : n || (U[o].auto = !1);
             }
             function V(e, t) {
@@ -9101,17 +9658,17 @@
                 var n = e.datapoints.pointsize;
                 t = e.datapoints.points.slice(n * t, n * (t + 1));
               }
-              var a = Y(e, t);
+              var a = q(e, t);
               -1 != a && (U.splice(a, 1), N());
             }
-            function Y(e, t) {
+            function q(e, t) {
               for (var n = 0; n < U.length; ++n) {
                 var a = U[n];
                 if (a.series == e && a.point[0] == t[0] && a.point[1] == t[1]) return n;
               }
               return -1;
             }
-            function q(t, n) {
+            function Y(t, n) {
               var a = n[0],
                 o = n[1],
                 i = t.xaxis,
@@ -9126,13 +9683,13 @@
               if (!(a < i.min || a > i.max || o < r.min || o > r.max)) {
                 var l = t.points.radius + t.points.lineWidth / 2;
                 (p.lineWidth = l), (p.strokeStyle = s);
-                var c = 1.5 * l;
+                var d = 1.5 * l;
                 (a = i.p2c(a)),
                   (o = r.p2c(o)),
                   p.beginPath(),
                   "circle" == t.points.symbol
-                    ? p.arc(a, o, c, 0, 2 * Math.PI, !1)
-                    : t.points.symbol(p, a, o, c, !1),
+                    ? p.arc(a, o, d, 0, 2 * Math.PI, !1)
+                    : t.points.symbol(p, a, o, d, !1),
                   p.closePath(),
                   p.stroke();
               }
@@ -9184,10 +9741,10 @@
               ) {
                 var l = t.colors[r];
                 if ("string" != typeof l) {
-                  var c = e.color.parse(o);
-                  null != l.brightness && (c = c.scale("rgb", l.brightness)),
-                    null != l.opacity && (c.a *= l.opacity),
-                    (l = c.toString());
+                  var d = e.color.parse(o);
+                  null != l.brightness && (d = d.scale("rgb", l.brightness)),
+                    null != l.opacity && (d.a *= l.opacity),
+                    (l = d.toString());
                 }
                 i.addColorStop(r / (s - 1), l);
               }
@@ -9227,11 +9784,11 @@
                       var r = o[i];
                       for (var s in r)
                         if (t.call(r, s)) {
-                          for (var l, c = r[s].positions, d = 0; (l = c[d]); d++)
+                          for (var l, d = r[s].positions, c = 0; (l = d[c]); c++)
                             l.active
                               ? l.rendered || (a.append(l.element), (l.rendered = !0))
-                              : (c.splice(d--, 1), l.rendered && l.element.detach());
-                          0 == c.length && delete r[s];
+                              : (d.splice(c--, 1), l.rendered && l.element.detach());
+                          0 == d.length && delete r[s];
                         }
                     }
                   a.show();
@@ -9261,7 +9818,7 @@
               );
             }),
             (n.prototype.getTextInfo = function(t, n, a, o, i) {
-              var r, s, l, c;
+              var r, s, l, d;
               if (
                 ((n = "" + n),
                 (r =
@@ -9280,40 +9837,40 @@
                     : a),
                 null == (s = this._textCache[t]) && (s = this._textCache[t] = {}),
                 null == (l = s[r]) && (l = s[r] = {}),
-                null == (c = l[n]))
+                null == (d = l[n]))
               ) {
-                var d = e("<div></div>")
+                var c = e("<div></div>")
                   .html(n)
                   .css({ position: "absolute", "max-width": i, top: -9999 })
                   .appendTo(this.getTextLayer(t));
                 "object" == typeof a
-                  ? d.css({ font: r, color: a.color })
-                  : "string" == typeof a && d.addClass(a),
-                  (c = l[n] = {
-                    width: d.outerWidth(!0),
-                    height: d.outerHeight(!0),
-                    element: d,
+                  ? c.css({ font: r, color: a.color })
+                  : "string" == typeof a && c.addClass(a),
+                  (d = l[n] = {
+                    width: c.outerWidth(!0),
+                    height: c.outerHeight(!0),
+                    element: c,
                     positions: []
                   }),
-                  d.detach();
+                  c.detach();
               }
-              return c;
+              return d;
             }),
             (n.prototype.addText = function(e, t, n, a, o, i, r, s, l) {
-              var c = this.getTextInfo(e, a, o, i, r),
-                d = c.positions;
-              "center" == s ? (t -= c.width / 2) : "right" == s && (t -= c.width),
-                "middle" == l ? (n -= c.height / 2) : "bottom" == l && (n -= c.height);
-              for (var u, p = 0; (u = d[p]); p++)
+              var d = this.getTextInfo(e, a, o, i, r),
+                c = d.positions;
+              "center" == s ? (t -= d.width / 2) : "right" == s && (t -= d.width),
+                "middle" == l ? (n -= d.height / 2) : "bottom" == l && (n -= d.height);
+              for (var u, p = 0; (u = c[p]); p++)
                 if (u.x == t && u.y == n) return void (u.active = !0);
               (u = {
                 active: !0,
                 rendered: !1,
-                element: d.length ? c.element.clone() : c.element,
+                element: c.length ? d.element.clone() : d.element,
                 x: t,
                 y: n
               }),
-                d.push(u),
+                c.push(u),
                 u.element.css({ top: Math.round(n), left: Math.round(t), "text-align": s });
             }),
             (n.prototype.removeText = function(e, n, a, o, i, r) {
@@ -9322,10 +9879,10 @@
                 if (null != s)
                   for (var l in s)
                     if (t.call(s, l)) {
-                      var c = s[l];
-                      for (var d in c)
-                        if (t.call(c, d))
-                          for (var u = c[d].positions, p = 0; (h = u[p]); p++) h.active = !1;
+                      var d = s[l];
+                      for (var c in d)
+                        if (t.call(d, c))
+                          for (var u = d[c].positions, p = 0; (h = u[p]); p++) h.active = !1;
                     }
               } else {
                 var h;
@@ -9356,12 +9913,12 @@
           if ("function" == typeof e.strftime) return e.strftime(t);
           var o,
             i = function(e, t) {
-              return (e = "" + e), (t = "" + (null == t ? "0" : t)), 1 == e.length ? t + e : e;
+              return (t = "" + (null == t ? "0" : t)), 1 == (e = "" + e).length ? t + e : e;
             },
             r = [],
             s = !1,
             l = e.getHours(),
-            c = l < 12;
+            d = l < 12;
           null == n &&
             (n = [
               "Jan",
@@ -9379,8 +9936,8 @@
             ]),
             null == a && (a = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]),
             (o = l > 12 ? l - 12 : 0 == l ? 12 : l);
-          for (var d = 0; d < t.length; ++d) {
-            var u = t.charAt(d);
+          for (var c = 0; c < t.length; ++c) {
+            var u = t.charAt(c);
             if (s) {
               switch (u) {
                 case "a":
@@ -9424,10 +9981,10 @@
                   u = "" + e.getFullYear();
                   break;
                 case "p":
-                  u = c ? "am" : "pm";
+                  u = d ? "am" : "pm";
                   break;
                 case "P":
-                  u = c ? "AM" : "PM";
+                  u = d ? "AM" : "PM";
                   break;
                 case "w":
                   u = "" + e.getDay();
@@ -9444,7 +10001,7 @@
             };
           }
           var n = { date: e };
-          void 0 != e.strftime && t(n, "strftime", e, "strftime"),
+          null != e.strftime && t(n, "strftime", e, "strftime"),
             t(n, "getTime", e, "getTime"),
             t(n, "setTime", e, "setTime");
           for (
@@ -9520,28 +10077,28 @@
                   ((a.tickGenerator = function(e) {
                     var n = [],
                       a = o(e.min, r),
-                      c = 0,
-                      d =
+                      d = 0,
+                      c =
                         (r.tickSize && "quarter" === r.tickSize[1]) ||
                         (r.minTickSize && "quarter" === r.minTickSize[1])
                           ? l
                           : s;
                     null != r.minTickSize &&
-                      (c =
+                      (d =
                         "number" == typeof r.tickSize
                           ? r.tickSize
                           : r.minTickSize[0] * i[r.minTickSize[1]]);
                     for (
                       var u = 0;
-                      u < d.length - 1 &&
+                      u < c.length - 1 &&
                       !(
-                        e.delta < (d[u][0] * i[d[u][1]] + d[u + 1][0] * i[d[u + 1][1]]) / 2 &&
-                        d[u][0] * i[d[u][1]] >= c
+                        e.delta < (c[u][0] * i[c[u][1]] + c[u + 1][0] * i[c[u + 1][1]]) / 2 &&
+                        c[u][0] * i[c[u][1]] >= d
                       );
                       ++u
                     );
-                    var p = d[u][0],
-                      h = d[u][1];
+                    var p = c[u][0],
+                      h = c[u][1];
                     if ("year" == h) {
                       if (null != r.minTickSize && "year" == r.minTickSize[1])
                         p = Math.floor(r.minTickSize[0]);
@@ -9600,25 +10157,25 @@
                         (t.options.tickSize && "quarter" == t.options.tickSize[1]) ||
                         (t.options.minTickSize && "quarter" == t.options.minTickSize[1]),
                       l = t.tickSize[0] * i[t.tickSize[1]],
-                      c = t.max - t.min,
-                      d = r.twelveHourClock ? " %p" : "",
+                      d = t.max - t.min,
+                      c = r.twelveHourClock ? " %p" : "",
                       u = r.twelveHourClock ? "%I" : "%H";
                     return n(
                       a,
                       l < i.minute
-                        ? u + ":%M:%S" + d
+                        ? u + ":%M:%S" + c
                         : l < i.day
-                          ? c < 2 * i.day
-                            ? u + ":%M" + d
-                            : "%b %d " + u + ":%M" + d
+                          ? d < 2 * i.day
+                            ? u + ":%M" + c
+                            : "%b %d " + u + ":%M" + c
                           : l < i.month
                             ? "%b %d"
                             : (s && l < i.quarter) || (!s && l < i.year)
-                              ? c < i.year
+                              ? d < i.year
                                 ? "%b"
                                 : "%b %Y"
                               : s && l < i.year
-                                ? c < i.year
+                                ? d < i.year
                                   ? "Q%q"
                                   : "Q%q %Y"
                                 : "%Y",
@@ -9641,7 +10198,6 @@
     }.call(this, n(1)));
   },
   function(e, t, n) {},
-  ,
   ,
   ,
   function(e, t) {

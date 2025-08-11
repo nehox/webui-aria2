@@ -1,0 +1,4 @@
+# Husky configuration file
+# Add Node.js to PATH for Git hooks
+
+export PATH="$PATH:/c/Program Files/nodejs"

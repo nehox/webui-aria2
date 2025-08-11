@@ -11,8 +11,8 @@ export default angular
     "webui.services.settings",
     "webui.services.modals",
     "webui.services.configuration",
-  "webui.services.errors",
-  "webui.services.alldebrid"
+    "webui.services.errors",
+    "webui.services.alldebrid"
   ])
   .controller("MainCtrl", [
     "$scope",
@@ -31,6 +31,8 @@ export default angular
     // for document title
     "$rootScope",
     "$filter",
+    "$modal",
+    "$alldebrid",
     function(
       scope,
       name,
@@ -47,83 +49,377 @@ export default angular
       getErrorStatus,
       rootScope,
       filter,
+      $modal,
       $alldebrid
     ) {
-      // UI: gestion de l'upload AllDebrid
+      // UI: gestion de l'upload AllDebrid et de la clé API
+      modals.register("getAllDebrid", function(args, closeCb) {
+        console.log("🎭 Ouverture modal AllDebrid");
+        console.log("🔑 Clé API initiale:", scope.alldebridApiKey);
+
+        var modalScope = scope.$new(true);
+        Object.assign(modalScope, scope);
+
+        // S'assurer que la clé API est bien copiée
+        modalScope.alldebridApiKey =
+          scope.alldebridApiKey || localStorage.getItem("alldebridApiKey") || "";
+        console.log("🔑 Clé API dans modalScope:", modalScope.alldebridApiKey);
+
+        $modal
+          .open({
+            templateUrl: "getAllDebrid.html",
+            scope: modalScope
+          })
+          .result.finally(function() {
+            console.log("🎭 Fermeture modal AllDebrid");
+            // Synchroniser les changements du modalScope vers le scope principal
+            scope.alldebridApiKey = modalScope.alldebridApiKey;
+            console.log("🔄 Clé API synchronisée:", scope.alldebridApiKey);
+            if (closeCb) closeCb();
+          });
+      });
+      scope.openAllDebridModal = function() {
+        // Synchroniser avant l'ouverture
+        scope.alldebrid.apiKey =
+          scope.alldebridApiKey || localStorage.getItem("alldebridApiKey") || "";
+
+        console.log("🚀 Ouverture modal AllDebrid avec clé:", scope.alldebrid.apiKey);
+
+        modals.invoke("getAllDebrid", scope.alldebrid, function() {
+          // Synchroniser après la fermeture
+          scope.alldebridApiKey = scope.alldebrid.apiKey;
+          console.log("🔄 Synchronisation après fermeture modal:", scope.alldebridApiKey);
+        });
+      };
       scope.downloadPath = "";
-      scope.uploadAllDebridTorrent = function() {
-        scope.alldebridLinks = null;
-        scope.alldebridError = null;
-        var input = document.getElementById('alldebrid-torrent');
-        if (!input.files || !input.files.length) {
-          scope.alldebridError = "Veuillez sélectionner un fichier .torrent.";
-          scope.$apply && scope.$apply();
+
+      // Chargement initial de la clé API - utiliser un objet pour le binding
+      scope.alldebrid = {
+        apiKey: localStorage.getItem("alldebridApiKey") || "",
+        apiKeySaved: false,
+        error: null,
+        success: null,
+        links: null
+      };
+
+      console.log("🔄 Chargement initial - Clé API récupérée:", scope.alldebrid.apiKey);
+      console.log("🔄 Chargement initial - localStorage:", localStorage.getItem("alldebridApiKey"));
+
+      // Compatibilité avec l'ancien code
+      scope.alldebridApiKey = scope.alldebrid.apiKey;
+      scope.alldebridApiKeySaved = scope.alldebrid.apiKeySaved;
+
+      scope.saveAllDebridApiKey = function() {
+        console.log("🔑 === DÉBUT SAUVEGARDE API KEY ===");
+        console.log("🔍 Context du scope:", this);
+        console.log("🔍 Scope actuel:", scope === this ? "scope principal" : "scope différent");
+        console.log(
+          "🔑 Clé API depuis l'objet alldebrid (scope):",
+          scope.alldebrid ? scope.alldebrid.apiKey : "objet manquant"
+        );
+        console.log(
+          "🔑 Clé API depuis l'objet alldebrid (this):",
+          this.alldebrid ? this.alldebrid.apiKey : "objet manquant"
+        );
+        console.log("🔑 Clé API depuis scope direct:", scope.alldebridApiKey);
+        console.log("🔑 Clé API depuis this direct:", this.alldebridApiKey);
+
+        var apiKey =
+          (this.alldebrid && this.alldebrid.apiKey) ||
+          (scope.alldebrid && scope.alldebrid.apiKey) ||
+          this.alldebridApiKey ||
+          scope.alldebridApiKey ||
+          "";
+        console.log("🔑 Clé API finale utilisée:", apiKey);
+        console.log("🔑 Type de la clé:", typeof apiKey);
+        console.log("🔑 Longueur de la clé:", apiKey ? apiKey.length : 0);
+        console.log("🔑 Clé vide ou undefined?", !apiKey);
+
+        if (!apiKey || apiKey.trim() === "") {
+          console.log("❌ Clé API vide, sauvegarde annulée");
+          if (scope.alldebrid) {
+            scope.alldebrid.error = "Veuillez entrer une clé API valide";
+          } else {
+            scope.alldebridError = "Veuillez entrer une clé API valide";
+          }
           return;
         }
+
+        try {
+          localStorage.setItem("alldebridApiKey", apiKey);
+          console.log("💾 Clé sauvegardée dans localStorage");
+
+          // Vérifier que la sauvegarde a bien fonctionné
+          var savedKey = localStorage.getItem("alldebridApiKey");
+          console.log("✅ Clé récupérée depuis localStorage:", savedKey);
+          console.log("🔄 Comparaison clés égales:", savedKey === apiKey);
+
+          // Mettre à jour le service AllDebrid
+          $alldebrid.setApiKey(apiKey);
+          console.log("🔧 Service AllDebrid mis à jour avec la nouvelle clé");
+
+          // Mettre à jour tous les scopes
+          if (scope.alldebrid) {
+            scope.alldebrid.apiKey = apiKey;
+            scope.alldebrid.apiKeySaved = true;
+            scope.alldebrid.error = null;
+          }
+          scope.alldebridApiKey = apiKey;
+          scope.alldebridApiKeySaved = true;
+          scope.alldebridError = null;
+
+          console.log("✨ Indicateur de sauvegarde affiché");
+
+          setTimeout(function() {
+            scope.$apply(function() {
+              if (scope.alldebrid) {
+                scope.alldebrid.apiKeySaved = false;
+              }
+              scope.alldebridApiKeySaved = false;
+              console.log("⏰ Indicateur de sauvegarde masqué");
+            });
+          }, 2000);
+        } catch (error) {
+          console.error("❌ Erreur lors de la sauvegarde:", error);
+          var errorMsg = "Erreur lors de la sauvegarde: " + error.message;
+          if (scope.alldebrid) {
+            scope.alldebrid.error = errorMsg;
+          } else {
+            scope.alldebridError = errorMsg;
+          }
+        }
+
+        console.log("🔑 === FIN SAUVEGARDE API KEY ===");
+      };
+
+      scope.uploadAllDebridTorrent = function() {
+        console.log("🚀 === DÉBUT UPLOAD ALLDEBRID TORRENT ===");
+        console.log("🔑 Clé API actuelle dans scope:", scope.alldebridApiKey);
+        console.log("🔑 Clé depuis localStorage:", localStorage.getItem("alldebridApiKey"));
+        console.log("🔑 Type de la clé:", typeof scope.alldebridApiKey);
+        console.log("🔑 Clé vide?", !scope.alldebridApiKey);
+
+        // Réinitialiser les états
+        scope.alldebridLinks = null;
+        scope.alldebridError = null;
+        scope.alldebridSuccess = null;
+
+        // Vérifier la clé API
+        var apiKey = scope.alldebridApiKey || localStorage.getItem("alldebridApiKey");
+        if (!apiKey || apiKey.trim() === "") {
+          console.log("❌ Aucune clé API configurée");
+          scope.alldebridError = "Veuillez d'abord configurer votre clé API AllDebrid.";
+          return;
+        }
+
+        console.log("🔍 Recherche de l'élément input file...");
+        // Chercher d'abord dans la modal, puis dans l'ancienne interface
+        var input =
+          document.getElementById("alldebrid-torrent-modal") ||
+          document.getElementById("alldebrid-torrent");
+        console.log("📂 Élément input trouvé:", !!input);
+        console.log("📂 Input ID:", input ? input.id : "aucun");
+        console.log("📂 Input files:", input ? input.files : "aucun");
+        console.log("📂 Nombre de fichiers:", input && input.files ? input.files.length : 0);
+
+        if (!input) {
+          console.log("❌ Élément input file non trouvé");
+          scope.alldebridError = "Erreur: élément de sélection de fichier non trouvé.";
+          return;
+        }
+
+        if (!input.files || !input.files.length) {
+          console.log("❌ Aucun fichier sélectionné");
+          scope.alldebridError = "Veuillez sélectionner un fichier .torrent.";
+          return;
+        }
+
         var file = input.files[0];
-        var path = scope.downloadPath || "";
+        console.log("📁 Fichier sélectionné:", file.name);
+        console.log("📁 Taille du fichier:", file.size, "bytes");
+        console.log("📁 Type MIME:", file.type);
+
+        // Récupération du chemin de téléchargement depuis plusieurs sources possibles
+        var path = "";
+        if (this.downloadPath) {
+          path = this.downloadPath;
+          console.log("📁 Chemin depuis this.downloadPath (modalScope):", path);
+        } else if (scope.downloadPath) {
+          path = scope.downloadPath;
+          console.log("📁 Chemin depuis scope.downloadPath (mainScope):", path);
+        } else {
+          // Fallback: chercher dans l'élément DOM directement
+          var pathInput = document.getElementById("download-path-modal");
+          console.log("📁 Element DOM trouvé:", pathInput);
+          console.log(
+            "📁 Valeur de l'élément:",
+            pathInput ? pathInput.value : "Element inexistant"
+          );
+          if (pathInput && pathInput.value) {
+            path = pathInput.value;
+            console.log("📁 Chemin depuis DOM direct:", path);
+          } else {
+            console.log("⚠️ Aucun chemin trouvé dans toutes les sources");
+          }
+        }
+
+        console.log("📁 Chemin de téléchargement final:", path);
         scope.alldebridError = "Envoi en cours...";
+
+        console.log("🔧 Configuration du service AllDebrid avec la clé:", apiKey);
+        $alldebrid.setApiKey(apiKey);
+
+        console.log("🌐 Début de l'upload vers AllDebrid...");
         $alldebrid.uploadTorrentToAllDebrid(file, function(err, links) {
+          console.log("📥 Réponse de AllDebrid reçue");
+          console.log("❌ Erreur:", err);
+          console.log("🔗 Liens:", links);
+
           if (err) {
-            scope.alldebridError = typeof err === 'string' ? err : (err && err.message) || "Erreur inconnue.";
+            console.log("❌ Erreur lors de l'upload:", err);
+            scope.alldebridError =
+              typeof err === "string" ? err : (err && err.message) || "Erreur inconnue.";
             scope.alldebridLinks = null;
           } else {
+            console.log("✅ Upload réussi, liens reçus:", links);
             scope.alldebridLinks = links;
             scope.alldebridError = null;
-            // Envoi des liens débridés au serveur via la mécanique existante
+
+            // Fonction pour extraire récursivement tous les liens des fichiers AllDebrid
+            function extractDownloadLinks(data) {
+              var downloadLinks = [];
+
+              // Si c'est un array de liens directs déverrouillés (nouveau format)
+              if (Array.isArray(data) && data[0] && data[0].link && data[0].name) {
+                console.log("📋 Format liens directs déverrouillés détecté");
+                data.forEach(function(linkObj) {
+                  downloadLinks.push({
+                    name: linkObj.name, // Nouveau format utilise 'name'
+                    size: linkObj.size,
+                    link: linkObj.link
+                  });
+                });
+                return downloadLinks;
+              }
+
+              // Si c'est un array de liens directs (format v4 /magnet/status legacy)
+              if (Array.isArray(data) && data[0] && data[0].link && data[0].filename) {
+                console.log("📋 Format liens directs v4 détecté (legacy)");
+                data.forEach(function(linkObj) {
+                  downloadLinks.push({
+                    name: linkObj.filename, // Ancien format utilise 'filename'
+                    size: linkObj.size,
+                    link: linkObj.link
+                  });
+                });
+                return downloadLinks;
+              }
+
+              // Sinon c'est le format files hiérarchique (format /magnet/files)
+              console.log("📋 Format files hiérarchique détecté");
+              function extractFromNode(node) {
+                if (node.l) {
+                  // C'est un fichier avec un lien de téléchargement
+                  downloadLinks.push({
+                    name: node.n,
+                    size: node.s,
+                    link: node.l
+                  });
+                } else if (node.e) {
+                  // C'est un dossier, traiter récursivement
+                  node.e.forEach(extractFromNode);
+                }
+              }
+
+              if (Array.isArray(data)) {
+                data.forEach(extractFromNode);
+              }
+              return downloadLinks;
+            } // Envoi des liens débridés au serveur via la mécanique existante
             if (links && links.length) {
-              var uris = links.map(function(file) { return [file.l]; });
-              var settings = { dir: path };
-              rhelpers.addUris(uris, settings, function() {
-                scope.alldebridSuccess = "Liens envoyés au serveur et ajoutés à la file de téléchargement.";
-                scope.$apply && scope.$apply();
-                setTimeout(function() {
-                  scope.alldebridSuccess = null;
-                  scope.$apply && scope.$apply();
-                }, 4000);
-              });
+              console.log("📤 Extraction et envoi des liens vers aria2...");
+              var downloadLinks = extractDownloadLinks(links);
+              console.log("🔗 Liens extraits:", downloadLinks);
+
+              if (downloadLinks.length > 0) {
+                var uris = downloadLinks.map(function(file) {
+                  console.log("🔗 Lien traité:", file.link, "pour", file.name);
+                  return [file.link];
+                });
+                var settings = { dir: path };
+                console.log("⚙️ Paramètres aria2:", settings);
+
+                rhelpers.addUris(uris, settings, function() {
+                  console.log("✅ Liens ajoutés à aria2 avec succès");
+                  scope.alldebridSuccess =
+                    "Liens envoyés au serveur et ajoutés à la file de téléchargement.";
+                  scope.$apply(function() {
+                    setTimeout(function() {
+                      scope.$apply(function() {
+                        scope.alldebridSuccess = null;
+                      });
+                    }, 4000);
+                  });
+                });
+              } else {
+                console.log("⚠️ Aucun lien de téléchargement trouvé dans la réponse AllDebrid");
+                scope.alldebridError = "Aucun lien de téléchargement trouvé.";
+              }
+            } else {
+              console.log("⚠️ Aucun fichier reçu d'AllDebrid");
+              scope.alldebridError = "Aucun fichier reçu d'AllDebrid.";
             }
           }
-          scope.$apply && scope.$apply();
+          scope.$apply();
+          console.log("🚀 === FIN UPLOAD ALLDEBRID TORRENT ===");
         });
       };
 
       // Télécharge un fichier à l'URL donnée dans le chemin local spécifié
       scope.downloadFileToPath = function(url, filename, path) {
         // Création d'un lien invisible pour déclencher le téléchargement côté navigateur
-        var a = document.createElement('a');
+        var a = document.createElement("a");
         a.href = url;
-        a.download = path ? (path + '/' + filename) : filename;
+        a.download = path ? path + "/" + filename : filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
       };
       // Ajout AllDebrid : upload et download torrent
       scope.uploadTorrentToAllDebrid = function(file, callback) {
-        $alldebrid.uploadTorrentFile(file)
-          .then(function(magnetId) {
+        $alldebrid.uploadTorrentFile(file).then(
+          function(magnetId) {
             // Pooling status jusqu'à ce que le magnet soit prêt
             function pollStatus() {
-              $alldebrid.getMagnetStatus(magnetId).then(function(status) {
-                if (status.statusCode === 4) { // Ready
-                  $alldebrid.getFilesLinks(magnetId).then(function(files) {
-                    if (callback) callback(null, files);
-                  }, function(err) {
-                    if (callback) callback(err);
-                  });
-                } else if (status.statusCode >= 5) {
-                  if (callback) callback("Erreur AllDebrid: " + status.status);
-                } else {
-                  setTimeout(pollStatus, 5000);
+              $alldebrid.getMagnetStatus(magnetId).then(
+                function(status) {
+                  if (status.statusCode === 4) {
+                    // Ready
+                    $alldebrid.getFilesLinks(magnetId).then(
+                      function(files) {
+                        if (callback) callback(null, files);
+                      },
+                      function(err) {
+                        if (callback) callback(err);
+                      }
+                    );
+                  } else if (status.statusCode >= 5) {
+                    if (callback) callback("Erreur AllDebrid: " + status.status);
+                  } else {
+                    setTimeout(pollStatus, 5000);
+                  }
+                },
+                function(err) {
+                  if (callback) callback(err);
                 }
-              }, function(err) {
-                if (callback) callback(err);
-              });
+              );
             }
             pollStatus();
-          }, function(err) {
+          },
+          function(err) {
             if (callback) callback(err);
-          });
+          }
+        );
       };
       scope.name = name; // default UI name
       scope.enable = enable; // UI enable options
