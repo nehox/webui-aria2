@@ -1356,6 +1356,38 @@
         <strong>Succès :</strong> {{alldebridSuccess}}
       </div>
 
+      <!-- Barre de progression AllDebrid -->
+      <div ng-if="alldebridProgress.show" class="panel panel-info">
+        <div class="panel-heading">
+          <h5 class="panel-title">
+            <svg class="icon icon-fw"><use xlink:href="#icon-loading"></use></svg>
+            Progression AllDebrid
+          </h5>
+        </div>
+        <div class="panel-body">
+          <div class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped" 
+                 ng-class="{'active': alldebridProgress.current < alldebridProgress.total}"
+                 role="progressbar" 
+                 ng-style="{width: (alldebridProgress.current / alldebridProgress.total * 100) + '%'}"
+                 aria-valuenow="{{alldebridProgress.current}}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="{{alldebridProgress.total}}">
+              {{alldebridProgress.current}}/{{alldebridProgress.total}}
+            </div>
+          </div>
+          <p class="text-muted">
+            <small>{{alldebridProgress.message}}</small>
+          </p>
+          <div ng-if="alldebridProgress.rateLimitInfo" class="text-info">
+            <small>
+              <svg class="icon icon-fw"><use xlink:href="#icon-clock"></use></svg>
+              Rate limiting: {{alldebridProgress.rateLimitInfo}}
+            </small>
+          </div>
+        </div>
+      </div>
+
       <div ng-if="alldebridLinks && alldebridLinks.length" class="panel panel-success">
         <div class="panel-heading">
           <h5 class="panel-title">Liens de téléchargement AllDebrid</h5>

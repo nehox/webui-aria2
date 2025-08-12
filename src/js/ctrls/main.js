@@ -204,6 +204,15 @@ export default angular
         scope.alldebridError = null;
         scope.alldebridSuccess = null;
 
+        // Initialiser la progression
+        scope.alldebridProgress = {
+          show: false,
+          current: 0,
+          total: 1,
+          message: "Initialisation...",
+          rateLimitInfo: null
+        };
+
         // Vérifier la clé API
         var apiKey = scope.alldebridApiKey || localStorage.getItem("alldebridApiKey");
         if (!apiKey || apiKey.trim() === "") {
@@ -264,16 +273,35 @@ export default angular
         }
 
         console.log("📁 Chemin de téléchargement final:", path);
-        scope.alldebridError = "Envoi en cours...";
+
+        // Afficher la progression
+        scope.alldebridProgress.show = true;
+        scope.alldebridProgress.message = "Upload du torrent vers AllDebrid...";
+        scope.alldebridError = null;
 
         console.log("🔧 Configuration du service AllDebrid avec la clé:", apiKey);
         $alldebrid.setApiKey(apiKey);
 
         console.log("🌐 Début de l'upload vers AllDebrid...");
-        $alldebrid.uploadTorrentToAllDebrid(file, function(err, links) {
+
+        // Callback de progression
+        var progressCallback = function(current, total, message) {
+          scope.$apply(function() {
+            scope.alldebridProgress.current = current;
+            scope.alldebridProgress.total = total;
+            scope.alldebridProgress.message = message;
+            scope.alldebridProgress.rateLimitInfo =
+              "Respecte les limites AllDebrid: 12 req/sec, 600 req/min";
+          });
+        };
+
+        $alldebrid.uploadTorrentToAllDebrid(file, progressCallback, function(err, links) {
           console.log("📥 Réponse de AllDebrid reçue");
           console.log("❌ Erreur:", err);
           console.log("🔗 Liens:", links);
+
+          // Masquer la progression
+          scope.alldebridProgress.show = false;
 
           if (err) {
             console.log("❌ Erreur lors de l'upload:", err);

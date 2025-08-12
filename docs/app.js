@@ -2416,25 +2416,92 @@
       "$q",
       function(e) {
         let t = localStorage.getItem("alldebridApiKey") || "";
-        function n(n, a, o, i) {
-          const r = { Authorization: "Bearer " + t };
-          let s = { method: a, headers: r };
-          return (
-            o &&
-              (i
-                ? (s.body = o)
-                : ((r["Content-Type"] = "application/x-www-form-urlencoded"),
-                  (s.body = new URLSearchParams(o)))),
-            fetch("https://api.alldebrid.com/v4" + n, s)
-              .then(e => e.json())
-              .catch(t => e.reject(t))
-          );
+        const n = {
+          requestQueue: [],
+          processing: !1,
+          lastRequestTime: 0,
+          requestCount: 0,
+          minuteRequestCount: 0,
+          minuteStartTime: Date.now(),
+          MAX_REQUESTS_PER_SECOND: 12,
+          MAX_REQUESTS_PER_MINUTE: 600,
+          MIN_INTERVAL: 1e3 / 12,
+          processQueue() {
+            if (this.processing || 0 === this.requestQueue.length) return;
+            this.processing = !0;
+            const e = Date.now();
+            if (
+              (e - this.minuteStartTime > 6e4 &&
+                ((this.minuteRequestCount = 0), (this.minuteStartTime = e)),
+              this.minuteRequestCount >= this.MAX_REQUESTS_PER_MINUTE)
+            )
+              return (
+                console.log("⏳ Limite minute atteinte, attente..."),
+                void setTimeout(() => {
+                  (this.processing = !1), this.processQueue();
+                }, 6e4 - (e - this.minuteStartTime))
+              );
+            const t = e - this.lastRequestTime,
+              n = Math.max(0, this.MIN_INTERVAL - t);
+            setTimeout(() => {
+              if (this.requestQueue.length > 0) {
+                const { resolve: e, reject: t, requestFn: n } = this.requestQueue.shift();
+                (this.lastRequestTime = Date.now()),
+                  this.requestCount++,
+                  this.minuteRequestCount++,
+                  n()
+                    .then(e)
+                    .catch(t)
+                    .finally(() => {
+                      (this.processing = !1), this.processQueue();
+                    });
+              } else this.processing = !1;
+            }, n);
+          },
+          addToQueue(e) {
+            return new Promise((t, n) => {
+              this.requestQueue.push({ resolve: t, reject: n, requestFn: e }), this.processQueue();
+            });
+          }
+        };
+        function a(e, o, i, r, s = 0) {
+          return n.addToQueue(() => {
+            const n = { Authorization: "Bearer " + t };
+            let l = { method: o, headers: n };
+            return (
+              i &&
+                (r
+                  ? (l.body = i)
+                  : ((n["Content-Type"] = "application/x-www-form-urlencoded"),
+                    (l.body = new URLSearchParams(i)))),
+              fetch("https://api.alldebrid.com/v4" + e, l)
+                .then(e => {
+                  if (429 === e.status || 503 === e.status)
+                    throw new Error("Rate limit: " + e.status);
+                  return e.json();
+                })
+                .catch(t => {
+                  if ((t.message.includes("429") || t.message.includes("503")) && s < 3) {
+                    const t = 1e3 * Math.pow(2, s);
+                    return (
+                      console.log(`⏳ Rate limit, retry ${s + 1}/3 dans ${t}ms`),
+                      new Promise(n => {
+                        setTimeout(() => {
+                          n(a(e, o, i, r, s + 1));
+                        }, t);
+                      })
+                    );
+                  }
+                  throw t;
+                })
+            );
+          });
         }
-        function a(t) {
-          const a = new FormData();
+        function o(t) {
+          const n = new FormData();
           return (
-            a.append("files[0]", t),
-            n("/magnet/upload/file", "POST", a, !0).then(t => {
+            n.append("files[0]", t),
+            a("/magnet/upload/file", "POST", n, !0).then(t => {
               if (
                 (console.log("🔍 Réponse uploadTorrentFile:", t),
                 "success" === t.status && t.data.files && t.data.files[0])
@@ -2446,8 +2513,8 @@
             })
           );
         }
-        function o(t) {
-          return n("/magnet/status", "POST", { id: t }, !1).then(t => {
+        function i(t) {
+          return a("/magnet/status", "POST", { id: t }, !1).then(t => {
             if (
               (console.log("🔍 Réponse getMagnetStatusWithLinks (v4):", t),
               console.log("🔍 Structure res.data:", t.data),
@@ -2471,8 +2538,8 @@
             return console.log("❌ Format getMagnetStatusWithLinks non reconnu:", t), e.reject(t);
           });
         }
-        function i(t) {
-          return n("/v4.1/magnet/status", "POST", { id: t }, !1).then(t => {
+        function r(t) {
+          return a("/v4.1/magnet/status", "POST", { id: t }, !1).then(t => {
             if (
               (console.log("🔍 Réponse getMagnetStatus (v4.1):", t),
               "success" === t.status && t.data.magnets)
@@ -2483,19 +2550,63 @@
             return console.log("❌ Format getMagnetStatus non reconnu:", t), e.reject(t);
           });
         }
-        function r(t) {
-          return n("/link/unlock", "POST", { link: t }, !1).then(
-            n => (
-              console.log("🔓 Réponse unlockLink:", n, "pour", t),
-              "success" === n.status && n.data.link
-                ? (console.log("✅ Lien direct obtenu:", n.data.link),
-                  { directLink: n.data.link, filename: n.data.filename, size: n.data.filesize })
-                : (console.log("❌ Impossible de déverrouiller le lien:", n), e.reject(n))
+        function s(t) {
+          return a("/link/unlock", "POST", { link: t }, !1)
+            .then(
+              n => (
+                console.log("🔓 Réponse unlockLink:", n, "pour", t),
+                "success" === n.status && n.data.link
+                  ? (console.log("✅ Lien direct obtenu:", n.data.link),
+                    { directLink: n.data.link, filename: n.data.filename, size: n.data.filesize })
+                  : (console.log("❌ Impossible de déverrouiller le lien:", n), e.reject(n))
+              )
             )
+            .catch(e => {
+              throw (console.log("❌ Erreur déverrouillage lien:", t, e), e);
+            });
+        }
+        function l(e, t) {
+          const n = [];
+          let a = 0;
+          return (
+            console.log(`🔓 Déverrouillage de ${e.length} liens par batch de 5`),
+            new Promise(o => {
+              const i = r => {
+                const l = e.slice(r, r + 5);
+                if (0 === l.length) return void o(n.filter(e => null !== e));
+                const d = l.map((n, o) => {
+                  const i = r + o;
+                  return (
+                    console.log(`🔓 Déverrouillage ${i + 1}/${e.length}: ${n.link}`),
+                    s(n.link)
+                      .then(
+                        n => (
+                          a++,
+                          t && t(a, e.length, `Lien ${a}/${e.length} déverrouillé`),
+                          console.log(`✅ Lien ${i + 1} déverrouillé:`, n),
+                          { name: n.filename, size: n.size, link: n.directLink }
+                        )
+                      )
+                      .catch(
+                        n => (
+                          a++,
+                          t && t(a, e.length, `Erreur lien ${a}/${e.length}`),
+                          console.log(`❌ Erreur lien ${i + 1}:`, n),
+                          null
+                        )
+                      )
+                  );
+                });
+                Promise.all(d).then(e => {
+                  n.push(...e), setTimeout(() => i(r + 5), 500);
+                });
+              };
+              i(0);
+            })
           );
         }
-        function s(t) {
-          return n("/magnet/files", "POST", { id: [t] }, !1).then(
+        function d(t) {
+          return a("/magnet/files", "POST", { id: [t] }, !1).then(
             t => (
               console.log("🔍 Réponse getFilesLinks:", t),
               "success" === t.status &&
@@ -2512,91 +2623,80 @@
           setApiKey: function(e) {
             (t = e), localStorage.setItem("alldebridApiKey", e);
           },
-          uploadTorrentFile: a,
-          getMagnetStatus: i,
-          getMagnetStatusWithLinks: o,
-          unlockLink: r,
-          getFilesLinks: s,
-          uploadTorrentToAllDebrid: function(e, t) {
-            a(e).then(
+          uploadTorrentFile: o,
+          getMagnetStatus: r,
+          getMagnetStatusWithLinks: i,
+          unlockLink: s,
+          unlockLinksWithProgress: l,
+          getFilesLinks: d,
+          uploadTorrentToAllDebrid: function(e, t, n) {
+            o(e).then(
               function(e) {
                 console.log("🔍 Réponse uploadTorrentFile dans uploadTorrentToAllDebrid:", e),
                   e && e.id
                     ? (console.log("📋 Upload réussi, ID magnet:", e.id),
                       e.ready
                         ? (console.log("✅ Magnet déjà prêt, récupération des liens via v4..."),
-                          o(e.id).then(
-                            function(n) {
-                              if (
-                                (console.log("📊 Status avec liens:", n),
-                                console.log("🔍 Vérification status.links:", n.links),
+                          i(e.id).then(
+                            function(a) {
+                              console.log("📊 Status avec liens:", a),
+                                console.log("🔍 Vérification status.links:", a.links),
                                 console.log(
                                   "🔍 Type de status.links:",
-                                  typeof n.links,
-                                  Array.isArray(n.links)
+                                  typeof a.links,
+                                  Array.isArray(a.links)
                                 ),
                                 console.log(
                                   "🔍 Longueur status.links:",
-                                  n.links ? n.links.length : "undefined"
+                                  a.links ? a.links.length : "undefined"
                                 ),
-                                n.links && n.links.length > 0)
-                              ) {
-                                console.log("✅ Liens AllDebrid récupérés:", n.links),
-                                  console.log("🔓 Déverrouillage des liens AllDebrid...");
-                                const e = n.links.map(
-                                  e => (
-                                    console.log("🔓 Déverrouillage du lien:", e.link),
-                                    r(e.link).then(
-                                      e => (
-                                        console.log("✅ Lien déverrouillé:", e),
-                                        { name: e.filename, size: e.size, link: e.directLink }
-                                      ),
-                                      t => (
-                                        console.log("❌ Erreur déverrouillage lien:", e.link, t),
-                                        null
-                                      )
-                                    )
-                                  )
-                                );
-                                console.log("🔄 Attente des déverrouillages..."),
-                                  Promise.all(e).then(e => {
-                                    const n = e.filter(e => null !== e);
-                                    console.log("✅ Liens directs déverrouillés:", n),
-                                      t && t(null, n);
-                                  });
-                              } else
-                                console.log(
-                                  "⚠️ Pas de liens dans le status, tentative getFilesLinks..."
-                                ),
-                                  s(e.id).then(
-                                    function(e) {
-                                      console.log("✅ Fichiers récupérés en fallback:", e),
+                                a.links && a.links.length > 0
+                                  ? (console.log("✅ Liens AllDebrid récupérés:", a.links),
+                                    console.log(
+                                      "🔓 Déverrouillage des liens AllDebrid avec progression..."
+                                    ),
+                                    l(a.links, n).then(e => {
+                                      console.log("✅ Liens directs déverrouillés:", e),
                                         t && t(null, e);
-                                    },
-                                    function(e) {
-                                      console.log("❌ Erreur getFilesLinks fallback:", e),
-                                        t &&
-                                          t(
-                                            "Impossible de récupérer les liens pour ce magnet prêt"
-                                          );
-                                    }
-                                  );
+                                    }))
+                                  : (console.log(
+                                      "⚠️ Pas de liens dans le status, tentative getFilesLinks..."
+                                    ),
+                                    d(e.id).then(
+                                      function(e) {
+                                        console.log("✅ Fichiers récupérés en fallback:", e),
+                                          t && t(null, e);
+                                      },
+                                      function(e) {
+                                        console.log("❌ Erreur getFilesLinks fallback:", e),
+                                          t &&
+                                            t(
+                                              "Impossible de récupérer les liens pour ce magnet prêt"
+                                            );
+                                      }
+                                    ));
                             },
                             function(e) {
                               console.log("❌ Erreur getMagnetStatusWithLinks:", e), t && t(e);
                             }
                           ))
                         : (console.log("⏳ Magnet en cours de traitement, polling..."),
-                          (function(e, t) {
-                            !(function n() {
-                              i(e).then(
-                                function(a) {
-                                  console.log("📊 Status polling:", a),
-                                    4 === a.statusCode
+                          (function(e, t, n) {
+                            !(function a() {
+                              r(e).then(
+                                function(o) {
+                                  console.log("📊 Status polling:", o),
+                                    n &&
+                                      n(
+                                        o.downloaded || 0,
+                                        o.size || 1,
+                                        "Téléchargement: " + o.status
+                                      ),
+                                    4 === o.statusCode
                                       ? (console.log(
                                           "✅ Magnet ready, récupération des fichiers..."
                                         ),
-                                        s(e).then(
+                                        d(e).then(
                                           function(e) {
                                             console.log("✅ Liens récupérés:", e), t && t(null, e);
                                           },
@@ -2604,18 +2704,18 @@
                                             console.log("❌ Erreur getFilesLinks:", e), t && t(e);
                                           }
                                         ))
-                                      : a.statusCode >= 5
-                                        ? (console.log("❌ Erreur statut:", a),
-                                          t && t("Erreur AllDebrid: " + a.status))
+                                      : o.statusCode >= 5
+                                        ? (console.log("❌ Erreur statut:", o),
+                                          t && t("Erreur AllDebrid: " + o.status))
                                         : (console.log("⏳ En attente, re-polling dans 5s..."),
-                                          setTimeout(n, 5e3));
+                                          setTimeout(a, 5e3));
                                 },
                                 function(e) {
                                   console.log("❌ Erreur getMagnetStatus:", e), t && t(e);
                                 }
                               );
                             })();
-                          })(e.id, t)))
+                          })(e.id, t, n)))
                     : (console.log("❌ Réponse upload sans ID:", e),
                       t && t("Réponse AllDebrid sans ID de magnet"));
               },
@@ -2775,7 +2875,14 @@
                   console.log("🔑 Clé vide?", !e.alldebridApiKey),
                   (e.alldebridLinks = null),
                   (e.alldebridError = null),
-                  (e.alldebridSuccess = null);
+                  (e.alldebridSuccess = null),
+                  (e.alldebridProgress = {
+                    show: !1,
+                    current: 0,
+                    total: 1,
+                    message: "Initialisation...",
+                    rateLimitInfo: null
+                  });
                 var t = e.alldebridApiKey || localStorage.getItem("alldebridApiKey");
                 if (!t || "" === t.trim())
                   return (
@@ -2822,15 +2929,29 @@
                       : console.log("⚠️ Aucun chemin trouvé dans toutes les sources");
                 }
                 console.log("📁 Chemin de téléchargement final:", i),
-                  (e.alldebridError = "Envoi en cours..."),
+                  (e.alldebridProgress.show = !0),
+                  (e.alldebridProgress.message = "Upload du torrent vers AllDebrid..."),
+                  (e.alldebridError = null),
                   console.log("🔧 Configuration du service AllDebrid avec la clé:", t),
                   g.setApiKey(t),
-                  console.log("🌐 Début de l'upload vers AllDebrid..."),
-                  g.uploadTorrentToAllDebrid(a, function(t, n) {
+                  console.log("🌐 Début de l'upload vers AllDebrid...");
+                g.uploadTorrentToAllDebrid(
+                  a,
+                  function(t, n, a) {
+                    e.$apply(function() {
+                      (e.alldebridProgress.current = t),
+                        (e.alldebridProgress.total = n),
+                        (e.alldebridProgress.message = a),
+                        (e.alldebridProgress.rateLimitInfo =
+                          "Respecte les limites AllDebrid: 12 req/sec, 600 req/min");
+                    });
+                  },
+                  function(t, n) {
                     if (
                       (console.log("📥 Réponse de AllDebrid reçue"),
                       console.log("❌ Erreur:", t),
                       console.log("🔗 Liens:", n),
+                      (e.alldebridProgress.show = !1),
                       t)
                     )
                       console.log("❌ Erreur lors de l'upload:", t),
@@ -2898,7 +3019,8 @@
                           (e.alldebridError = "Aucun fichier reçu d'AllDebrid.");
                     }
                     e.$apply(), console.log("🚀 === FIN UPLOAD ALLDEBRID TORRENT ===");
-                  });
+                  }
+                );
               }),
               (e.downloadFileToPath = function(e, t, n) {
                 var a = document.createElement("a");
