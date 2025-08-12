@@ -2935,92 +2935,78 @@
                   console.log("🔧 Configuration du service AllDebrid avec la clé:", t),
                   g.setApiKey(t),
                   console.log("🌐 Début de l'upload vers AllDebrid...");
-                g.uploadTorrentToAllDebrid(
-                  a,
-                  function(t, n, a) {
-                    e.$apply(function() {
-                      (e.alldebridProgress.current = t),
-                        (e.alldebridProgress.total = n),
-                        (e.alldebridProgress.message = a),
-                        (e.alldebridProgress.rateLimitInfo =
-                          "Respecte les limites AllDebrid: 12 req/sec, 600 req/min");
-                    });
-                  },
-                  function(t, n) {
+                g.uploadTorrentToAllDebrid(a, function(t, n) {
+                  if (
+                    (console.log("📥 Réponse de AllDebrid reçue"),
+                    console.log("❌ Erreur:", t),
+                    console.log("🔗 Liens:", n),
+                    (e.alldebridProgress.show = !1),
+                    t)
+                  )
+                    console.log("❌ Erreur lors de l'upload:", t),
+                      (e.alldebridError =
+                        "string" == typeof t ? t : (t && t.message) || "Erreur inconnue."),
+                      (e.alldebridLinks = null);
+                  else {
                     if (
-                      (console.log("📥 Réponse de AllDebrid reçue"),
-                      console.log("❌ Erreur:", t),
-                      console.log("🔗 Liens:", n),
-                      (e.alldebridProgress.show = !1),
-                      t)
-                    )
-                      console.log("❌ Erreur lors de l'upload:", t),
-                        (e.alldebridError =
-                          "string" == typeof t ? t : (t && t.message) || "Erreur inconnue."),
-                        (e.alldebridLinks = null);
-                    else {
-                      if (
-                        (console.log("✅ Upload réussi, liens reçus:", n),
-                        (e.alldebridLinks = n),
-                        (e.alldebridError = null),
-                        n && n.length)
-                      ) {
-                        console.log("📤 Extraction et envoi des liens vers aria2...");
-                        var a = (function(e) {
-                          var t = [];
-                          return Array.isArray(e) && e[0] && e[0].link && e[0].name
-                            ? (console.log("📋 Format liens directs déverrouillés détecté"),
+                      (console.log("✅ Upload réussi, liens reçus:", n),
+                      (e.alldebridLinks = n),
+                      (e.alldebridError = null),
+                      n && n.length)
+                    ) {
+                      console.log("📤 Extraction et envoi des liens vers aria2...");
+                      var a = (function(e) {
+                        var t = [];
+                        return Array.isArray(e) && e[0] && e[0].link && e[0].name
+                          ? (console.log("📋 Format liens directs déverrouillés détecté"),
+                            e.forEach(function(e) {
+                              t.push({ name: e.name, size: e.size, link: e.link });
+                            }),
+                            t)
+                          : Array.isArray(e) && e[0] && e[0].link && e[0].filename
+                            ? (console.log("📋 Format liens directs v4 détecté (legacy)"),
                               e.forEach(function(e) {
-                                t.push({ name: e.name, size: e.size, link: e.link });
+                                t.push({ name: e.filename, size: e.size, link: e.link });
                               }),
                               t)
-                            : Array.isArray(e) && e[0] && e[0].link && e[0].filename
-                              ? (console.log("📋 Format liens directs v4 détecté (legacy)"),
-                                e.forEach(function(e) {
-                                  t.push({ name: e.filename, size: e.size, link: e.link });
+                            : (console.log("📋 Format files hiérarchique détecté"),
+                              Array.isArray(e) &&
+                                e.forEach(function e(n) {
+                                  n.l
+                                    ? t.push({ name: n.n, size: n.s, link: n.l })
+                                    : n.e && n.e.forEach(e);
                                 }),
-                                t)
-                              : (console.log("📋 Format files hiérarchique détecté"),
-                                Array.isArray(e) &&
-                                  e.forEach(function e(n) {
-                                    n.l
-                                      ? t.push({ name: n.n, size: n.s, link: n.l })
-                                      : n.e && n.e.forEach(e);
-                                  }),
-                                t);
-                        })(n);
-                        if ((console.log("🔗 Liens extraits:", a), a.length > 0)) {
-                          var r = a.map(function(e) {
-                              return (
-                                console.log("🔗 Lien traité:", e.link, "pour", e.name), [e.link]
-                              );
-                            }),
-                            s = { dir: i };
-                          console.log("⚙️ Paramètres aria2:", s),
-                            o.addUris(r, s, function() {
-                              console.log("✅ Liens ajoutés à aria2 avec succès"),
-                                (e.alldebridSuccess =
-                                  "Liens envoyés au serveur et ajoutés à la file de téléchargement."),
-                                e.$apply(function() {
-                                  setTimeout(function() {
-                                    e.$apply(function() {
-                                      e.alldebridSuccess = null;
-                                    });
-                                  }, 4e3);
-                                });
-                            });
-                        } else
-                          console.log(
-                            "⚠️ Aucun lien de téléchargement trouvé dans la réponse AllDebrid"
-                          ),
-                            (e.alldebridError = "Aucun lien de téléchargement trouvé.");
+                              t);
+                      })(n);
+                      if ((console.log("🔗 Liens extraits:", a), a.length > 0)) {
+                        var r = a.map(function(e) {
+                            return console.log("🔗 Lien traité:", e.link, "pour", e.name), [e.link];
+                          }),
+                          s = { dir: i };
+                        console.log("⚙️ Paramètres aria2:", s),
+                          o.addUris(r, s, function() {
+                            console.log("✅ Liens ajoutés à aria2 avec succès"),
+                              (e.alldebridSuccess =
+                                "Liens envoyés au serveur et ajoutés à la file de téléchargement."),
+                              e.$apply(function() {
+                                setTimeout(function() {
+                                  e.$apply(function() {
+                                    e.alldebridSuccess = null;
+                                  });
+                                }, 4e3);
+                              });
+                          });
                       } else
-                        console.log("⚠️ Aucun fichier reçu d'AllDebrid"),
-                          (e.alldebridError = "Aucun fichier reçu d'AllDebrid.");
-                    }
-                    e.$apply(), console.log("🚀 === FIN UPLOAD ALLDEBRID TORRENT ===");
+                        console.log(
+                          "⚠️ Aucun lien de téléchargement trouvé dans la réponse AllDebrid"
+                        ),
+                          (e.alldebridError = "Aucun lien de téléchargement trouvé.");
+                    } else
+                      console.log("⚠️ Aucun fichier reçu d'AllDebrid"),
+                        (e.alldebridError = "Aucun fichier reçu d'AllDebrid.");
                   }
-                );
+                  e.$apply(), console.log("🚀 === FIN UPLOAD ALLDEBRID TORRENT ===");
+                });
               }),
               (e.downloadFileToPath = function(e, t, n) {
                 var a = document.createElement("a");

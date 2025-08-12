@@ -295,7 +295,7 @@ export default angular
           });
         };
 
-        $alldebrid.uploadTorrentToAllDebrid(file, progressCallback, function(err, links) {
+        $alldebrid.uploadTorrentToAllDebrid(file, function(err, links) {
           console.log("📥 Réponse de AllDebrid reçue");
           console.log("❌ Erreur:", err);
           console.log("🔗 Liens:", links);
